@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">java_CAPSA</string>
+    <string name="notificaciones">Notificaciones</string>
+    <string name="cambiar_tema">Cambiar tema</string>
+    <string name="configuracion">Configuraion</string>
+    <string name="panel_del_administrador">"Panel del administrador "</string>
+    <string name="cuidadores_activos">Cuidadores activos</string>
+    <string name="citas_pendientes">Citas pendientes</string>
+    <string name="notificaciones_recientes">Notificaciones recientes</string>
+    <string name="servicios_completados">Servicios completados</string>
+    <string name="mapa">Mapa</string>
+    <string name="cuidadores">Cuidadores</string>
+    <string name="citas">Citas</string>
+    <string name="historial">Historial</string>
+    <string name="regresar">Regresar</string>
 </resources>

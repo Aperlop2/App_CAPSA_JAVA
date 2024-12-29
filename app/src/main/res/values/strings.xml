@@ -9,4 +9,8 @@
     <string name="horario">Horario</string>
     <string name="guardar">Guardar</string>
     <string name="cancelar">Cancelar</string>
+
+    <!-- String de la pantalla gestion_de_cuidadores.xml-->
+    <string name="gestion_de_cuidadores">Gestón de cuidadores</string>
+    <string name="agregar">Agregar</string>
 </resources>

@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">java_CAPSA</string>
+    
+    <!-- String de la pantalla agregar_nuevo_cuidador.xml -->
+    <string name="agregar_cuidador">Agregar nuevo cuidador</string>
+    <string name="nombre">Nombre completo</string>
+    <string name="direccion">Dirección</string>
+    <string name="telefono">Teléfono</string>
+    <string name="horario">Horario</string>
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
 </resources>

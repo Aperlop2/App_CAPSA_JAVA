@@ -1,6 +1,7 @@
 package com.example.java_capsa;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -31,6 +32,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
+        findViewById(R.id.openDashboardButton).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, DashboardCuidadorActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override

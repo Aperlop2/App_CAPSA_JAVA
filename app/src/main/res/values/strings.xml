@@ -2,8 +2,8 @@
     <string name="app_name">java_CAPSA</string>
     <string name="notificaciones">Notificaciones</string>
     <string name="cambiar_tema">Cambiar tema</string>
-    <string name="configuracion">Configuraion</string>
-    <string name="panel_del_administrador">"Panel del administrador "</string>
+    <string name="configuracion">Configuración</string>
+    <string name="panel_del_administrador">Panel del administrador</string>
     <string name="cuidadores_activos">Cuidadores activos</string>
     <string name="citas_pendientes">Citas pendientes</string>
     <string name="notificaciones_recientes">Notificaciones recientes</string>
@@ -14,11 +14,10 @@
     <string name="historial">Historial</string>
     <string name="regresar">Regresar</string>
 
-
     <string name="titulo_cuidadores_activos">Cuidadores Activos</string>
     <string name="numero_cuidadores_activos">Número de cuidadores activos: 0</string>
     <string name="cerrar_ventana">Cerrar</string>
-    <string name="icono_cuidadores_activos">Icono de cuidadores activos</string>
+    <string name="icono_cuidadores_activos">Ícono de cuidadores activos</string>
     <string name="nombre_nombre">Nombre: [Nombre]</string>
     <string name="estado_estado">Estado: [Estado]</string>
     <string name="ubicacion_ubicacion">Ubicación: [Ubicación]</string>
@@ -29,4 +28,11 @@
     <string name="ubicacion_placeholder">Ubicación: %1$s</string>
     <string name="especialidad_placeholder">Especialidad: %1$s</string>
 
+    <string name="titulo_citas_pendientes">Citas pendientes</string>
+    <string name="total_citas_placeholder">Total de citas pendientes: %1$d</string>
+    <string name="icono_citas_pendientes">Ícono de citas pendientes</string>
+    <string name="cita">Cita:</string>
+    <string name="fecha">Fecha:</string>
+    <string name="cuidador">Cuidador:</string>
+    <string name="ubicacion">Ubicación:</string>
 </resources>

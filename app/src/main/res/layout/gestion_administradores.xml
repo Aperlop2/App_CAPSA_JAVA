@@ -138,6 +138,7 @@
 
         <!-- Notificaciones Recientes -->
         <LinearLayout
+            android:id="@+id/card_notificaciones_recientes"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_rowWeight="1"

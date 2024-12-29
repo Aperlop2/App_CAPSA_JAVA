@@ -38,40 +38,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nombre"
+            android:fontFamily="@font/roboto_medium"
             android:inputType="textPersonName"
             android:layout_marginBottom="8dp"
             android:minHeight="48dp"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:background="@color/white"/>
 
         <EditText
             android:id="@+id/address_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/direccion"
+            android:fontFamily="@font/roboto_medium"
             android:inputType="textPostalAddress"
             android:layout_marginBottom="8dp"
             android:minHeight="48dp"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:background="@color/white"/>
 
         <EditText
             android:id="@+id/phone_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/telefono"
+            android:fontFamily="@font/roboto_medium"
             android:inputType="phone"
             android:layout_marginBottom="8dp"
             android:minHeight="48dp"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:background="@color/white"/>
 
         <EditText
             android:id="@+id/schedule_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/horario"
+            android:fontFamily="@font/roboto_medium"
             android:inputType="text"
             android:layout_marginBottom="16dp"
             android:minHeight="48dp"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:background="@color/white"/>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -7,10 +7,9 @@
 
     <ImageView
         android:id="@+id/img_title"
-        android:layout_width="132dp"
-        android:layout_height="108dp"
+        android:layout_width="75dp"
+        android:layout_height="60dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
         android:contentDescription="@string/icono_cuidadores_activos"
         android:src="@drawable/estado_activos"
         tools:ignore="ImageContrastCheck" />
@@ -20,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/titulo_cuidadores_activos"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="#000000"
         android:layout_below="@id/img_title"
@@ -38,27 +37,31 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp" />
 
-    <!-- Lista dinámica de cuidadores -->
     <ScrollView
         android:id="@+id/scroll_cuidadores"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="382dp"
+        android:layout_height="482dp"
+        android:layout_above="@id/btn_close"
         android:layout_below="@id/tv_total_cuidadores"
-        android:layout_marginTop="16dp">
-
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        tools:ignore="SpeakableTextPresentCheck">
     </ScrollView>
 
     <Button
         android:id="@+id/btn_close"
-        android:layout_width="150dp"
-        android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="18dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="#4A90E2"
         android:text="@string/cerrar_ventana"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
-        android:textStyle="bold" />
-
+        android:textStyle="bold"
+        android:padding="12dp"
+        tools:ignore="VisualLintButtonSize" />
 
 </RelativeLayout>

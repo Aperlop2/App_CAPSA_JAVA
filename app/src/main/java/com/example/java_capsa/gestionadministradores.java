@@ -1,5 +1,6 @@
 package com.example.java_capsa;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class gestionadministradores extends AppCompatActivity {
         findViewById(R.id.card_cuidadores_activos).setOnClickListener(v -> mostrarVentanaEmergente(this));
     }
 
+    @SuppressLint("SetTextI18n")
     private void mostrarVentanaEmergente(Context context) {
         // Inflar el diseño de la ventana emergente
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -58,10 +60,11 @@ public class gestionadministradores extends AppCompatActivity {
             TextView tvLocation = cardView.findViewById(R.id.tv_location);
             TextView tvEspecialidad = cardView.findViewById(R.id.tv_especialidad);
 
-            tvName.setText(getString(R.string.nombre_placeholder, "Cuidador " + i));
-            tvStatus.setText(getString(R.string.estado_placeholder, "Activo"));
-            tvLocation.setText(getString(R.string.ubicacion_placeholder, "Pendiente"));
-            tvEspecialidad.setText(getString(R.string.especialidad_placeholder, "General"));
+            tvName.setText("Nombre:");
+            tvStatus.setText("Estado:");
+            tvLocation.setText("Ubicación:");
+            tvEspecialidad.setText("Especialidad:");
+
 
             // Agregar la tarjeta al contenedor dinámico
             layoutCuidadores.addView(cardView);

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E1E1E1"
-    tools:context=".MainActivity">
+    tools:context=".gestionadministradores">
 
     <LinearLayout
         android:id="@+id/header"
@@ -71,6 +71,7 @@
         android:rowCount="2">
 
         <LinearLayout
+            android:id="@+id/card_cuidadores_activos"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_rowWeight="1"

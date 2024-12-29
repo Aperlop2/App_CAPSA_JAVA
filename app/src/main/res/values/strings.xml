@@ -13,4 +13,20 @@
     <string name="citas">Citas</string>
     <string name="historial">Historial</string>
     <string name="regresar">Regresar</string>
+
+
+    <string name="titulo_cuidadores_activos">Cuidadores Activos</string>
+    <string name="numero_cuidadores_activos">Número de cuidadores activos: 0</string>
+    <string name="cerrar_ventana">Cerrar</string>
+    <string name="icono_cuidadores_activos">Icono de cuidadores activos</string>
+    <string name="nombre_nombre">Nombre: [Nombre]</string>
+    <string name="estado_estado">Estado: [Estado]</string>
+    <string name="ubicacion_ubicacion">Ubicación: [Ubicación]</string>
+
+    <string name="numero_cuidadores_placeholder">Número de cuidadores activos: %1$d</string>
+    <string name="nombre_placeholder">Nombre: %1$s</string>
+    <string name="estado_placeholder">Estado: %1$s</string>
+    <string name="ubicacion_placeholder">Ubicación: %1$s</string>
+    <string name="especialidad_placeholder">Especialidad: %1$s</string>
+
 </resources>

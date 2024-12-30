@@ -13,4 +13,12 @@
     <!-- String de la pantalla gestion_de_cuidadores.xml-->
     <string name="gestion_de_cuidadores">Gestón de cuidadores</string>
     <string name="agregar">Agregar</string>
+
+    <!-- String de la pantalla item_cuidador.xml-->
+    <string name="nombre_cuidador">Nombre del Cuidador</string>
+    <string name="direccionItem">Durección</string>
+    <string name="telefonoItem">Teléfono</string>
+    <string name="horarioItem">Horario</string>
+    <string name="editar">Editar</string>
+    <string name="eliminar">Eliminar</string>
 </resources>

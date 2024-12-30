@@ -16,7 +16,6 @@
 
     <string name="titulo_cuidadores_activos">Cuidadores Activos</string>
     <string name="numero_cuidadores_activos">Número de cuidadores activos: 0</string>
-    <string name="cerrar_ventana">Cerrar</string>
     <string name="icono_cuidadores_activos">Ícono de cuidadores activos</string>
     <string name="nombre_nombre">Nombre: [Nombre]</string>
     <string name="estado_estado">Estado: [Estado]</string>
@@ -32,15 +31,24 @@
     <string name="total_citas_placeholder">Total de citas pendientes: %1$d</string>
     <string name="icono_citas_pendientes">Ícono de citas pendientes</string>
     <string name="cita">Cita:</string>
-    <string name="fecha">Fecha:</string>
-    <string name="cuidador">Cuidador:</string>
-    <string name="ubicacion">Ubicación:</string>
     <string name="cerrar">Cerrar</string>
     <string name="notificaciones_recientes_titulo">Notificaciones recientes</string>
     <string name="total_de_notificaciones_recientes_0">Total de notificaciones recientes: 0</string>
+
     <string name="fecha_fecha">Fecha:</string>
     <string name="tipo_de_notificacion_tipo">Tipo de Notificación:</string>
     <string name="nombre_nombre_notificacion">Nombre:</string>
     <string name="direccion_direccion">Dirección:</string>
     <string name="horario_horario">Horario:</string>
+
+    <string name="titulo_servicios_completados">Servicios Completados</string>
+    <string name="total_servicios_placeholder">Total de servicios completados: %1$d</string>
+    <string name="icono_servicios_completados">Ícono de servicios completados</string>
+    <string name="servicio">Servicio:</string>
+    <string name="fecha">Fecha:</string>
+    <string name="hora">Hora:</string>
+    <string name="cuidador">Cuidador:</string>
+    <string name="ubicacion">Ubicación:</string>
+    <string name="cerrar_ventana">Cerrar</string>
+
 </resources>

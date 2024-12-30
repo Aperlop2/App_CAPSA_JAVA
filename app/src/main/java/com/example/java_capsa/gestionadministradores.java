@@ -29,20 +29,20 @@ public class gestionadministradores extends AppCompatActivity {
 
         // Configuración del clic en la tarjeta de "Notificaciones Recientes"
         findViewById(R.id.card_notificaciones_recientes).setOnClickListener(v -> mostrarVentanaNotificacionesRecientes(this));
+
+        // Configuración del clic en la tarjeta de "Servicios Completados"
+        findViewById(R.id.card_servicios_completados).setOnClickListener(v -> mostrarVentanaServiciosCompletados(this));
     }
 
     @SuppressLint("SetTextI18n")
     private void mostrarVentanaEmergente(Context context) {
-        // Inflar el diseño de la ventana emergente
         LayoutInflater inflater = LayoutInflater.from(context);
         View popupView = inflater.inflate(R.layout.cuidadores_activos, null);
 
-        // Crear el diálogo para la ventana emergente
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(popupView);
         AlertDialog dialog = builder.create();
 
-        // Configurar los elementos de la ventana emergente
         TextView tvTotalCuidadores = popupView.findViewById(R.id.tv_total_cuidadores);
         ScrollView scrollCuidadores = popupView.findViewById(R.id.scroll_cuidadores);
         Button btnClose = popupView.findViewById(R.id.btn_close);
@@ -150,6 +150,48 @@ public class gestionadministradores extends AppCompatActivity {
             tvHorario.setText("Horario:");
 
             layoutNotificaciones.addView(cardView);
+        }
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void mostrarVentanaServiciosCompletados(Context context) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View popupView = inflater.inflate(R.layout.servicios_completados, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(popupView);
+        AlertDialog dialog = builder.create();
+
+        TextView tvTotalServicios = popupView.findViewById(R.id.tv_total_servicios);
+        ScrollView scrollServicios = popupView.findViewById(R.id.scroll_servicios);
+        Button btnClose = popupView.findViewById(R.id.btn_close);
+
+        String totalServicios = String.format(getString(R.string.total_servicios_placeholder), 0);
+        tvTotalServicios.setText(totalServicios);
+
+        LinearLayout layoutServicios = new LinearLayout(context);
+        layoutServicios.setOrientation(LinearLayout.VERTICAL);
+        scrollServicios.addView(layoutServicios);
+
+        for (int i = 1; i <= 3; i++) {
+            View cardView = inflater.inflate(R.layout.card_servicio, layoutServicios, false);
+
+            TextView tvServicio = cardView.findViewById(R.id.tv_servicio);
+            TextView tvFecha = cardView.findViewById(R.id.tv_fecha);
+            TextView tvHora = cardView.findViewById(R.id.tv_hora);
+            TextView tvCuidador = cardView.findViewById(R.id.tv_cuidador);
+            TextView tvUbicacion = cardView.findViewById(R.id.tv_ubicacion);
+
+            tvServicio.setText("Servicio:");
+            tvFecha.setText("Fecha:");
+            tvHora.setText("Hora:");
+            tvCuidador.setText("Cuidador:");
+            tvUbicacion.setText("Ubicación:");
+
+            layoutServicios.addView(cardView);
         }
 
         btnClose.setOnClickListener(v -> dialog.dismiss());

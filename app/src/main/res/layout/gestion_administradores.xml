@@ -170,6 +170,7 @@
 
         <!-- Servicios Completados -->
         <LinearLayout
+            android:id="@+id/card_servicios_completados"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_rowWeight="1"

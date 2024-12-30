@@ -51,4 +51,9 @@
     <string name="ubicacion">Ubicación:</string>
     <string name="cerrar_ventana">Cerrar</string>
 
+    <string name="mapa_tiempo_real">Mapa en tiempo real</string>
+    <string name="centrar_mapa">Centrar mapa</string>
+
+
+
 </resources>

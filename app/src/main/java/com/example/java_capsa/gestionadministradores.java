@@ -3,10 +3,12 @@ package com.example.java_capsa;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -32,6 +34,14 @@ public class gestionadministradores extends AppCompatActivity {
 
         // Configuración del clic en la tarjeta de "Servicios Completados"
         findViewById(R.id.card_servicios_completados).setOnClickListener(v -> mostrarVentanaServiciosCompletados(this));
+
+        // Configuración del clic en el icono del mapa
+        ImageView iconMap = findViewById(R.id.icon_map);
+        iconMap.setOnClickListener(v -> {
+            // Iniciar la actividad de MapaTiempoReal
+            Intent intent = new Intent(gestionadministradores.this, MapaTiempoReal.class);
+            startActivity(intent);
+        });
     }
 
     @SuppressLint("SetTextI18n")

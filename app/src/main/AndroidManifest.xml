@@ -12,15 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Java_CAPSA"
         tools:targetApi="35">
+
+        <!-- Actividad principal -->
         <activity
             android:name=".gestionadministradores"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MapaTiempoReal"
+            android:exported="true" />
+
     </application>
 
 </manifest>

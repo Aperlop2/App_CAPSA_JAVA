@@ -90,8 +90,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:contentDescription="cuidadores_activos_boton"
                 android:src="@drawable/ic_cuidadores_activos"
                 tools:ignore="HardcodedText" />
@@ -119,8 +119,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:contentDescription="citas_pendientes_boton"
                 android:src="@drawable/ic_citas_pendientes"
                 tools:ignore="HardcodedText,ImageContrastCheck" />
@@ -181,8 +181,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:contentDescription="servicios_completados_boton"
                 android:src="@drawable/ic_servicios_completados"
                 tools:ignore="HardcodedText,ImageContrastCheck" />
@@ -261,6 +261,7 @@
                 android:text="Cuidadores"
                 android:textColor="#000000"
                 android:textSize="14sp"
+                android:textAlignment="center"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 

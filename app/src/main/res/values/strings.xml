@@ -55,5 +55,9 @@
     <string name="centrar_mapa">Centrar mapa</string>
 
 
-
+    <string name="notificaciones_titulo">Notificaciones en general</string>
+    <string name="icono_notificaciones_desc">Icono de notificaciones</string>
+    <string name="notificaciones_en_general">Notificaciones en general</string>
+    <string name="icono_de_notificaciones">Icono de notificaciones</string>
 </resources>
+

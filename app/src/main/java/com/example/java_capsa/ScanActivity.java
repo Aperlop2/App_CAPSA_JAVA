@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,10 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.java_capsa.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +37,8 @@ public class ScanActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private TextView locationTextView;
     private ImageView photoImageView;
+    private Button takePhotoButton;
+    private Bitmap capturedPhoto; // Variable para guardar la foto capturada
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,7 @@ public class ScanActivity extends AppCompatActivity {
 
         locationTextView = findViewById(R.id.locationTextView);
         photoImageView = findViewById(R.id.photoImageView);
-        Button takePhotoButton = findViewById(R.id.takePhotoButton);
+        takePhotoButton = findViewById(R.id.takePhotoButton);
 
         // Inicializar el cliente de ubicación
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -51,9 +55,13 @@ public class ScanActivity extends AppCompatActivity {
         // Verificar permisos de ubicación
         checkLocationPermission();
 
-        // Configurar botón para tomar fotos
+        // Configurar botón para tomar fotos o guardar
         takePhotoButton.setOnClickListener(v -> {
-            checkCameraPermission();
+            if ("Guardar".equals(takePhotoButton.getText().toString())) {
+                guardarImagen(capturedPhoto);
+            } else {
+                checkCameraPermission();
+            }
         });
     }
 
@@ -149,9 +157,37 @@ public class ScanActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             // Obtener la foto capturada como un Bitmap
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            capturedPhoto = (Bitmap) data.getExtras().get("data");
             // Mostrar la foto en el ImageView
-            photoImageView.setImageBitmap(photo);
+            photoImageView.setImageBitmap(capturedPhoto);
+
+            // Cambiar el texto del botón a "Guardar"
+            takePhotoButton.setText("Guardar");
+        }
+    }
+
+    private void guardarImagen(Bitmap bitmap) {
+        try {
+            // Ruta para almacenar la imagen
+            File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "MiApp");
+            if (!storageDir.exists()) {
+                storageDir.mkdirs();
+            }
+
+            String fileName = "IMG_" + System.currentTimeMillis() + ".jpg";
+            File file = new File(storageDir, fileName);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            Toast.makeText(this, "Imagen guardada en: " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+
+            // Restablecer el texto del botón
+            takePhotoButton.setText("Tomar Foto");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
         }
     }
 }

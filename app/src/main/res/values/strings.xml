@@ -16,7 +16,7 @@
 
     <!-- String de la pantalla item_cuidador.xml-->
     <string name="nombre_cuidador">Nombre del Cuidador</string>
-    <string name="direccionItem">Durección</string>
+    <string name="direccionItem">Dirección</string>
     <string name="telefonoItem">Teléfono</string>
     <string name="horarioItem">Horario</string>
     <string name="editar">Editar</string>

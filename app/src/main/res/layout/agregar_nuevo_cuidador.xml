@@ -34,7 +34,7 @@
             android:src="@drawable/agregar_foto" />
 
         <EditText
-            android:id="@+id/name_input"
+            android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nombre"
@@ -46,7 +46,7 @@
             android:background="@color/white"/>
 
         <EditText
-            android:id="@+id/address_input"
+            android:id="@+id/etDireccion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/direccion"
@@ -58,7 +58,7 @@
             android:background="@color/white"/>
 
         <EditText
-            android:id="@+id/phone_input"
+            android:id="@+id/etTelefono"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/telefono"
@@ -70,7 +70,7 @@
             android:background="@color/white"/>
 
         <EditText
-            android:id="@+id/schedule_input"
+            android:id="@+id/etHorario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/horario"
@@ -88,7 +88,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/save_button"
+                android:id="@+id/btnGuardar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/guardar"
@@ -98,7 +98,7 @@
                 android:drawableLeft="@drawable/baseline_save_24"/>
 
             <Button
-                android:id="@+id/cancel_button"
+                android:id="@+id/btnCancelar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cancelar"

@@ -21,4 +21,25 @@
     <string name="horarioItem">Horario</string>
     <string name="editar">Editar</string>
     <string name="eliminar">Eliminar</string>
+
+    <!-- String de la pantalla editar_cuidador-->
+    <string name="editar_cuidador">Editar cuidador</string>
+
+    <!-- String de la pantalla gestion_de_citas-->
+    <string name="gestion_de_citas">Gestión de citas</string>
+    <string name="detalle_cita">Detalle de la cita</string>
+
+    <!-- String de la pantalla gestion_de_citas-->
+    <string name="agregar_cita">Agregar cita</string>
+    <string name="seleccione_fecha">Seleccione fecha</string>
+    <string name="seleccione_hora">Selecciona hora</string>
+    <string name="cuidador">Cuidador</string>
+    <string name="ubicacion">Ubicación</string>
+
+    <!-- String de la pantalla editar_cita.xml-->
+    <string name="editar_cita">Editar cita</string>
+
+    <!-- String de la pantalla historial_evidencia.xml-->
+    <string name="historial_de_evidencias">Historial de evidencias</string>
+
 </resources>

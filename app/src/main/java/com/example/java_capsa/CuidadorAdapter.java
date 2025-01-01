@@ -1,5 +1,6 @@
 package com.example.java_capsa;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 public class CuidadorAdapter extends RecyclerView.Adapter<CuidadorAdapter.CuidadorViewHolder> {
 
     private List<Cuidador> cuidadoresList;
+    private static final int EDITAR_CUIDADOR_REQUEST = 1;
 
     public CuidadorAdapter(List<Cuidador> cuidadoresList) {
         this.cuidadoresList = cuidadoresList;
@@ -40,6 +43,12 @@ public class CuidadorAdapter extends RecyclerView.Adapter<CuidadorAdapter.Cuidad
 
         holder.btnEditar.setOnClickListener(v -> {
             // Acción para editar cuidador
+            Intent intent = new Intent(v.getContext(), EditarCuidador.class);
+            intent.putExtra("nombre", cuidador.getNombre());
+            intent.putExtra("direccion", cuidador.getDireccion());
+            intent.putExtra("telefono", cuidador.getTelefono());
+            intent.putExtra("horario", cuidador.getHorario());
+            ((AppCompatActivity) v.getContext()).startActivityForResult(intent, EDITAR_CUIDADOR_REQUEST);
         });
 
         holder.btnEliminar.setOnClickListener(v -> {

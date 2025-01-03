@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="@color/gris">
+
+    <TextView
+        android:id="@+id/tvLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/iniciar_sesi_n"
+        android:textSize="24sp"
+        android:fontFamily="@font/roboto_bold"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="@string/correo_eletr_nico"
+        android:inputType="textEmailAddress"
+        android:autofillHints="emailAddress"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/azul"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="@string/contrase_a"
+        android:inputType="textPassword"
+        android:autofillHints="password"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/azul"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tv_contrasena"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="@string/olvidaste_la_contrase_a"
+        android:textColor="@color/azul"
+        android:textSize="14sp"
+        android:fontFamily="@font/roboto_italic"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/ingresar"
+        android:backgroundTint="@color/azul"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="24dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_bold" />
+
+    <TextView
+        android:id="@+id/tvSelectRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/si_no_tines_cuenta_registrate"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btnAdmin"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:backgroundTint="@color/azul"
+        android:text="@string/registro"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_bold" />
+
+</LinearLayout>

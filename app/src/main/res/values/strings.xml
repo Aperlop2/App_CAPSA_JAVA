@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">java_CAPSA</string>
+    <string name="select_your_role">Select your role</string>
+    <string name="correo_eletr_nico">Correo Eletrónico</string>
+    <string name="contrase_a">Contraseña</string>
+    <string name="iniciar_sesi_n">INICIAR SESIÓN</string>
+    <string name="olvidaste_la_contrase_a">¿Olvidaste la contraseña?</string>
+    <string name="ingresar">INGRESAR</string>
+    <string name="si_no_tines_cuenta_registrate">Si no tienes cuenta registrate</string>
+    <string name="registro">Registro</string>
 </resources>

@@ -7,9 +7,10 @@ import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,8 +23,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -37,8 +37,8 @@ public class ScanActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private TextView locationTextView;
     private ImageView photoImageView;
-    private Button takePhotoButton;
-    private Bitmap capturedPhoto; // Variable para guardar la foto capturada
+    private Bitmap capturedPhoto;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,22 +47,48 @@ public class ScanActivity extends AppCompatActivity {
 
         locationTextView = findViewById(R.id.locationTextView);
         photoImageView = findViewById(R.id.photoImageView);
-        takePhotoButton = findViewById(R.id.takePhotoButton);
+        Button takePhotoButton = findViewById(R.id.takePhotoButton);
+        Button enviarButton = findViewById(R.id.enviarButton);
 
         // Inicializar el cliente de ubicación
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        databaseHelper = new DatabaseHelper(this); // Inicializar base de datos
 
         // Verificar permisos de ubicación
         checkLocationPermission();
 
-        // Configurar botón para tomar fotos o guardar
-        takePhotoButton.setOnClickListener(v -> {
-            if ("Guardar".equals(takePhotoButton.getText().toString())) {
-                guardarImagen(capturedPhoto);
+        // Configurar botón para tomar fotos
+        takePhotoButton.setOnClickListener(v -> checkCameraPermission());
+
+        // Configurar botón para enviar datos
+        enviarButton.setOnClickListener(v -> {
+            String nombreCuidador = "Nombre Predeterminado"; // Cambiar por el nombre dinámico en el futuro
+            String ubicacion = locationTextView.getText().toString();
+            String descripcion = ((EditText) findViewById(R.id.descripcionEditText)).getText().toString();
+
+            if (capturedPhoto == null || ubicacion.isEmpty() || descripcion.isEmpty()) {
+                Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Convertir la foto a Base64
+            String fotoBase64 = bitmapToBase64(capturedPhoto);
+
+            // Guardar la evidencia en la base de datos
+            long result = databaseHelper.insertarEvidencia(nombreCuidador, ubicacion, descripcion, fotoBase64);
+
+            if (result != -1) {
+                Toast.makeText(this, "Evidencia guardada exitosamente", Toast.LENGTH_SHORT).show();
+                // Limpiar los campos después de guardar
+                locationTextView.setText("");
+                ((EditText) findViewById(R.id.descripcionEditText)).setText("");
+                photoImageView.setImageBitmap(null);
+                capturedPhoto = null;
             } else {
-                checkCameraPermission();
+                Toast.makeText(this, "Error al guardar la evidencia", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     private void checkLocationPermission() {
@@ -98,12 +124,19 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
+    private String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+
     private void getLocation() {
         try {
             fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener(this, location -> {
                         if (location != null) {
-                            // Obtener latitud y longitud
                             double latitude = location.getLatitude();
                             double longitude = location.getLongitude();
 
@@ -113,7 +146,7 @@ public class ScanActivity extends AppCompatActivity {
                                 List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
                                 if (addresses != null && !addresses.isEmpty()) {
                                     Address address = addresses.get(0);
-                                    String fullAddress = address.getAddressLine(0); // Dirección completa
+                                    String fullAddress = address.getAddressLine(0);
                                     locationTextView.setText(fullAddress);
                                 } else {
                                     locationTextView.setText("No se pudo determinar la dirección");
@@ -137,14 +170,12 @@ public class ScanActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permisos concedidos
                 getLocation();
             } else {
                 Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permiso concedido
                 openCamera();
             } else {
                 Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
@@ -156,38 +187,8 @@ public class ScanActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            // Obtener la foto capturada como un Bitmap
             capturedPhoto = (Bitmap) data.getExtras().get("data");
-            // Mostrar la foto en el ImageView
             photoImageView.setImageBitmap(capturedPhoto);
-
-            // Cambiar el texto del botón a "Guardar"
-            takePhotoButton.setText("Guardar");
-        }
-    }
-
-    private void guardarImagen(Bitmap bitmap) {
-        try {
-            // Ruta para almacenar la imagen
-            File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "MiApp");
-            if (!storageDir.exists()) {
-                storageDir.mkdirs();
-            }
-
-            String fileName = "IMG_" + System.currentTimeMillis() + ".jpg";
-            File file = new File(storageDir, fileName);
-            FileOutputStream outputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-            outputStream.flush();
-            outputStream.close();
-
-            Toast.makeText(this, "Imagen guardada en: " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-
-            // Restablecer el texto del botón
-            takePhotoButton.setText("Tomar Foto");
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
         }
     }
 }

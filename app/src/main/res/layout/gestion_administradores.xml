@@ -15,8 +15,8 @@
 
         <ImageButton
             android:id="@+id/btn_back"
-            android:layout_width="40dp"
-            android:layout_height="38dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/regresar"
             android:contentDescription="@string/regresar"
@@ -27,7 +27,7 @@
             android:layout_width="50dp"
             android:layout_height="45dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="150dp"
+            android:layout_marginStart="120dp"
             android:background="@drawable/ic_notificaciones"
             android:contentDescription="@string/notificaciones"
             tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />

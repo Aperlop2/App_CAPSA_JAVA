@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permisos necesarios -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +20,11 @@
         android:theme="@style/Theme.Java_CAPSA"
         tools:targetApi="35">
 
+        <!-- Llave de la API de Google Maps -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDWonA4tTFkquO3RpV7y2GRYI4_w0mHq9g" />
+
         <!-- Actividad principal -->
         <activity
             android:name=".gestionadministradores"
@@ -23,10 +35,10 @@
             </intent-filter>
         </activity>
 
+        <!-- Actividad del mapa en tiempo real -->
         <activity
             android:name=".MapaTiempoReal"
             android:exported="true" />
-
     </application>
 
 </manifest>

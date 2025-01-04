@@ -2,11 +2,13 @@ package com.example.java_capsa;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +39,14 @@ public class MapaTiempoReal extends FragmentActivity implements OnMapReadyCallba
         // Configurar el botón para centrar el mapa
         Button btnCentrarMapa = findViewById(R.id.btn_centrar_mapa);
         btnCentrarMapa.setOnClickListener(v -> centrarMapa());
+
+        // Configurar el botón para regresar
+        ImageButton btnBackMapa = findViewById(R.id.btn_back_mapa);
+        btnBackMapa.setOnClickListener(v -> {
+            Intent intent = new Intent(MapaTiempoReal.this, gestionadministradores.class);
+            startActivity(intent);
+            finish();
+        });
 
         // Verificar y solicitar permisos
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED

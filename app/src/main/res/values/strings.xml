@@ -62,7 +62,7 @@
     <string name="titulo">Título</string>
     <string name="detalles">Detalles</string>
 
-
+    <!-- Pantallas de britani -->
     <!-- String de la pantalla agregar_nuevo_cuidador.xml -->
     <string name="agregar_cuidador">Agregar nuevo cuidador</string>
     <string name="nombre">Nombre completo</string>
@@ -75,5 +75,12 @@
     <string name="gestion_de_cuidadores">Gestón de cuidadores</string>
     <string name="agregar">Agregar</string>
 
+    <!-- String de la pantalla item_cuidador.xml-->
+    <string name="nombre_cuidador">Nombre del Cuidador</string>
+    <string name="direccionItem">Dirección</string>
+    <string name="telefonoItem">Teléfono</string>
+    <string name="horarioItem">Horario</string>
+    <string name="editar">Editar</string>
+    <string name="eliminar">Eliminar</string>
 </resources>
 

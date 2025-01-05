@@ -85,5 +85,8 @@
 
     <!-- String de la pantalla editar_cuidador-->
     <string name="editar_cuidador">Editar cuidador</string>
+    <!-- String de la pantalla gestion_de_citas-->
+    <string name="gestion_de_citas">Gestión de citas</string>
+    <string name="detalle_cita">Detalle de la cita</string>
 </resources>
 

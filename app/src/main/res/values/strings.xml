@@ -82,5 +82,8 @@
     <string name="horarioItem">Horario</string>
     <string name="editar">Editar</string>
     <string name="eliminar">Eliminar</string>
+
+    <!-- String de la pantalla editar_cuidador-->
+    <string name="editar_cuidador">Editar cuidador</string>
 </resources>
 

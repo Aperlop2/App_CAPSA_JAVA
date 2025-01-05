@@ -95,5 +95,8 @@
 
     <!-- String de la pantalla editar_cita.xml-->
     <string name="editar_cita">Editar cita</string>
+
+    <!-- String de la pantalla historial_evidencia.xml-->
+    <string name="historial_de_evidencias">Historial de evidencias</string>
 </resources>
 

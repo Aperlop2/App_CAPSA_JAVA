@@ -92,5 +92,8 @@
     <string name="agregar_cita">Agregar cita</string>
     <string name="seleccione_fecha">Seleccione fecha</string>
     <string name="seleccione_hora">Selecciona hora</string>
+
+    <!-- String de la pantalla editar_cita.xml-->
+    <string name="editar_cita">Editar cita</string>
 </resources>
 

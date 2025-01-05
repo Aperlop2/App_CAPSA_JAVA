@@ -88,5 +88,9 @@
     <!-- String de la pantalla gestion_de_citas-->
     <string name="gestion_de_citas">Gestión de citas</string>
     <string name="detalle_cita">Detalle de la cita</string>
+
+    <string name="agregar_cita">Agregar cita</string>
+    <string name="seleccione_fecha">Seleccione fecha</string>
+    <string name="seleccione_hora">Selecciona hora</string>
 </resources>
 

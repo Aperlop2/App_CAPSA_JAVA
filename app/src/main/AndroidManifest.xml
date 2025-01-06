@@ -39,6 +39,12 @@
         <activity
             android:name=".MapaTiempoReal"
             android:exported="true" />
+
+        <activity android:name=".GestionDeCuidadores" />
+        <activity android:name=".AgregarNuevoCuidador" />
+        <activity android:name=".GestionDeCitas" />
+        <activity android:name=".HistorialEvidencias" />
+
     </application>
 
 </manifest>

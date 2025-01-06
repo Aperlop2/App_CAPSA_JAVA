@@ -42,6 +42,30 @@ public class gestionadministradores extends AppCompatActivity {
             Intent intent = new Intent(gestionadministradores.this, MapaTiempoReal.class);
             startActivity(intent);
         });
+
+        // Configuración del clic en el icono de cuidadores
+        ImageView iconCaregivers = findViewById(R.id.icon_caregivers);
+        iconCaregivers.setOnClickListener(v -> {
+            // Redirigir a GestionDeCuidadores
+            Intent intent = new Intent(gestionadministradores.this, GestionDeCuidadores.class);
+            startActivity(intent);
+        });
+
+        // Configuración del clic en el icono de citas
+        ImageView iconAppointments = findViewById(R.id.icon_appointments);
+        iconAppointments.setOnClickListener(v -> {
+            // Redirigir a GestionDeCitas
+            Intent intent = new Intent(gestionadministradores.this, GestionDeCitas.class);
+            startActivity(intent);
+        });
+
+        // Configuración del clic en el icono de historial
+        ImageView iconHistory = findViewById(R.id.icon_history);
+        iconHistory.setOnClickListener(v -> {
+            // Redirigir a HistorialEvidencias
+            Intent intent = new Intent(gestionadministradores.this, HistorialEvidencias.class);
+            startActivity(intent);
+        });
     }
 
     @SuppressLint("SetTextI18n")

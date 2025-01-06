@@ -44,6 +44,7 @@
         <activity android:name=".AgregarNuevoCuidador" />
         <activity android:name=".GestionDeCitas" />
         <activity android:name=".HistorialEvidencias" />
+        <activity android:name=".AgregarCita" />
 
     </application>
 

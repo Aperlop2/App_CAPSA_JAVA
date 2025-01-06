@@ -1,6 +1,7 @@
 package com.example.java_capsa;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -32,7 +33,9 @@ public class GestionDeCitas extends AppCompatActivity {
 
         // Botón para agregar nueva cita
         btnAgregarCita.setOnClickListener(v -> {
-            // Lógica para abrir pantalla de agregar citas
+            // Redirigir a la actividad AgregarCita
+            Intent intent = new Intent(GestionDeCitas.this, AgregarCita.class);
+            startActivity(intent);
         });
 
         // Cargar citas de ejemplo

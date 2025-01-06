@@ -31,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Notificaciones en general"
-            android:textSize="25sp"
+            android:textColor="#000000"
+            android:textSize="20sp"
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
 

@@ -45,7 +45,7 @@
         <activity android:name=".GestionDeCitas" />
         <activity android:name=".HistorialEvidencias" />
         <activity android:name=".AgregarCita" />
-
+        <activity android:name=".NotificacionesGenerales" />
     </application>
 
 </manifest>

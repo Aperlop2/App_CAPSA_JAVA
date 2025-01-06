@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +15,25 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class gestionadministradores extends AppCompatActivity {
+
+    private static final String PREFS_NAME = "theme_prefs";
+    private static final String KEY_THEME = "dark_theme";
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Cargar el tema desde las preferencias
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean isDarkTheme = preferences.getBoolean(KEY_THEME, false);
+        if (isDarkTheme) {
+            setTheme(R.style.AppTheme_Dark);
+        } else {
+            setTheme(R.style.AppTheme_Light);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gestion_administradores);
 
@@ -38,7 +52,6 @@ public class gestionadministradores extends AppCompatActivity {
         // Configuración del clic en el icono del mapa
         ImageView iconMap = findViewById(R.id.icon_map);
         iconMap.setOnClickListener(v -> {
-            // Iniciar la actividad de MapaTiempoReal
             Intent intent = new Intent(gestionadministradores.this, MapaTiempoReal.class);
             startActivity(intent);
         });
@@ -46,7 +59,6 @@ public class gestionadministradores extends AppCompatActivity {
         // Configuración del clic en el icono de cuidadores
         ImageView iconCaregivers = findViewById(R.id.icon_caregivers);
         iconCaregivers.setOnClickListener(v -> {
-            // Redirigir a GestionDeCuidadores
             Intent intent = new Intent(gestionadministradores.this, GestionDeCuidadores.class);
             startActivity(intent);
         });
@@ -54,7 +66,6 @@ public class gestionadministradores extends AppCompatActivity {
         // Configuración del clic en el icono de citas
         ImageView iconAppointments = findViewById(R.id.icon_appointments);
         iconAppointments.setOnClickListener(v -> {
-            // Redirigir a GestionDeCitas
             Intent intent = new Intent(gestionadministradores.this, GestionDeCitas.class);
             startActivity(intent);
         });
@@ -62,10 +73,44 @@ public class gestionadministradores extends AppCompatActivity {
         // Configuración del clic en el icono de historial
         ImageView iconHistory = findViewById(R.id.icon_history);
         iconHistory.setOnClickListener(v -> {
-            // Redirigir a HistorialEvidencias
             Intent intent = new Intent(gestionadministradores.this, HistorialEvidencias.class);
             startActivity(intent);
         });
+
+        // Configuración del clic en el botón de notificaciones
+        ImageView btnNotifications = findViewById(R.id.btn_notifications);
+        btnNotifications.setOnClickListener(v -> {
+            Intent intent = new Intent(gestionadministradores.this, NotificacionesGenerales.class);
+            startActivity(intent);
+        });
+
+        // Configuración del clic en el botón de cam bio de tema
+        ImageView btnThemeToggle = findViewById(R.id.btn_theme_toggle);
+        btnThemeToggle.setOnClickListener(v -> toggleTheme());
+    }
+
+    private void toggleTheme() {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean isDarkTheme = preferences.getBoolean(KEY_THEME, false);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        if (isDarkTheme) {
+            editor.putBoolean(KEY_THEME, false);
+            setThemeForAllActivities(R.style.AppTheme_Light);
+        } else {
+            editor.putBoolean(KEY_THEME, true);
+            setThemeForAllActivities(R.style.AppTheme_Dark);
+        }
+        editor.apply();
+
+        // Reiniciar la actividad para aplicar el cambio de tema
+        recreate();
+    }
+
+    private void setThemeForAllActivities(int themeResId) {
+        AppCompatDelegate.setDefaultNightMode(
+                themeResId == R.style.AppTheme_Dark ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
     }
 
     @SuppressLint("SetTextI18n")

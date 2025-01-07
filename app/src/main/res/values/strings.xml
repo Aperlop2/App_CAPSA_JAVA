@@ -98,5 +98,14 @@
 
     <!-- String de la pantalla historial_evidencia.xml-->
     <string name="historial_de_evidencias">Historial de evidencias</string>
+
+
+    <string name="bienvenido_a_capsa">Bienvenido a capsa</string>
+    <string name="cuidado_experto_con_ubicacion_precisa">Cuidado exeperto con ubicación precisa</string>
+    <string name="correo_electronico">Correo electronico</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="olvidaste_tu_contrasena">Olvidaste tu contraseña</string>
+    <string name="iniciar_sesion">Iniciar sesion</string>
+    <string name="no_tienes_cuenta_registrate_aqui">No tienes cuenta registrate aqui</string>
 </resources>
 

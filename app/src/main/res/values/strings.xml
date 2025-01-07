@@ -111,5 +111,15 @@
     <string name="registrate_como">Registrate como:</string>
     <string name="_admin">Administrador</string>
     <string name="ya_tienes_una_cuenta_inicia_sesion_sesion">¿Ya tienes una cuenta? Inicia sesión</string>
+    <string name="registro_de_administrador">Registro del Administrador</string>
+    <string name="foto_de_perfil">Foto de perfil</string>
+    <string name="subir_foto">Subir foto</string>
+    <string name="nombre_completo">Nombre Completo</string>
+    <string name="registrar">Registrar</string>
+    <string name="repetir_contraseña">Repetir Contraseña</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="cargo_o_rol_ej_administrador_general">Cargo o rol (Ej: Administrador General)</string>
+    <string name="numero_de_telefono">Número de Teléfono</string>
+    <string name="correo">Correo</string>
 </resources>
 

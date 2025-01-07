@@ -1,5 +1,6 @@
 package com.example.java_capsa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Objects;
 
@@ -55,11 +58,22 @@ public class FormularioCuidador extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
-                            Caretaker caretaker = new Caretaker(fullName, email, phone, birthDate, specialty, availableHours, password);
+
+                            // Hashear la contraseña antes de almacenarla
+                            String hashedPassword = hashPassword(password);
+
+                            // Crear un objeto de cuidador con la contraseña encriptada
+                            Caretaker caretaker = new Caretaker(fullName, email, phone, birthDate, specialty, availableHours, hashedPassword);
+
+                            // Guardar los datos en Firebase Realtime Database
                             databaseReference.child(userId).setValue(caretaker)
                                     .addOnSuccessListener(unused -> {
                                         Toast.makeText(this, "Cuidador registrado con éxito", Toast.LENGTH_SHORT).show();
-                                        finish(); // Volver al Login
+
+                                        // Redirigir automáticamente al LoginPrincipal
+                                        Intent intent = new Intent(FormularioCuidador.this, LoginPrincipal.class);
+                                        startActivity(intent);
+                                        finish(); // Finalizar esta actividad
                                     })
                                     .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                         } else {
@@ -89,6 +103,11 @@ public class FormularioCuidador extends AppCompatActivity {
 
         return true;
     }
+
+    private String hashPassword(String password) {
+        // Generar un hash seguro con BCrypt
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
 }
 
 class Caretaker {
@@ -101,6 +120,6 @@ class Caretaker {
         this.fechaNacimiento = fechaNacimiento;
         this.especialidad = especialidad;
         this.horariosDisponibles = horariosDisponibles;
-        this.contraseña = contraseña; // Encriptar la contraseña aquí si es necesario
+        this.contraseña = contraseña;
     }
 }

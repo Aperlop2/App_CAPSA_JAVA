@@ -87,6 +87,14 @@ public class gestionadministradores extends AppCompatActivity {
         // Configuración del clic en el botón de cambio de tema
         ImageView btnThemeToggle = findViewById(R.id.btn_theme_toggle);
         btnThemeToggle.setOnClickListener(v -> toggleTheme());
+
+        // Configuración del botón "Regresar"
+        ImageView btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(gestionadministradores.this, LoginPrincipal.class);
+            startActivity(intent);
+            finish(); // Finaliza la actividad actual para evitar volver con el botón de retroceso
+        });
     }
 
     private void toggleTheme() {

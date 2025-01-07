@@ -1,5 +1,6 @@
 package com.example.java_capsa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Objects;
 
@@ -56,12 +59,19 @@ public class FormularioAdministrador extends AppCompatActivity {
                             assert user != null;
                             String userId = user.getUid();
 
+                            // Hashear la contraseña antes de almacenarla
+                            String hashedPassword = hashPassword(password);
+
                             // Guardar datos adicionales en Firebase Realtime Database
-                            Administrator administrator = new Administrator(fullName, email, phone, role, password);
+                            Administrator administrator = new Administrator(fullName, email, phone, role, hashedPassword);
                             databaseReference.child(userId).setValue(administrator)
                                     .addOnSuccessListener(unused -> {
                                         Toast.makeText(this, "Administrador registrado con éxito", Toast.LENGTH_SHORT).show();
-                                        finish(); // Volver al Login
+
+                                        // Redirigir automáticamente al LoginPrincipal
+                                        Intent intent = new Intent(FormularioAdministrador.this, LoginPrincipal.class);
+                                        startActivity(intent);
+                                        finish(); // Finaliza esta actividad
                                     })
                                     .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar en la base de datos: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                         } else {
@@ -89,6 +99,11 @@ public class FormularioAdministrador extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private String hashPassword(String password) {
+        // Generar un hash seguro con BCrypt
+        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 }
 

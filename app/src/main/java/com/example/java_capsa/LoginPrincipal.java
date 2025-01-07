@@ -14,6 +14,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class LoginPrincipal extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private DatabaseReference adminRef, caretakerRef;
@@ -56,12 +58,15 @@ public class LoginPrincipal extends AppCompatActivity {
         adminRef.get().addOnSuccessListener(snapshot -> {
             if (snapshot.exists() && validateLogin(snapshot, email, password)) {
                 Toast.makeText(this, "Inicio de sesión exitoso (Administrador)", Toast.LENGTH_SHORT).show();
-                // Aquí puedes redirigir a otra actividad si es necesario
+                // Redirigir al panel de administración
+                Intent intent = new Intent(LoginPrincipal.this, gestionadministradores.class);
+                startActivity(intent);
+                finish(); // Finalizar actividad actual
             } else {
                 caretakerRef.get().addOnSuccessListener(caretakerSnapshot -> {
                     if (caretakerSnapshot.exists() && validateLogin(caretakerSnapshot, email, password)) {
                         Toast.makeText(this, "Inicio de sesión exitoso (Cuidador)", Toast.LENGTH_SHORT).show();
-                        // Aquí puedes redirigir a otra actividad si es necesario
+                        // Aquí puedes redirigir al panel del cuidador si es necesario
                     } else {
                         Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
                     }
@@ -72,8 +77,12 @@ public class LoginPrincipal extends AppCompatActivity {
 
     private boolean validateLogin(DataSnapshot snapshot, String email, String password) {
         for (DataSnapshot child : snapshot.getChildren()) {
-            if (email.equals(child.child("correo").getValue(String.class))
-                    && password.equals(child.child("contraseña").getValue(String.class))) {
+            String storedEmail = child.child("correo").getValue(String.class);
+            String storedPassword = child.child("contraseña").getValue(String.class);
+
+            if (storedEmail != null && storedPassword != null
+                    && storedEmail.equals(email)
+                    && BCrypt.checkpw(password, storedPassword)) {
                 return true;
             }
         }

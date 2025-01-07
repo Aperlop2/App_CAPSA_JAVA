@@ -121,5 +121,17 @@
     <string name="cargo_o_rol_ej_administrador_general">Cargo o rol (Ej: Administrador General)</string>
     <string name="numero_de_telefono">Número de Teléfono</string>
     <string name="correo">Correo</string>
+    <string name="registro_de_cuidador">Registro de cuidador</string>
+    <string name="foto_de_perfil_cuidador">Foto de perfil</string>
+    <string name="subir_foto_cuidador">Subir foto</string>
+    <string name="nombre_completo_cuidador">Nombre Completo</string>
+    <string name="correo_electronico_cuidador">Correo electrónico</string>
+    <string name="numero_de_telefono_cuidador">Número de teléfono</string>
+    <string name="fecha_de_nacimiento_cuidador">Fecha de nacimiento</string>
+    <string name="especialidad_cuidador">Especialidad</string>
+    <string name="horarios_disponibles_cuidador">Horarios disponibles</string>
+    <string name="contraseña_cuidador">Contraseña</string>
+    <string name="repetir_contraseña_cuidador">Repetir contraseña</string>
+    <string name="registrar_cuidador">Registrar</string>
 </resources>
 

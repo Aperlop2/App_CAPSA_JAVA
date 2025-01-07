@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#E1E1E1">
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        android:src="@drawable/imagen_logo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tvSlogan"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cuidado_experto_con_ubicacion_precisa_precisa"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:fontFamily="@font/roboto_lightitalic"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/ivLogo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/tvRegisterTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/registrate_como"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:fontFamily="sans-serif"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@id/tvSlogan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Botón Administrador -->
+    <Button
+        android:id="@+id/btnAdministrador"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/_admin"
+        android:textColor="@color/black"
+        android:backgroundTint="#4C9BB8"
+        android:fontFamily="@font/roboto_bolditalic"
+        app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        tools:ignore="VisualLintButtonSize" />
+
+    <!-- Botón Cuidador -->
+    <Button
+        android:id="@+id/btnCuidador"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cuidador"
+        android:textColor="@color/black"
+        android:backgroundTint="#4C9BB8"
+        android:fontFamily="@font/roboto_blackitalic"
+        app:layout_constraintTop_toBottomOf="@id/btnAdministrador"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        tools:ignore="VisualLintButtonSize" />
+
+    <TextView
+        android:id="@+id/tvAlreadyAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ya_tienes_una_cuenta_inicia_sesion_sesion"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:fontFamily="@font/roboto_italic"
+        app:layout_constraintTop_toBottomOf="@id/btnCuidador"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

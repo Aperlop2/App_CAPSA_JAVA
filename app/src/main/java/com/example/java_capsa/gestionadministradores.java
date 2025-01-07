@@ -84,7 +84,7 @@ public class gestionadministradores extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Configuración del clic en el botón de cam bio de tema
+        // Configuración del clic en el botón de cambio de tema
         ImageView btnThemeToggle = findViewById(R.id.btn_theme_toggle);
         btnThemeToggle.setOnClickListener(v -> toggleTheme());
     }
@@ -133,21 +133,18 @@ public class gestionadministradores extends AppCompatActivity {
         layoutCuidadores.setOrientation(LinearLayout.VERTICAL);
         scrollCuidadores.addView(layoutCuidadores);
 
-        for (int i = 1; i <= 3; i++) {
-            View cardView = inflater.inflate(R.layout.card_cuidador, layoutCuidadores, false);
+        View cardView = inflater.inflate(R.layout.card_cuidador, layoutCuidadores, false);
+        TextView tvName = cardView.findViewById(R.id.tv_name);
+        TextView tvStatus = cardView.findViewById(R.id.tv_status);
+        TextView tvLocation = cardView.findViewById(R.id.tv_location);
+        TextView tvEspecialidad = cardView.findViewById(R.id.tv_especialidad);
 
-            TextView tvName = cardView.findViewById(R.id.tv_name);
-            TextView tvStatus = cardView.findViewById(R.id.tv_status);
-            TextView tvLocation = cardView.findViewById(R.id.tv_location);
-            TextView tvEspecialidad = cardView.findViewById(R.id.tv_especialidad);
+        tvName.setText("Nombre:");
+        tvStatus.setText("Estado:");
+        tvLocation.setText("Ubicación:");
+        tvEspecialidad.setText("Especialidad:");
 
-            tvName.setText("Nombre:");
-            tvStatus.setText("Estado:");
-            tvLocation.setText("Ubicación:");
-            tvEspecialidad.setText("Especialidad:");
-
-            layoutCuidadores.addView(cardView);
-        }
+        layoutCuidadores.addView(cardView);
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
@@ -173,21 +170,18 @@ public class gestionadministradores extends AppCompatActivity {
         layoutCitas.setOrientation(LinearLayout.VERTICAL);
         scrollCitas.addView(layoutCitas);
 
-        for (int i = 1; i <= 3; i++) {
-            View cardView = inflater.inflate(R.layout.card_cita, layoutCitas, false);
+        View cardView = inflater.inflate(R.layout.card_cita, layoutCitas, false);
+        TextView tvCita = cardView.findViewById(R.id.tv_cita);
+        TextView tvFecha = cardView.findViewById(R.id.tv_fecha);
+        TextView tvCuidador = cardView.findViewById(R.id.tv_cuidador);
+        TextView tvUbicacion = cardView.findViewById(R.id.tv_ubicacion);
 
-            TextView tvCita = cardView.findViewById(R.id.tv_cita);
-            TextView tvFecha = cardView.findViewById(R.id.tv_fecha);
-            TextView tvCuidador = cardView.findViewById(R.id.tv_cuidador);
-            TextView tvUbicacion = cardView.findViewById(R.id.tv_ubicacion);
+        tvCita.setText("Cita:");
+        tvFecha.setText("Fecha:");
+        tvCuidador.setText("Cuidador:");
+        tvUbicacion.setText("Ubicación:");
 
-            tvCita.setText("Cita:");
-            tvFecha.setText("Fecha:");
-            tvCuidador.setText("Cuidador:");
-            tvUbicacion.setText("Ubicación:");
-
-            layoutCitas.addView(cardView);
-        }
+        layoutCitas.addView(cardView);
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
@@ -213,23 +207,20 @@ public class gestionadministradores extends AppCompatActivity {
         layoutNotificaciones.setOrientation(LinearLayout.VERTICAL);
         scrollNotificaciones.addView(layoutNotificaciones);
 
-        for (int i = 1; i <= 3; i++) {
-            View cardView = inflater.inflate(R.layout.card_notificacion, layoutNotificaciones, false);
+        View cardView = inflater.inflate(R.layout.card_notificacion, layoutNotificaciones, false);
+        TextView tvFecha = cardView.findViewById(R.id.tv_fecha);
+        TextView tvTipo = cardView.findViewById(R.id.tv_tipo_notificacion);
+        TextView tvNombre = cardView.findViewById(R.id.tv_nombre);
+        TextView tvDireccion = cardView.findViewById(R.id.tv_direccion);
+        TextView tvHorario = cardView.findViewById(R.id.tv_horario);
 
-            TextView tvFecha = cardView.findViewById(R.id.tv_fecha);
-            TextView tvTipo = cardView.findViewById(R.id.tv_tipo_notificacion);
-            TextView tvNombre = cardView.findViewById(R.id.tv_nombre);
-            TextView tvDireccion = cardView.findViewById(R.id.tv_direccion);
-            TextView tvHorario = cardView.findViewById(R.id.tv_horario);
+        tvFecha.setText("Fecha:");
+        tvTipo.setText("Tipo de notificación:");
+        tvNombre.setText("Nombre:");
+        tvDireccion.setText("Dirección:");
+        tvHorario.setText("Horario:");
 
-            tvFecha.setText("Fecha:");
-            tvTipo.setText("Tipo de notificación:");
-            tvNombre.setText("Nombre:");
-            tvDireccion.setText("Dirección:");
-            tvHorario.setText("Horario:");
-
-            layoutNotificaciones.addView(cardView);
-        }
+        layoutNotificaciones.addView(cardView);
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
@@ -255,23 +246,20 @@ public class gestionadministradores extends AppCompatActivity {
         layoutServicios.setOrientation(LinearLayout.VERTICAL);
         scrollServicios.addView(layoutServicios);
 
-        for (int i = 1; i <= 3; i++) {
-            View cardView = inflater.inflate(R.layout.card_servicio, layoutServicios, false);
+        View cardView = inflater.inflate(R.layout.card_servicio, layoutServicios, false);
+        TextView tvServicio = cardView.findViewById(R.id.tv_servicio);
+        TextView tvFecha = cardView.findViewById(R.id.tv_fecha);
+        TextView tvHora = cardView.findViewById(R.id.tv_hora);
+        TextView tvCuidador = cardView.findViewById(R.id.tv_cuidador);
+        TextView tvUbicacion = cardView.findViewById(R.id.tv_ubicacion);
 
-            TextView tvServicio = cardView.findViewById(R.id.tv_servicio);
-            TextView tvFecha = cardView.findViewById(R.id.tv_fecha);
-            TextView tvHora = cardView.findViewById(R.id.tv_hora);
-            TextView tvCuidador = cardView.findViewById(R.id.tv_cuidador);
-            TextView tvUbicacion = cardView.findViewById(R.id.tv_ubicacion);
+        tvServicio.setText("Servicio:");
+        tvFecha.setText("Fecha:");
+        tvHora.setText("Hora:");
+        tvCuidador.setText("Cuidador:");
+        tvUbicacion.setText("Ubicación:");
 
-            tvServicio.setText("Servicio:");
-            tvFecha.setText("Fecha:");
-            tvHora.setText("Hora:");
-            tvCuidador.setText("Cuidador:");
-            tvUbicacion.setText("Ubicación:");
-
-            layoutServicios.addView(cardView);
-        }
+        layoutServicios.addView(cardView);
 
         btnClose.setOnClickListener(v -> dialog.dismiss());
         dialog.show();

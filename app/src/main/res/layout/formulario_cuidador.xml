@@ -52,7 +52,7 @@
                 android:layout_gravity="center"
                 android:text="@string/subir_foto_cuidador"
                 android:backgroundTint="#4C9BB8"
-                android:textColor="@color/black"
+                android:textColor="#FFFFFF"
                 android:fontFamily="@font/roboto_bolditalic"
                 android:elevation="4dp"
                 android:layout_marginTop="8dp" />
@@ -68,7 +68,8 @@
                 android:hint="@string/nombre_completo_cuidador"
                 android:inputType="textPersonName"
                 android:padding="12dp"
-                android:textColorHint="#888888"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
                 tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
 
             <EditText
@@ -82,7 +83,8 @@
                 android:hint="@string/correo_electronico_cuidador"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
-                android:textColorHint="#888888"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
                 tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
 
             <EditText
@@ -96,7 +98,8 @@
                 android:hint="@string/numero_de_telefono_cuidador"
                 android:inputType="phone"
                 android:padding="12dp"
-                android:textColorHint="#888888"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
                 tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
 
             <EditText
@@ -110,7 +113,8 @@
                 android:hint="@string/fecha_de_nacimiento_cuidador"
                 android:inputType="date"
                 android:padding="12dp"
-                android:textColorHint="#888888"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
                 tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
 
             <EditText
@@ -124,7 +128,8 @@
                 android:hint="@string/especialidad_cuidador"
                 android:inputType="text"
                 android:padding="12dp"
-                android:textColorHint="#888888"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
                 tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
 
             <EditText
@@ -138,7 +143,8 @@
                 android:hint="@string/horarios_disponibles_cuidador"
                 android:inputType="text"
                 android:padding="12dp"
-                android:textColorHint="#888888"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
                 tools:ignore="Autofill,TextContrastCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
             <EditText
@@ -152,7 +158,8 @@
                 android:hint="@string/contraseña_cuidador"
                 android:inputType="textPassword"
                 android:padding="12dp"
-                android:textColorHint="#888888"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
                 tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
 
             <EditText
@@ -166,7 +173,8 @@
                 android:hint="@string/repetir_contraseña_cuidador"
                 android:inputType="textPassword"
                 android:padding="12dp"
-                android:textColorHint="#888888"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
                 tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
 
             <Button

@@ -11,8 +11,8 @@
 
     <ImageView
         android:id="@+id/ivLogo"
-        android:layout_width="98dp"
-        android:layout_height="98dp"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
         android:src="@drawable/imagen_logo"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/_admin"
-        android:textColor="@color/black"
+        android:textColor="#FFFFFF"
         android:backgroundTint="#4C9BB8"
         android:fontFamily="@font/roboto_bolditalic"
         app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
@@ -70,7 +70,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/cuidador"
-        android:textColor="@color/black"
+        android:textColor="#FFFFFF"
         android:backgroundTint="#4C9BB8"
         android:fontFamily="@font/roboto_blackitalic"
         app:layout_constraintTop_toBottomOf="@id/btnAdministrador"
@@ -78,19 +78,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
         tools:ignore="VisualLintButtonSize" />
-
-    <TextView
-        android:id="@+id/tvAlreadyAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ya_tienes_una_cuenta_inicia_sesion_sesion"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:fontFamily="@font/roboto_italic"
-        app:layout_constraintTop_toBottomOf="@id/btnCuidador"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

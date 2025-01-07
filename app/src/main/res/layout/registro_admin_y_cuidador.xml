@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="#E1E1E1">
+    android:background="#E1E1E1"
+    tools:context=".RegistroAdminYCuidador">
 
     <ImageView
         android:id="@+id/ivLogo"

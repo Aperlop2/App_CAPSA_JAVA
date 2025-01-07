@@ -27,7 +27,7 @@
 
         <!-- Actividad principal -->
         <activity
-            android:name=".gestionadministradores"
+            android:name=".LoginPrincipal"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,6 +46,13 @@
         <activity android:name=".HistorialEvidencias" />
         <activity android:name=".AgregarCita" />
         <activity android:name=".NotificacionesGenerales" />
+
+        <!-- Actividad pantalla principal del login -->
+
+        <activity android:name=".RegistroAdminYCuidador" />
+        <activity android:name=".FormularioAdministrador" />
+
+        <activity android:name=".FormularioCuidador" />
     </application>
 
 </manifest>

@@ -60,6 +60,7 @@ public class FormularioAdministrador extends AppCompatActivity {
                             String userId = user.getUid();
 
                             // Hashear la contraseña antes de almacenarla
+                            // Hashear la contraseña antes de almacenarla
                             String hashedPassword = hashPassword(password);
 
                             // Guardar datos adicionales en Firebase Realtime Database

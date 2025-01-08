@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import org.mindrot.jbcrypt.BCrypt;
+
 
 public class LoginPrincipal extends AppCompatActivity {
     private EditText etEmail, etPassword;

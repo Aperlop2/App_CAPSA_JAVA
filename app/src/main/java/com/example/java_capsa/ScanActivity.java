@@ -20,17 +20,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class ScanActivity extends AppCompatActivity {
 
@@ -75,18 +71,15 @@ public class ScanActivity extends AppCompatActivity {
                 return;
             }
 
+            // Convertir la foto a Base64
             String fotoBase64 = bitmapToBase64(capturedPhoto);
 
-            // Guardar en SQLite
+            // Guardar la evidencia en la base de datos
             long result = databaseHelper.insertarEvidencia(nombreCuidador, ubicacion, descripcion, fotoBase64);
 
             if (result != -1) {
                 Toast.makeText(this, "Evidencia guardada exitosamente", Toast.LENGTH_SHORT).show();
-
-                // Enviar datos al servidor
-                enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64);
-
-                // Limpiar los campos
+                // Limpiar los campos después de guardar
                 locationTextView.setText("");
                 ((EditText) findViewById(R.id.descripcionEditText)).setText("");
                 photoImageView.setImageBitmap(null);
@@ -95,35 +88,7 @@ public class ScanActivity extends AppCompatActivity {
                 Toast.makeText(this, "Error al guardar la evidencia", Toast.LENGTH_SHORT).show();
             }
         });
-    }
 
-    private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64) {
-        String url = "http://192.168.100.12/guardar_evidencia.php"; // Cambia esta URL por la de tu servidor
-
-        // Crear la solicitud POST
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                response -> {
-                    // Manejar respuesta del servidor
-                    Toast.makeText(this, "Datos enviados correctamente: " + response, Toast.LENGTH_SHORT).show();
-                },
-                error -> {
-                    // Manejar error
-                    Toast.makeText(this, "Error al enviar datos: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Crear los parámetros de la solicitud
-                Map<String, String> params = new HashMap<>();
-                params.put("nombre_cuidador", nombreCuidador);
-                params.put("ubicacion", ubicacion);
-                params.put("descripcion", descripcion);
-                params.put("foto", fotoBase64);
-                return params;
-            }
-        };
-
-        // Agregar la solicitud a la cola de Volley
-        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     private void checkLocationPermission() {
@@ -165,6 +130,7 @@ public class ScanActivity extends AppCompatActivity {
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
+
 
     private void getLocation() {
         try {

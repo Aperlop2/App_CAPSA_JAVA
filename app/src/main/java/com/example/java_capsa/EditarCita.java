@@ -1,5 +1,6 @@
 package com.example.java_capsa;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,11 +20,13 @@ public class EditarCita extends AppCompatActivity {
     private TextView tvFechaEditar, tvHoraEditar;
     private EditText etCuidadorEditar, etUbicacionEditar;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editar_cita);
 
+        // Enlazar vistas
         tvFechaEditar = findViewById(R.id.tvFechaEditar);
         tvHoraEditar = findViewById(R.id.tvHoraEditar);
         etCuidadorEditar = findViewById(R.id.etCuidadorEditar);
@@ -34,13 +38,26 @@ public class EditarCita extends AppCompatActivity {
 
         // Recibir datos de la cita seleccionada
         Intent intent = getIntent();
-        String fecha = intent.getStringExtra("fecha");
-        String hora = intent.getStringExtra("hora");
+        String detalle = intent.getStringExtra("detalle");
         String cuidador = intent.getStringExtra("cuidador");
         String ubicacion = intent.getStringExtra("ubicacion");
 
-        tvFechaEditar.setText(fecha);
-        tvHoraEditar.setText(hora);
+        // Dividir el detalle en fecha y hora
+        if (detalle != null) {
+            String[] detalleDividido = detalle.split(" ");
+            if (detalleDividido.length >= 3) {
+                tvFechaEditar.setText(detalleDividido[0]); // Fecha
+                tvHoraEditar.setText(detalleDividido[1] + " " + detalleDividido[2]); // Hora (con AM/PM)
+            } else if (detalleDividido.length == 2) {
+                tvFechaEditar.setText(detalleDividido[0]); // Fecha
+                tvHoraEditar.setText(detalleDividido[1]); // Hora (sin AM/PM)
+            } else {
+                tvFechaEditar.setText("Fecha no disponible");
+                tvHoraEditar.setText("Hora no disponible");
+            }
+        }
+
+        // Asignar valores a los campos restantes
         etCuidadorEditar.setText(cuidador);
         etUbicacionEditar.setText(ubicacion);
 
@@ -71,18 +88,27 @@ public class EditarCita extends AppCompatActivity {
             timePickerDialog.show();
         });
 
-        // Acción para guardar
+        // Guardar cambios
         btnGuardarCitaEditar.setOnClickListener(v -> {
+            if (tvFechaEditar.getText().toString().isEmpty() ||
+                    tvHoraEditar.getText().toString().isEmpty() ||
+                    etCuidadorEditar.getText().toString().isEmpty() ||
+                    etUbicacionEditar.getText().toString().isEmpty()) {
+                Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent resultIntent = new Intent();
-            resultIntent.putExtra("fecha", tvFechaEditar.getText().toString());
-            resultIntent.putExtra("hora", tvHoraEditar.getText().toString());
+            String nuevoDetalle = tvFechaEditar.getText().toString() + " " + tvHoraEditar.getText().toString();
+            resultIntent.putExtra("detalle", nuevoDetalle);
             resultIntent.putExtra("cuidador", etCuidadorEditar.getText().toString());
             resultIntent.putExtra("ubicacion", etUbicacionEditar.getText().toString());
+            resultIntent.putExtra("position", intent.getIntExtra("position", -1));
             setResult(RESULT_OK, resultIntent);
             finish();
         });
 
-        // Acción para cancelar
+        // Cancelar edición
         btnCancelarCitaEditar.setOnClickListener(v -> finish());
     }
 }

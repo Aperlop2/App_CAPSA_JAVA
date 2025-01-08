@@ -1,9 +1,9 @@
 package com.example.java_capsa;
 
 public class Cita {
-    private final String detalle;
-    private final String cuidador;
-    private final String ubicacion;
+    private String detalle;
+    private String cuidador;
+    private String ubicacion;
 
     public Cita(String detalle, String cuidador, String ubicacion) {
         this.detalle = detalle;
@@ -11,6 +11,7 @@ public class Cita {
         this.ubicacion = ubicacion;
     }
 
+    // Getters
     public String getDetalle() {
         return detalle;
     }
@@ -21,5 +22,18 @@ public class Cita {
 
     public String getUbicacion() {
         return ubicacion;
+    }
+
+    // Setters (si necesitas modificar los atributos)
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+
+    public void setCuidador(String cuidador) {
+        this.cuidador = cuidador;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
     }
 }

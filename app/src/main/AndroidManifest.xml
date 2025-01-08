@@ -54,6 +54,7 @@
         <activity android:name=".FormularioAdministrador" />
 
         <activity android:name=".FormularioCuidador" />
+        <activity android:name=".EditarCita" />
     </application>
 
 </manifest>

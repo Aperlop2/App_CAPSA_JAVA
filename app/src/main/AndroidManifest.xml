@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,15 +13,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- Permisos necesarios -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
-
     <application
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
@@ -33,7 +23,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Java_CAPSA"
-
         tools:targetApi="31">
 
         <meta-data
@@ -45,43 +34,15 @@
         <activity android:name=".AppointmentsActivity" />
         <activity android:name=".ProfileActivity" />
 
-
-
-        <!-- Llave de la API de Google Maps -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDWonA4tTFkquO3RpV7y2GRYI4_w0mHq9g" />
-
-        <!-- Actividad principal -->
         <activity
-            android:name=".LoginPrincipal"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".gestionadministradores" />
-
-        <!-- Actividad del mapa en tiempo real -->
-        <activity
-            android:name=".MapaTiempoReal"
-            android:exported="true" />
-
-        <activity android:name=".GestionDeCuidadores" />
-        <activity android:name=".AgregarNuevoCuidador" />
-        <activity android:name=".GestionDeCitas" />
-        <activity android:name=".HistorialEvidencias" />
-        <activity android:name=".AgregarCita" />
-        <activity android:name=".NotificacionesGenerales" />
-
-        <!-- Actividad pantalla principal del login -->
-
-        <activity android:name=".RegistroAdminYCuidador" />
-        <activity android:name=".FormularioAdministrador" />
-
-        <activity android:name=".FormularioCuidador" />
-        <activity android:name=".EditarCita" />
     </application>
 
 </manifest>

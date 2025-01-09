@@ -117,12 +117,8 @@
     <string name="vista_previa_de_la_foto">Vista previa de la foto</string>
     <string name="tomar_foto">Tomar Foto</string>
     <string name="enviar_evidencia">Enviar Evidencia</string>
-
-
-    <!-- Otros strings que ya tengas -->
-    <string-array name="estado_array">
-        <item>Activo</item>
-        <item>Inactivo</item>
-        <item>Otro</item>
-    </string-array>
+    <string name="estado_opciones">Activo,Inactivo</string>
+    <string name="actualizar_info">Actualizar Información</string>
+    <string name="foto_evidencia">foto_evidencia</string>
+    <string name="actualizar_informacion">actualizar_informacion</string>
 </resources>

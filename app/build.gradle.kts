@@ -43,12 +43,11 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("com.google.android.gms:play-services-maps:19.0.0")
-    implementation("androidx.fragment:fragment:1.8.5")
-
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-database")
     implementation("org.mindrot:jbcrypt:0.4")
+    implementation ("androidx.fragment:fragment:1.6.1")
 
 }

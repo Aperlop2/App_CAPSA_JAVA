@@ -43,7 +43,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+<<<<<<< HEAD
 }
+=======
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation("androidx.fragment:fragment:1.8.5")
 
@@ -54,3 +56,4 @@ dependencies {
     implementation("org.mindrot:jbcrypt:0.4")
 
 }
+>>>>>>> ana_del_btanch_tatiana2

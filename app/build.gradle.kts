@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
+
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -32,9 +34,7 @@ android {
 }
 
 dependencies {
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
-    implementation ("com.android.volley:volley:1.2.1")
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -43,4 +43,14 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+}
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("androidx.fragment:fragment:1.8.5")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-database")
+    implementation("org.mindrot:jbcrypt:0.4")
+
 }

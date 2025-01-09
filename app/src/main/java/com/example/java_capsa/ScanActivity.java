@@ -76,6 +76,7 @@ public class ScanActivity extends AppCompatActivity {
             // Convertir la foto a Base64
             String fotoBase64 = bitmapToBase64(capturedPhoto);
 
+            // Guardar la evidencia en la base de datos
             long result = databaseHelper.insertarEvidencia(nombreCuidador, ubicacion, descripcion, fotoBase64);
 
             if (result != -1) {
@@ -189,7 +190,6 @@ public class ScanActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            capturedPhoto = (Bitmap) data.getExtras().get("data");
             capturedPhoto = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             photoImageView.setImageBitmap(capturedPhoto);
         }

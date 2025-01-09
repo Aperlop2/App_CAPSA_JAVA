@@ -1,6 +1,7 @@
 package com.example.java_capsa;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -27,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ScanActivity extends AppCompatActivity {
 
@@ -132,6 +134,7 @@ public class ScanActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void getLocation() {
         try {
             fusedLocationProviderClient.getLastLocation()
@@ -187,7 +190,7 @@ public class ScanActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            capturedPhoto = (Bitmap) data.getExtras().get("data");
+            capturedPhoto = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             photoImageView.setImageBitmap(capturedPhoto);
         }
     }

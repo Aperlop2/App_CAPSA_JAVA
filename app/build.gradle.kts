@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.example.java_capsa"
         minSdk = 34
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -44,6 +44,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation("androidx.fragment:fragment:1.8.5")
+    implementation ("com.android.volley:volley:1.2.1")
 
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-auth")

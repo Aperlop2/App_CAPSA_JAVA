@@ -114,4 +114,15 @@
     <string name="registrar_cuidador">Registrar</string>
     <string name="contraseña">contraseña</string>
     <string name="cuidado_experto_con_ubicacion_precisa_precisa">cuidado_experto_con_ubicacion_precisa_precisa</string>
+    <string name="vista_previa_de_la_foto">Vista previa de la foto</string>
+    <string name="tomar_foto">Tomar Foto</string>
+    <string name="enviar_evidencia">Enviar Evidencia</string>
+
+
+    <!-- Otros strings que ya tengas -->
+    <string-array name="estado_array">
+        <item>Activo</item>
+        <item>Inactivo</item>
+        <item>Otro</item>
+    </string-array>
 </resources>

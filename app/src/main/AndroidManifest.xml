@@ -9,10 +9,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
     <uses-feature android:name="android.hardware.camera.front" android:required="false" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,26 +19,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Java_CAPSA"
-        tools:targetApi="31">
+        tools:targetApi="35">
 
+        <!-- Llave de la API de Google Maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
 
+        <!-- Actividades registradas -->
         <activity android:name=".DashboardCuidadorActivity" />
         <activity android:name=".ScanActivity" />
         <activity android:name=".AppointmentsActivity" />
         <activity android:name=".ProfileActivity" />
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+        <activity android:name=".LoginPrincipal" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".gestionadministradores" />
+        <activity android:name=".MapaTiempoReal" android:exported="true" />
+        <activity android:name=".GestionDeCuidadores" />
+        <activity android:name=".AgregarNuevoCuidador" />
+        <activity android:name=".GestionDeCitas" />
+        <activity android:name=".HistorialEvidencias" />
+        <activity android:name=".AgregarCita" />
+        <activity android:name=".NotificacionesGenerales" />
+        <activity android:name=".RegistroAdminYCuidador" />
+        <activity android:name=".FormularioAdministrador" />
+        <activity android:name=".FormularioCuidador" />
+        <activity android:name=".EditarCita" />
     </application>
 
 </manifest>

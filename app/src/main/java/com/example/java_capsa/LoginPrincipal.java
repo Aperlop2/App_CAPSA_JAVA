@@ -29,6 +29,7 @@ public class LoginPrincipal extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
         TextView tvSignUp = findViewById(R.id.tvSignUp); // Texto para redirigir al registro
+        TextView tvForgotPassword = findViewById(R.id.tvForgotPassword); // Texto para redirigir a la recuperación de contraseña
 
         // Referencias a Firebase
         adminRef = FirebaseDatabase.getInstance().getReference("usuarios/administradores");
@@ -41,6 +42,13 @@ public class LoginPrincipal extends AppCompatActivity {
         tvSignUp.setOnClickListener(v -> {
             // Redirigir a la actividad RegistroAdminYCuidador
             Intent intent = new Intent(LoginPrincipal.this, RegistroAdminYCuidador.class);
+            startActivity(intent);
+        });
+
+        // Manejar clic en "Olvidaste tu contraseña"
+        tvForgotPassword.setOnClickListener(v -> {
+            // Redirigir a la actividad Recuperación de Contraseña
+            Intent intent = new Intent(LoginPrincipal.this, RecuperarContrasena.class);
             startActivity(intent);
         });
     }

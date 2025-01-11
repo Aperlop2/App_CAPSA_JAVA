@@ -6,6 +6,8 @@
     android:padding="16dp"
     tools:context=".MapaTiempoReal">
 
+    <!-- Esto es el boton de regresar -->
+
     <ImageButton
         android:id="@+id/btn_back_mapa"
         android:layout_width="50dp"

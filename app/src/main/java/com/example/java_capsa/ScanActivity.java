@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,6 +25,10 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,85 +39,135 @@ import java.util.Map;
 
 public class ScanActivity extends AppCompatActivity {
 
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 2;
-    private static final int CAMERA_REQUEST_CODE = 3;
+    private static final int CAMERA_REQUEST_CODE = 100;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 101;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
     private TextView locationTextView;
+    private EditText descripcionEditText;
     private ImageView photoImageView;
     private Bitmap capturedPhoto;
-    private DatabaseHelper databaseHelper;
+    private String nombreCuidador = "Nombre Predeterminado"; // Valor por defecto
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
+        // Inicialización de vistas
         locationTextView = findViewById(R.id.locationTextView);
+        descripcionEditText = findViewById(R.id.descripcionEditText);
         photoImageView = findViewById(R.id.photoImageView);
         Button takePhotoButton = findViewById(R.id.takePhotoButton);
         Button enviarButton = findViewById(R.id.enviarButton);
 
-        // Inicializar el cliente de ubicación
+        // Inicialización del cliente de ubicación
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        databaseHelper = new DatabaseHelper(this); // Inicializar base de datos
 
-        // Verificar permisos de ubicación
+        // Obtener nombre del cuidador desde Firebase
+        obtenerNombreCuidador();
+
+        // Configurar listeners para botones
+        takePhotoButton.setOnClickListener(v -> openCamera());
+        enviarButton.setOnClickListener(v -> enviarDatos());
+
         checkLocationPermission();
+    }
 
-        // Configurar botón para tomar fotos
-        takePhotoButton.setOnClickListener(v -> checkCameraPermission());
-
-        // Configurar botón para enviar datos
-        enviarButton.setOnClickListener(v -> {
-            String nombreCuidador = "Nombre Predeterminado"; // Cambiar por el nombre dinámico en el futuro
-            String ubicacion = locationTextView.getText().toString();
-            String descripcion = ((EditText) findViewById(R.id.descripcionEditText)).getText().toString();
-
-            if (capturedPhoto == null || ubicacion.isEmpty() || descripcion.isEmpty()) {
-                Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
-                return;
+    private void openCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+        } else {
+            try {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+            } catch (Exception e) {
+                Toast.makeText(this, "Error al abrir la cámara: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
+        }
+    }
 
-            String fotoBase64 = bitmapToBase64(capturedPhoto);
+    private void enviarDatos() {
+        if (capturedPhoto == null || locationTextView.getText().toString().isEmpty() || descripcionEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            // Guardar en SQLite
-            long result = databaseHelper.insertarEvidencia(nombreCuidador, ubicacion, descripcion, fotoBase64);
+        String ubicacion = locationTextView.getText().toString();
+        String descripcion = descripcionEditText.getText().toString();
+        String fotoBase64 = bitmapToBase64(capturedPhoto);
 
-            if (result != -1) {
-                Toast.makeText(this, "Evidencia guardada exitosamente", Toast.LENGTH_SHORT).show();
+        enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64);
+    }
 
-                // Enviar datos al servidor
-                enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64);
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            getLocation();
+        }
+    }
 
-                // Limpiar los campos
-                locationTextView.setText("");
-                ((EditText) findViewById(R.id.descripcionEditText)).setText("");
-                photoImageView.setImageBitmap(null);
-                capturedPhoto = null;
-            } else {
-                Toast.makeText(this, "Error al guardar la evidencia", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void getLocation() {
+        try {
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+                if (location != null) {
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                        if (addresses != null && !addresses.isEmpty()) {
+                            locationTextView.setText(addresses.get(0).getAddressLine(0));
+                        } else {
+                            locationTextView.setText("No se encontró la dirección");
+                        }
+                    } catch (IOException e) {
+                        locationTextView.setText("Error al obtener la dirección");
+                    }
+                } else {
+                    Toast.makeText(this, "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (SecurityException e) {
+            Toast.makeText(this, "Error al obtener ubicación: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void obtenerNombreCuidador() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
+            caretakerRef.child(userId).get().addOnSuccessListener(snapshot -> {
+                if (snapshot.exists()) {
+                    nombreCuidador = snapshot.child("nombre").getValue(String.class);
+                } else {
+                    Toast.makeText(this, "No se encontraron datos del cuidador", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(e -> {
+                Toast.makeText(this, "Error al obtener datos de Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            Toast.makeText(this, "Usuario no autenticado. Inicie sesión.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginPrincipal.class));
+            finish();
+        }
     }
 
     private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64) {
-        String url = "http://192.168.100.12/guardar_evidencia.php"; // Cambia esta URL por la de tu servidor
+        String url = "http://192.168.100.5/guardar_evidencia.php";
 
-        // Crear la solicitud POST
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                response -> {
-                    // Manejar respuesta del servidor
-                    Toast.makeText(this, "Datos enviados correctamente: " + response, Toast.LENGTH_SHORT).show();
-                },
+                response -> Toast.makeText(this, "Datos enviados correctamente", Toast.LENGTH_SHORT).show(),
                 error -> {
-                    // Manejar error
-                    Toast.makeText(this, "Error al enviar datos: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (error.networkResponse != null) {
+                        int statusCode = error.networkResponse.statusCode;
+                        Toast.makeText(this, "Error: Código HTTP " + statusCode, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(this, "Error de red: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }) {
             @Override
             protected Map<String, String> getParams() {
-                // Crear los parámetros de la solicitud
                 Map<String, String> params = new HashMap<>();
                 params.put("nombre_cuidador", nombreCuidador);
                 params.put("ubicacion", ubicacion);
@@ -122,99 +177,13 @@ public class ScanActivity extends AppCompatActivity {
             }
         };
 
-        // Agregar la solicitud a la cola de Volley
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
-    }
-
-    private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
-        } else {
-            // Permisos concedidos
-            getLocation();
-        }
-    }
-
-    private void checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    CAMERA_PERMISSION_REQUEST_CODE);
-        } else {
-            // Permiso concedido, abrir cámara
-            openCamera();
-        }
-    }
-
-    private void openCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-        } else {
-            Toast.makeText(this, "No se pudo abrir la cámara", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
-    }
-
-    private void getLocation() {
-        try {
-            fusedLocationProviderClient.getLastLocation()
-                    .addOnSuccessListener(this, location -> {
-                        if (location != null) {
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
-
-                            // Convertir coordenadas en dirección usando Geocoder
-                            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                            try {
-                                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-                                if (addresses != null && !addresses.isEmpty()) {
-                                    Address address = addresses.get(0);
-                                    String fullAddress = address.getAddressLine(0);
-                                    locationTextView.setText(fullAddress);
-                                } else {
-                                    locationTextView.setText("No se pudo determinar la dirección");
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                locationTextView.setText("Error al obtener la dirección");
-                            }
-
-                        } else {
-                            Toast.makeText(this, "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLocation();
-            } else {
-                Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera();
-            } else {
-                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
-            }
-        }
+        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
     }
 
     @Override
@@ -225,5 +194,22 @@ public class ScanActivity extends AppCompatActivity {
             photoImageView.setImageBitmap(capturedPhoto);
         }
     }
-}
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocation();
+            } else {
+                Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+}

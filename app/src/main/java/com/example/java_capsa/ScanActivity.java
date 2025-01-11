@@ -28,7 +28,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -57,23 +56,33 @@ public class ScanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
-        // Inicialización de vistas
+        auth = FirebaseAuth.getInstance();
+        FirebaseApp.initializeApp(this);
+
+        // Listener para cambios de estado de autenticación
+        auth.addAuthStateListener(firebaseAuth -> {
+            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+            if (currentUser == null) {
+                Toast.makeText(this, "Usuario no autenticado. Inicie sesión.", Toast.LENGTH_SHORT).show();
+                redirigirALogin();
+            } else {
+                Log.d("AUTH_STATE", "Usuario autenticado: " + currentUser.getUid());
+                obtenerNombreCuidador(); // Asegura que los datos sean recuperados correctamente
+            }
+        });
+
+        inicializarComponentes();
+    }
+
+    private void inicializarComponentes() {
         locationTextView = findViewById(R.id.locationTextView);
         descripcionEditText = findViewById(R.id.descripcionEditText);
         photoImageView = findViewById(R.id.photoImageView);
         Button takePhotoButton = findViewById(R.id.takePhotoButton);
         Button enviarButton = findViewById(R.id.enviarButton);
 
-        FirebaseApp.initializeApp(this);
-
-        // Inicialización del cliente de ubicación
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        auth = FirebaseAuth.getInstance();
-        // Obtener nombre del cuidador desde Firebase
-        obtenerNombreCuidador();
-
-        // Configurar listeners para botones
         takePhotoButton.setOnClickListener(v -> openCamera());
         enviarButton.setOnClickListener(v -> enviarDatos());
 
@@ -96,6 +105,13 @@ public class ScanActivity extends AppCompatActivity {
     private void enviarDatos() {
         if (capturedPhoto == null || locationTextView.getText().toString().isEmpty() || descripcionEditText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "Usuario no autenticado. Inicie sesión.", Toast.LENGTH_SHORT).show();
+            redirigirALogin();
             return;
         }
 
@@ -139,7 +155,7 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     private void obtenerNombreCuidador() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
             DatabaseReference caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
@@ -149,12 +165,12 @@ public class ScanActivity extends AppCompatActivity {
                     String nombre = snapshot.child("nombre").getValue(String.class);
                     if (nombre != null) {
                         nombreCuidador = nombre;
-                        Log.d("FIREBASE_DATA", "Nombre del cuidador: " + nombreCuidador);
+                        Log.d("FIREBASE_DATA", "Nombre del cuidador actualizado: " + nombreCuidador);
                     } else {
-                        Log.w("FIREBASE_WARNING", "Campo 'nombre' no encontrado en el nodo.");
+                        Log.w("FIREBASE_WARNING", "Campo 'nombre' no encontrado.");
                     }
                 } else {
-                    Log.e("FIREBASE_ERROR", "El nodo con UID " + userId + " no existe.");
+                    Log.e("FIREBASE_ERROR", "Datos no encontrados para UID: " + userId);
                     Toast.makeText(this, "No se encontraron datos del cuidador.", Toast.LENGTH_SHORT).show();
                 }
             }).addOnFailureListener(e -> {
@@ -163,8 +179,7 @@ public class ScanActivity extends AppCompatActivity {
             });
         } else {
             Toast.makeText(this, "Usuario no autenticado. Inicie sesión.", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginPrincipal.class));
-            finish();
+            redirigirALogin();
         }
     }
 
@@ -199,6 +214,13 @@ public class ScanActivity extends AppCompatActivity {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+    }
+
+    private void redirigirALogin() {
+        Intent intent = new Intent(this, LoginPrincipal.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     @Override

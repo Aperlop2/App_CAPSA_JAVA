@@ -1,35 +1,44 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#FFFFFF"
-    android:padding="10dp">
+    android:padding="8dp">
+
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_foreground"
         tools:ignore="ContentDescription,ImageContrastCheck" />
+
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/titulo"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Título"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:paddingTop="5dp"
-        android:textColor="#000000" />
+        android:textColor="@android:color/black"
+        tools:ignore="HardcodedText" />
+
 
     <TextView
         android:id="@+id/details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/detalles"
+        android:layout_marginTop="4dp"
+        android:text="Detalles"
         android:textSize="14sp"
-        android:paddingTop="5dp"
-        android:textColor="#333333" />
+        android:textColor="@android:color/black"
+        tools:ignore="HardcodedText" />
+
 </LinearLayout>

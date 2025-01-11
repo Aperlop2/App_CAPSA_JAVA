@@ -6,6 +6,8 @@
     android:layout_height="match_parent">
 
     <!-- Fragmento del mapa -->
+    <!-- Fragmento del mapa -->
+
     <fragment
         android:id="@+id/map_fragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"

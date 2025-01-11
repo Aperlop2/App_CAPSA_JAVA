@@ -9,6 +9,9 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
     <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
 
     <application
         android:allowBackup="true"
@@ -25,7 +28,7 @@
         <!-- Llave de la API de Google Maps -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_api_key" />
+            android:value="AIzaSyDWonA4tTFkquO3RpV7y2GRYI4_w0mHq9g" />
 
         <!-- Actividades registradas -->
         <activity android:name=".DashboardCuidadorActivity" />

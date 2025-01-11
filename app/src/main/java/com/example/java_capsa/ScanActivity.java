@@ -25,8 +25,10 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -48,6 +50,7 @@ public class ScanActivity extends AppCompatActivity {
     private ImageView photoImageView;
     private Bitmap capturedPhoto;
     private String nombreCuidador = "Nombre Predeterminado"; // Valor por defecto
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +64,12 @@ public class ScanActivity extends AppCompatActivity {
         Button takePhotoButton = findViewById(R.id.takePhotoButton);
         Button enviarButton = findViewById(R.id.enviarButton);
 
+        FirebaseApp.initializeApp(this);
+
         // Inicialización del cliente de ubicación
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+        auth = FirebaseAuth.getInstance();
         // Obtener nombre del cuidador desde Firebase
         obtenerNombreCuidador();
 
@@ -137,14 +143,23 @@ public class ScanActivity extends AppCompatActivity {
         if (currentUser != null) {
             String userId = currentUser.getUid();
             DatabaseReference caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
+
             caretakerRef.child(userId).get().addOnSuccessListener(snapshot -> {
                 if (snapshot.exists()) {
-                    nombreCuidador = snapshot.child("nombre").getValue(String.class);
+                    String nombre = snapshot.child("nombre").getValue(String.class);
+                    if (nombre != null) {
+                        nombreCuidador = nombre;
+                        Log.d("FIREBASE_DATA", "Nombre del cuidador: " + nombreCuidador);
+                    } else {
+                        Log.w("FIREBASE_WARNING", "Campo 'nombre' no encontrado en el nodo.");
+                    }
                 } else {
-                    Toast.makeText(this, "No se encontraron datos del cuidador", Toast.LENGTH_SHORT).show();
+                    Log.e("FIREBASE_ERROR", "El nodo con UID " + userId + " no existe.");
+                    Toast.makeText(this, "No se encontraron datos del cuidador.", Toast.LENGTH_SHORT).show();
                 }
             }).addOnFailureListener(e -> {
-                Toast.makeText(this, "Error al obtener datos de Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("FIREBASE_ERROR", "Error al obtener datos: " + e.getMessage(), e);
+                Toast.makeText(this, "Error al conectar con Firebase.", Toast.LENGTH_SHORT).show();
             });
         } else {
             Toast.makeText(this, "Usuario no autenticado. Inicie sesión.", Toast.LENGTH_SHORT).show();

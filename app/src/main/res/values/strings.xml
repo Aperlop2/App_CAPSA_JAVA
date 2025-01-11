@@ -114,6 +114,12 @@
     <string name="registrar_cuidador">Registrar</string>
     <string name="contraseña">contraseña</string>
     <string name="cuidado_experto_con_ubicacion_precisa_precisa">cuidado_experto_con_ubicacion_precisa_precisa</string>
+
+    <string name="recuperar_contrasena">Recuperar contraseña</string>
+    <string name="recuperar_exito">Te hemos enviado un correo para recuperar tu contraseña</string>
+    <string name="recuperar_error">No se pudo enviar el correo. Verifica el correo electrónico</string>
+</resources>
+
     <string name="vista_previa_de_la_foto">Vista previa de la foto</string>
     <string name="tomar_foto">Tomar Foto</string>
     <string name="enviar_evidencia">Enviar Evidencia</string>

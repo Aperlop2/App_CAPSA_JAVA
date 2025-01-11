@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import org.mindrot.jbcrypt.BCrypt;
 
+import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginPrincipal extends AppCompatActivity {
     private EditText etEmail, etPassword;
@@ -29,6 +29,7 @@ public class LoginPrincipal extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
         TextView tvSignUp = findViewById(R.id.tvSignUp); // Texto para redirigir al registro
+        TextView tvForgotPassword = findViewById(R.id.tvForgotPassword); // Texto para redirigir a la recuperación de contraseña
 
         // Referencias a Firebase
         adminRef = FirebaseDatabase.getInstance().getReference("usuarios/administradores");
@@ -43,6 +44,13 @@ public class LoginPrincipal extends AppCompatActivity {
             Intent intent = new Intent(LoginPrincipal.this, RegistroAdminYCuidador.class);
             startActivity(intent);
         });
+
+        // Manejar clic en "Olvidaste tu contraseña"
+        tvForgotPassword.setOnClickListener(v -> {
+            // Redirigir a la actividad Recuperación de Contraseña
+            Intent intent = new Intent(LoginPrincipal.this, RecuperarContrasena.class);
+            startActivity(intent);
+        });
     }
 
     private void loginUser() {
@@ -54,25 +62,33 @@ public class LoginPrincipal extends AppCompatActivity {
             return;
         }
 
-        // Validar credenciales en la base de datos
+        // Validar en Administradores
         adminRef.get().addOnSuccessListener(snapshot -> {
             if (snapshot.exists() && validateLogin(snapshot, email, password)) {
                 Toast.makeText(this, "Inicio de sesión exitoso (Administrador)", Toast.LENGTH_SHORT).show();
-                // Redirigir al panel de administración
+                // Redirigir al Dashboard del Administrador
                 Intent intent = new Intent(LoginPrincipal.this, gestionadministradores.class);
+                intent.putExtra("email", email); // Pasar el correo a la siguiente actividad
                 startActivity(intent);
-                finish(); // Finalizar actividad actual
+                finish();
             } else {
+                // Validar en Cuidadores
                 caretakerRef.get().addOnSuccessListener(caretakerSnapshot -> {
                     if (caretakerSnapshot.exists() && validateLogin(caretakerSnapshot, email, password)) {
                         Toast.makeText(this, "Inicio de sesión exitoso (Cuidador)", Toast.LENGTH_SHORT).show();
-                        // Aquí puedes redirigir al panel del cuidador si es necesario
+                        // Redirigir al Dashboard del Cuidador
+                        Intent intent = new Intent(LoginPrincipal.this, DashboardCuidadorActivity.class);
+                        intent.putExtra("email", email); // Pasar el correo a la siguiente actividad
+                        startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }).addOnFailureListener(e ->
+                        Toast.makeText(this, "Error al conectarse con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
-        });
+        }).addOnFailureListener(e ->
+                Toast.makeText(this, "Error al conectarse con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     private boolean validateLogin(DataSnapshot snapshot, String email, String password) {

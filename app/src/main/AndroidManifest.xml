@@ -22,6 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Java_CAPSA"
+        android:usesCleartextTraffic="true"
         tools:targetApi="35">
 
         <!-- Llave de la API de Google Maps -->
@@ -52,6 +53,8 @@
         <activity android:name=".FormularioAdministrador" />
         <activity android:name=".FormularioCuidador" />
         <activity android:name=".EditarCita" />
+
+        <activity android:name=".RecuperarContrasena"/>
     </application>
 
 </manifest>

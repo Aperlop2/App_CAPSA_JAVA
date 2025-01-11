@@ -22,7 +22,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:contentDescription="@string/icono_de_notificaciones"
-            android:src="@drawable/ic_notificaciones"
+            android:src="@drawable/ic_notificacion"
             tools:ignore="ImageContrastCheck" />
 
         <TextView

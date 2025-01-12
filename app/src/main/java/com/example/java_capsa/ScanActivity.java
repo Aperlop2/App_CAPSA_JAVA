@@ -217,7 +217,7 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64) {
-        String url = "http://192.168.100.5/guardar_evidencia.php";
+        String url = "http://192.168.137.1/evidencias/guardar_evidencia.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> Toast.makeText(this, "Datos enviados correctamente", Toast.LENGTH_SHORT).show(),

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,6 +20,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class LoginPrincipal extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private DatabaseReference adminRef, caretakerRef;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class LoginPrincipal extends AppCompatActivity {
         TextView tvSignUp = findViewById(R.id.tvSignUp); // Texto para redirigir al registro
         TextView tvForgotPassword = findViewById(R.id.tvForgotPassword); // Texto para redirigir a la recuperación de contraseña
 
+        mAuth = FirebaseAuth.getInstance();
         // Referencias a Firebase
         adminRef = FirebaseDatabase.getInstance().getReference("usuarios/administradores");
         caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
@@ -61,6 +64,7 @@ public class LoginPrincipal extends AppCompatActivity {
             Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
+
 
         // Validar en Administradores
         adminRef.get().addOnSuccessListener(snapshot -> {
@@ -103,5 +107,6 @@ public class LoginPrincipal extends AppCompatActivity {
             }
         }
         return false;
-    }
+
+   }
 }

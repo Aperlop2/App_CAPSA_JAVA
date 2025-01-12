@@ -1,6 +1,7 @@
 package com.example.java_capsa;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,7 +10,6 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class ScanActivity extends AppCompatActivity {
 
@@ -49,13 +50,21 @@ public class ScanActivity extends AppCompatActivity {
     private EditText descripcionEditText;
     private ImageView photoImageView;
     private Bitmap capturedPhoto;
-    private String nombreCuidador = "Nombre Predeterminado"; // Valor por defecto
-    private FirebaseAuth auth;
+    private String nombreCuidador = "";
+    private FirebaseAuth mAuth;
+    private DatabaseReference caretakerRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        // Inicialización de Firebase y referencias
+        FirebaseApp.initializeApp(this);
+        mAuth = FirebaseAuth.getInstance();
+        caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
 
         // Inicialización de vistas
         locationTextView = findViewById(R.id.locationTextView);
@@ -64,20 +73,53 @@ public class ScanActivity extends AppCompatActivity {
         Button takePhotoButton = findViewById(R.id.takePhotoButton);
         Button enviarButton = findViewById(R.id.enviarButton);
 
-        FirebaseApp.initializeApp(this);
-
-        // Inicialización del cliente de ubicación
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        auth = FirebaseAuth.getInstance();
-        // Obtener nombre del cuidador desde Firebase
-        obtenerNombreCuidador();
+        // Verificar autenticación y obtener datos del cuidador
+        verificarAutenticacion();
 
         // Configurar listeners para botones
         takePhotoButton.setOnClickListener(v -> openCamera());
         enviarButton.setOnClickListener(v -> enviarDatos());
 
         checkLocationPermission();
+    }
+
+    private void verificarAutenticacion() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(this, LoginPrincipal.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private void obtenerDatosCuidador(String email) {
+        caretakerRef.get().addOnSuccessListener(snapshot -> {
+            boolean encontrado = false;
+            for (DataSnapshot child : snapshot.getChildren()) {
+                String storedEmail = child.child("correo").getValue(String.class);
+                if (storedEmail != null && storedEmail.equals(email)) {
+                    nombreCuidador = child.child("nombre").getValue(String.class);
+                    if (nombreCuidador == null) {
+                        nombreCuidador = "Cuidador sin nombre asignado";
+                    }
+                    Toast.makeText(this, "Bienvenido, " + nombreCuidador, Toast.LENGTH_SHORT).show();
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) {
+                Toast.makeText(this, "No se encontró información para el correo: " + email, Toast.LENGTH_SHORT).show();
+                redirigirAlLogin();
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Error al conectar con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            redirigirAlLogin();
+        });
+    }
+
+    private void redirigirAlLogin() {
+        startActivity(new Intent(this, LoginPrincipal.class));
+        finish();
     }
 
     private void openCamera() {
@@ -94,16 +136,46 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     private void enviarDatos() {
-        if (capturedPhoto == null || locationTextView.getText().toString().isEmpty() || descripcionEditText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
+        String ubicacion = locationTextView.getText().toString();
+
+        if (capturedPhoto == null || ubicacion.isEmpty() || ubicacion.equals("Esperando ubicación...") || descripcionEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Por favor, complete todos los campos y asegúrese de que la ubicación esté disponible.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String ubicacion = locationTextView.getText().toString();
+        // Obtener la descripción
         String descripcion = descripcionEditText.getText().toString();
+        // Convertir la foto a base64
         String fotoBase64 = bitmapToBase64(capturedPhoto);
 
-        enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64);
+        // Verificar que el usuario está autenticado
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            String email = user.getEmail();
+            // Obtener el nombre del cuidador desde Firebase
+            caretakerRef.get().addOnSuccessListener(snapshot -> {
+                boolean encontrado = false;
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    String storedEmail = child.child("correo").getValue(String.class);
+                    if (storedEmail != null && storedEmail.equals(email)) {
+                        // Nombre del cuidador encontrado
+                        String nombreCuidador = child.child("nombre").getValue(String.class);
+                        if (nombreCuidador == null) {
+                            nombreCuidador = "Cuidador sin nombre asignado";
+                        }
+                        // Ahora que tenemos el nombre, enviamos los datos al servidor
+                        enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64);
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) {
+                    Toast.makeText(this, "No se encontró información para el cuidador con correo: " + email, Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(e -> Toast.makeText(this, "Error al conectar con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        } else {
+            Toast.makeText(this, "Usuario no autenticado. Por favor, inicie sesión.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void checkLocationPermission() {
@@ -114,7 +186,13 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+
         try {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
                 if (location != null) {
@@ -130,57 +208,20 @@ public class ScanActivity extends AppCompatActivity {
                         locationTextView.setText("Error al obtener la dirección");
                     }
                 } else {
-                    Toast.makeText(this, "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show();
+                    locationTextView.setText("Esperando ubicación...");
                 }
             });
         } catch (SecurityException e) {
-            Toast.makeText(this, "Error al obtener ubicación: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void obtenerNombreCuidador() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
-            DatabaseReference caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
-
-            caretakerRef.child(userId).get().addOnSuccessListener(snapshot -> {
-                if (snapshot.exists()) {
-                    String nombre = snapshot.child("nombre").getValue(String.class);
-                    if (nombre != null) {
-                        nombreCuidador = nombre;
-                        Log.d("FIREBASE_DATA", "Nombre del cuidador: " + nombreCuidador);
-                    } else {
-                        Log.w("FIREBASE_WARNING", "Campo 'nombre' no encontrado en el nodo.");
-                    }
-                } else {
-                    Log.e("FIREBASE_ERROR", "El nodo con UID " + userId + " no existe.");
-                    Toast.makeText(this, "No se encontraron datos del cuidador.", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(e -> {
-                Log.e("FIREBASE_ERROR", "Error al obtener datos: " + e.getMessage(), e);
-                Toast.makeText(this, "Error al conectar con Firebase.", Toast.LENGTH_SHORT).show();
-            });
-        } else {
-            Toast.makeText(this, "Usuario no autenticado. Inicie sesión.", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginPrincipal.class));
-            finish();
+            Toast.makeText(this, "Error de permisos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64) {
-        String url = "http://192.168.100.5/guardar_evidencia.php";
+        String url = "http://192.168.137.1/evidencias/guardar_evidencia.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> Toast.makeText(this, "Datos enviados correctamente", Toast.LENGTH_SHORT).show(),
-                error -> {
-                    if (error.networkResponse != null) {
-                        int statusCode = error.networkResponse.statusCode;
-                        Toast.makeText(this, "Error: Código HTTP " + statusCode, Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(this, "Error de red: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }) {
+                error -> Toast.makeText(this, "Error de red: " + error.getMessage(), Toast.LENGTH_LONG).show()) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -205,7 +246,7 @@ public class ScanActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            capturedPhoto = (Bitmap) data.getExtras().get("data");
+            capturedPhoto = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             photoImageView.setImageBitmap(capturedPhoto);
         }
     }

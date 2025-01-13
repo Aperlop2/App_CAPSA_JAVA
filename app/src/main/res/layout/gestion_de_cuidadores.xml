@@ -1,39 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gris">
+    android:orientation="vertical"
+    tools:ignore="VisualLintBounds">
 
-    <!-- TextView principal -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/gestion_de_cuidadores"
+        android:text="Gestión de cuidadores"
         android:textSize="28sp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/roboto_bold"
         android:gravity="center"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        tools:ignore="HardcodedText" />
 
-
-    <!-- ListView para mostrar la lista de elementos -->
     <ListView
         android:id="@+id/caregiverListView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:divider="@color/black"
-        android:dividerHeight="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/list_item"
-        tools:ignore="UnknownId" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/gris"
     tools:context=".AgregarNuevoCuidadorActivity">
-
+ <!-- Este comentario lo agrego ya que no recuerdo si ya habia subido mis cambios -->
     <!-- Título de la pantalla -->
     <TextView
         android:id="@+id/titleTextView"

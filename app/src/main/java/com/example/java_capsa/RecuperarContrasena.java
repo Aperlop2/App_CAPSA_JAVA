@@ -9,6 +9,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
 public class RecuperarContrasena extends AppCompatActivity {
     private EditText etEmail;
@@ -19,31 +21,43 @@ public class RecuperarContrasena extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recuperar_contrasena);
 
+        // Referencia al campo de correo y botón
         etEmail = findViewById(R.id.etEmailRecuperar);
         Button btnRecuperar = findViewById(R.id.btnRecuperar);
+
+     // Inicializar FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
 
-        // Acción de recuperar contraseña
+        // Acción al presionar el botón de recuperar contraseña
         btnRecuperar.setOnClickListener(v -> recuperarContrasena());
     }
 
     private void recuperarContrasena() {
         String email = etEmail.getText().toString().trim();
 
+        // Validación del campo de correo
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(this, "Por favor ingresa tu correo electrónico", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Enviar correo para recuperar la contraseña
+        // Enviar correo para recuperar contraseña
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Te hemos enviado un correo para recuperar tu contraseña", Toast.LENGTH_SHORT).show();
                         finish(); // Cerrar la actividad y regresar al Login
-                    } else {
-                        Toast.makeText(this, "No se pudo enviar el correo. Verifica el correo electrónico", Toast.LENGTH_SHORT).show();
+ } else {
+                        // Manejo de errores específicos
+                        if (task.getException() instanceof FirebaseAuthInvalidUserException) {
+                            Toast.makeText(this, "El correo no está registrado en el sistema", Toast.LENGTH_SHORT).show();
+                        } else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(this, "El formato del correo no es válido", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String error = task.getException() != null ? task.getException().getMessage() : "Error desconocido";
+                            Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                        }
                     }
-                });
-    }
+                });
+    }
 }

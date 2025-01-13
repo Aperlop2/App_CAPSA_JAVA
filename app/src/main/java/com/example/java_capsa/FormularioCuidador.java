@@ -1,6 +1,5 @@
 package com.example.java_capsa;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -13,13 +12,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.mindrot.jbcrypt.BCrypt;
-
-import java.util.Objects;
-
 public class FormularioCuidador extends AppCompatActivity {
     private EditText etFullName, etEmail, etPhoneNumber, etBirthDate, etSpecialty, etAvailableHours, etPassword, etConfirmPassword;
-    private DatabaseReference databaseReference;
+    private DatabaseReference solicitudesReference;
     private FirebaseAuth auth;
 
     @Override
@@ -37,7 +32,7 @@ public class FormularioCuidador extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         Button btnRegister = findViewById(R.id.btnRegister);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
+        solicitudesReference = FirebaseDatabase.getInstance().getReference("solicitudes_cuidadores");
         auth = FirebaseAuth.getInstance();
 
         btnRegister.setOnClickListener(v -> registerCaretaker());
@@ -54,32 +49,20 @@ public class FormularioCuidador extends AppCompatActivity {
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
         if (validateFields(fullName, email, phone, birthDate, specialty, availableHours, password, confirmPassword)) {
-            auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
+            String solicitudId = solicitudesReference.push().getKey(); // Generar un ID único para la solicitud
 
-                            // Hashear la contraseña antes de almacenarla
-                            String hashedPassword = hashPassword(password);
+            // Crear un objeto de cuidador con estado pendiente
+            Caretaker caretaker = new Caretaker(fullName, email, phone, birthDate, specialty, availableHours, password, "pendiente");
 
-                            // Crear un objeto de cuidador con la contraseña encriptada
-                            Caretaker caretaker = new Caretaker(fullName, email, phone, birthDate, specialty, availableHours, hashedPassword);
-
-                            // Guardar los datos en Firebase Realtime Database
-                            databaseReference.child(userId).setValue(caretaker)
-                                    .addOnSuccessListener(unused -> {
-                                        Toast.makeText(this, "Cuidador registrado con éxito", Toast.LENGTH_SHORT).show();
-
-                                        // Redirigir automáticamente al LoginPrincipal
-                                        Intent intent = new Intent(FormularioCuidador.this, LoginPrincipal.class);
-                                        startActivity(intent);
-                                        finish(); // Finalizar esta actividad
-                                    })
-                                    .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-                        } else {
-                            Toast.makeText(this, "Error en el registro: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            // Guardar en Firebase como solicitud pendiente
+            if (solicitudId != null) {
+                solicitudesReference.child(solicitudId).setValue(caretaker)
+                        .addOnSuccessListener(unused -> {
+                            Toast.makeText(this, "Tu solicitud está pendiente de aprobación.", Toast.LENGTH_SHORT).show();
+                            finish();
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
         }
     }
 
@@ -103,17 +86,12 @@ public class FormularioCuidador extends AppCompatActivity {
 
         return true;
     }
-
-    private String hashPassword(String password) {
-        // Generar un hash seguro con BCrypt
-        return BCrypt.hashpw(password, BCrypt.gensalt());
-    }
 }
 
 class Caretaker {
-    public String nombre, correo, telefono, fechaNacimiento, especialidad, horariosDisponibles, contraseña;
+    public String nombre, correo, telefono, fechaNacimiento, especialidad, horariosDisponibles, contraseña, estado;
 
-    public Caretaker(String nombre, String correo, String telefono, String fechaNacimiento, String especialidad, String horariosDisponibles, String contraseña) {
+    public Caretaker(String nombre, String correo, String telefono, String fechaNacimiento, String especialidad, String horariosDisponibles, String contraseña, String estado) {
         this.nombre = nombre;
         this.correo = correo;
         this.telefono = telefono;
@@ -121,5 +99,6 @@ class Caretaker {
         this.especialidad = especialidad;
         this.horariosDisponibles = horariosDisponibles;
         this.contraseña = contraseña;
+        this.estado = estado;
     }
 }

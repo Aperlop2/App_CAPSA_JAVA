@@ -59,7 +59,7 @@ public class gestionadministradores extends AppCompatActivity {
         // Configuración del clic en el icono de cuidadores
         ImageView iconCaregivers = findViewById(R.id.icon_caregivers);
         iconCaregivers.setOnClickListener(v -> {
-            Intent intent = new Intent(gestionadministradores.this, GestionDeCuidadores.class);
+            Intent intent = new Intent(gestionadministradores.this, GestionDeCuidadoresActivity.class);
             startActivity(intent);
         });
 

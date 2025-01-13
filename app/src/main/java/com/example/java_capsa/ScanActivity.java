@@ -34,6 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -59,24 +61,19 @@ public class ScanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        // Inicialización de Firebase y referencias
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
 
-        // Inicialización de vistas
         locationTextView = findViewById(R.id.locationTextView);
         descripcionEditText = findViewById(R.id.descripcionEditText);
         photoImageView = findViewById(R.id.photoImageView);
         Button takePhotoButton = findViewById(R.id.takePhotoButton);
         Button enviarButton = findViewById(R.id.enviarButton);
 
-        // Verificar autenticación y obtener datos del cuidador
         verificarAutenticacion();
 
-        // Configurar listeners para botones
         takePhotoButton.setOnClickListener(v -> openCamera());
         enviarButton.setOnClickListener(v -> enviarDatos());
 
@@ -90,36 +87,6 @@ public class ScanActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-    }
-
-    private void obtenerDatosCuidador(String email) {
-        caretakerRef.get().addOnSuccessListener(snapshot -> {
-            boolean encontrado = false;
-            for (DataSnapshot child : snapshot.getChildren()) {
-                String storedEmail = child.child("correo").getValue(String.class);
-                if (storedEmail != null && storedEmail.equals(email)) {
-                    nombreCuidador = child.child("nombre").getValue(String.class);
-                    if (nombreCuidador == null) {
-                        nombreCuidador = "Cuidador sin nombre asignado";
-                    }
-                    Toast.makeText(this, "Bienvenido, " + nombreCuidador, Toast.LENGTH_SHORT).show();
-                    encontrado = true;
-                    break;
-                }
-            }
-            if (!encontrado) {
-                Toast.makeText(this, "No se encontró información para el correo: " + email, Toast.LENGTH_SHORT).show();
-                redirigirAlLogin();
-            }
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Error al conectar con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            redirigirAlLogin();
-        });
-    }
-
-    private void redirigirAlLogin() {
-        startActivity(new Intent(this, LoginPrincipal.class));
-        finish();
     }
 
     private void openCamera() {
@@ -143,28 +110,23 @@ public class ScanActivity extends AppCompatActivity {
             return;
         }
 
-        // Obtener la descripción
         String descripcion = descripcionEditText.getText().toString();
-        // Convertir la foto a base64
         String fotoBase64 = bitmapToBase64(capturedPhoto);
+        String fechaHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-        // Verificar que el usuario está autenticado
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             String email = user.getEmail();
-            // Obtener el nombre del cuidador desde Firebase
             caretakerRef.get().addOnSuccessListener(snapshot -> {
                 boolean encontrado = false;
                 for (DataSnapshot child : snapshot.getChildren()) {
                     String storedEmail = child.child("correo").getValue(String.class);
                     if (storedEmail != null && storedEmail.equals(email)) {
-                        // Nombre del cuidador encontrado
                         String nombreCuidador = child.child("nombre").getValue(String.class);
                         if (nombreCuidador == null) {
                             nombreCuidador = "Cuidador sin nombre asignado";
                         }
-                        // Ahora que tenemos el nombre, enviamos los datos al servidor
-                        enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64);
+                        enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64, fechaHora);
                         encontrado = true;
                         break;
                     }
@@ -216,8 +178,8 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
-    private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64) {
-        String url = "http://192.168.137.1/evidencias/guardar_evidencia.php";
+    private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64, String fechaHora) {
+        String url = "http://192.168.100.5/guardar_evidencia.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> Toast.makeText(this, "Datos enviados correctamente", Toast.LENGTH_SHORT).show(),
@@ -229,6 +191,7 @@ public class ScanActivity extends AppCompatActivity {
                 params.put("ubicacion", ubicacion);
                 params.put("descripcion", descripcion);
                 params.put("foto", fotoBase64);
+                params.put("fecha_hora", fechaHora);
                 return params;
             }
         };
@@ -254,17 +217,17 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera();
-            } else {
-                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocation();
             } else {
                 Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
             }
         }
     }

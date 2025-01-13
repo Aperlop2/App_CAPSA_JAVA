@@ -33,13 +33,12 @@
         android:textSize="16sp"
         android:textColor="#000000"/>
 
-    <ScrollView
-        android:id="@+id/scroll_notificaciones"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_notificaciones"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="16dp"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:layout_marginTop="20dp"/>
 
     <Button
         android:id="@+id/btn_close"

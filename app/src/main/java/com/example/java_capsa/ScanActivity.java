@@ -34,6 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -148,6 +150,10 @@ public class ScanActivity extends AppCompatActivity {
         // Convertir la foto a base64
         String fotoBase64 = bitmapToBase64(capturedPhoto);
 
+
+        // Obtener la fecha y hora actual
+        String fechaHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+
         // Verificar que el usuario está autenticado
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
@@ -164,7 +170,7 @@ public class ScanActivity extends AppCompatActivity {
                             nombreCuidador = "Cuidador sin nombre asignado";
                         }
                         // Ahora que tenemos el nombre, enviamos los datos al servidor
-                        enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64);
+                        enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64, fechaHora);
                         encontrado = true;
                         break;
                     }
@@ -216,8 +222,8 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
-    private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64) {
-        String url = "http://192.168.137.1/evidencias/guardar_evidencia.php";
+    private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64, String fechaHora) {
+        String url = "http://192.168.100.5/guardar_evidencia.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> Toast.makeText(this, "Datos enviados correctamente", Toast.LENGTH_SHORT).show(),
@@ -229,12 +235,14 @@ public class ScanActivity extends AppCompatActivity {
                 params.put("ubicacion", ubicacion);
                 params.put("descripcion", descripcion);
                 params.put("foto", fotoBase64);
+                params.put("fecha_hora", fechaHora); // Enviar la fecha y hora al servidor
                 return params;
             }
         };
 
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
+
 
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -267,5 +275,5 @@ public class ScanActivity extends AppCompatActivity {
                 Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+   }
 }

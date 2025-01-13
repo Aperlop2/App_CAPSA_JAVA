@@ -53,6 +53,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-database")
+    implementation ("com.google.firebase:firebase-storage")
+
     implementation("org.mindrot:jbcrypt:0.4")
     implementation ("androidx.fragment:fragment:1.6.1")
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+
+import android.net.Uri;
+
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -22,6 +30,9 @@ public class FormularioAdministrador extends AppCompatActivity {
     private EditText etFullName, etEmail, etPhoneNumber, etRole, etPassword, etConfirmPassword;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
+    private StorageReference storageReference;
+    private Uri imageUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +46,35 @@ public class FormularioAdministrador extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         Button btnRegister = findViewById(R.id.btnRegister);
+        Button btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
+
+
+        storageReference = FirebaseStorage.getInstance().getReference("usuarios/perfiles");
 
         databaseReference = FirebaseDatabase.getInstance().getReference("usuarios/administradores");
         firebaseAuth = FirebaseAuth.getInstance();
 
         btnRegister.setOnClickListener(v -> registerAdministrator());
+        btnUploadPhoto.setOnClickListener(v -> openGallery());
+
     }
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, 1000); // Código de solicitud para distinguir acciones
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000 && resultCode == RESULT_OK && data != null) {
+            imageUri = data.getData();
+            ImageView ivProfilePicture = findViewById(R.id.ivProfilePicture);
+            ivProfilePicture.setImageURI(imageUri); // Mostrar la imagen seleccionada
+        }
+    }
+
 
     private void registerAdministrator() {
         String fullName = etFullName.getText().toString().trim();
@@ -50,36 +84,52 @@ public class FormularioAdministrador extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-        if (validateFields(fullName, email, phone, role, password, confirmPassword)) {
-            // Registrar en Firebase Authentication
-            firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            assert user != null;
-                            String userId = user.getUid();
-
-                            // Hashear la contraseña antes de almacenarla
-                            // Hashear la contraseña antes de almacenarla
-                            String hashedPassword = hashPassword(password);
-
-                            // Guardar datos adicionales en Firebase Realtime Database
-                            Administrator administrator = new Administrator(fullName, email, phone, role, hashedPassword);
-                            databaseReference.child(userId).setValue(administrator)
-                                    .addOnSuccessListener(unused -> {
-                                        Toast.makeText(this, "Administrador registrado con éxito", Toast.LENGTH_SHORT).show();
-
-                                        // Redirigir automáticamente al LoginPrincipal
-                                        Intent intent = new Intent(FormularioAdministrador.this, LoginPrincipal.class);
-                                        startActivity(intent);
-                                        finish(); // Finaliza esta actividad
-                                    })
-                                    .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar en la base de datos: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-                        } else {
-                            Toast.makeText(this, "Error al registrar el usuario: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+        if (!validateFields(fullName, email, phone, role, password, confirmPassword)) {
+            return;
         }
+
+        if (imageUri != null) {
+            // Subir la imagen a Firebase Storage
+            StorageReference fileReference = storageReference.child(System.currentTimeMillis() + ".jpg");
+            fileReference.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String photoUrl = uri.toString(); // URL pública de la foto
+                        createFirebaseUser(fullName, email, phone, role, password, photoUrl);
+                    }))
+                    .addOnFailureListener(e -> Toast.makeText(this, "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        } else {
+            // Continuar sin foto de perfil
+            createFirebaseUser(fullName, email, phone, role, password, null);
+        }
+    }
+
+    private void createFirebaseUser(String fullName, String email, String phone, String role, String password, String photoUrl) {
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        assert user != null;
+                        String userId = user.getUid();
+
+                        // Hashear la contraseña antes de almacenarla
+                        String hashedPassword = hashPassword(password);
+
+                        // Crear y guardar el objeto del administrador
+                        Administrator administrator = new Administrator(fullName, email, phone, role, hashedPassword, photoUrl);
+                        databaseReference.child(userId).setValue(administrator)
+                                .addOnSuccessListener(unused -> {
+                                    Toast.makeText(this, "Administrador registrado con éxito", Toast.LENGTH_SHORT).show();
+
+                                    // Redirigir automáticamente al LoginPrincipal
+                                    Intent intent = new Intent(FormularioAdministrador.this, LoginPrincipal.class);
+                                    startActivity(intent);
+                                    finish(); // Finalizar esta actividad
+                                })
+                                .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar en la base de datos: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    } else {
+                        Toast.makeText(this, "Error al registrar el usuario: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private boolean validateFields(String fullName, String email, String phone, String role, String password, String confirmPassword) {
@@ -109,13 +159,15 @@ public class FormularioAdministrador extends AppCompatActivity {
 }
 
 class Administrator {
-    public String nombre, correo, telefono, rol, contraseña;
+    public String nombre, correo, telefono, rol, contraseña, fotoPerfil;
 
-    public Administrator(String nombre, String correo, String telefono, String rol, String contraseña) {
+    public Administrator(String nombre, String correo, String telefono, String rol, String contraseña, String fotoPerfil) {
         this.nombre = nombre;
         this.correo = correo;
         this.telefono = telefono;
         this.rol = rol;
         this.contraseña = contraseña;
+        this.fotoPerfil = fotoPerfil;
     }
 }
+

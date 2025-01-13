@@ -64,8 +64,8 @@
     <string name="direccion">Dirección</string>
     <string name="telefono">Teléfono</string>
     <string name="horario">Horario</string>
-    <string name="guardar">Guardar</string>
-    <string name="cancelar">Cancelar</string>
+    <string name="Aceptar">Aceptar</string>
+    <string name="Rechazar">Rechazar</string>
     <string name="gestion_de_cuidadores">Gestión de cuidadores</string>
     <string name="agregar">Agregar</string>
     <string name="nombre_cuidador">Nombre del Cuidador</string>
@@ -126,4 +126,7 @@
     <string name="actualizar_info">Actualizar Información</string>
     <string name="foto_evidencia">foto_evidencia</string>
     <string name="actualizar_informacion">actualizar_informacion</string>
+    <string name="datos_del_cuidador">Datos del cuidador</string>
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
 </resources>

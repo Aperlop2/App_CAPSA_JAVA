@@ -1,12 +1,9 @@
 package com.example.java_capsa;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,26 +11,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import org.mindrot.jbcrypt.BCrypt;
-
-import java.util.Objects;
 
 public class FormularioCuidador extends AppCompatActivity {
     private EditText etFullName, etEmail, etPhoneNumber, etBirthDate, etSpecialty, etAvailableHours, etPassword, etConfirmPassword;
-    private DatabaseReference databaseReference;
+    private DatabaseReference solicitudesReference;
     private FirebaseAuth auth;
-    private StorageReference storageReference;
-    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.formulario_cuidador);
 
-        // Inicializar los campos y botones
         etFullName = findViewById(R.id.etFullName);
         etEmail = findViewById(R.id.etEmail);
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
@@ -43,32 +31,11 @@ public class FormularioCuidador extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         Button btnRegister = findViewById(R.id.btnRegister);
-        Button btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
 
-        // Inicializar Firebase
-        databaseReference = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
+        solicitudesReference = FirebaseDatabase.getInstance().getReference("solicitudes_cuidadores");
         auth = FirebaseAuth.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference("usuarios/perfiles");
 
-        // Configurar acciones para los botones
         btnRegister.setOnClickListener(v -> registerCaretaker());
-        btnUploadPhoto.setOnClickListener(v -> openGallery());
-    }
-
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, 1000); // Código de solicitud para la galería
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000 && resultCode == RESULT_OK && data != null) {
-            imageUri = data.getData();
-            ImageView ivProfilePicture = findViewById(R.id.ivProfilePicture);
-            ivProfilePicture.setImageURI(imageUri); // Mostrar la imagen seleccionada
-        }
     }
 
     private void registerCaretaker() {
@@ -81,50 +48,22 @@ public class FormularioCuidador extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-        if (!validateFields(fullName, email, phone, birthDate, specialty, availableHours, password, confirmPassword)) {
-            return;
+        if (validateFields(fullName, email, phone, birthDate, specialty, availableHours, password, confirmPassword)) {
+            String solicitudId = solicitudesReference.push().getKey(); // Generar un ID único para la solicitud
+
+            // Crear un objeto de cuidador con estado pendiente
+            Caretaker caretaker = new Caretaker(fullName, email, phone, birthDate, specialty, availableHours, password, "pendiente");
+
+            // Guardar en Firebase como solicitud pendiente
+            if (solicitudId != null) {
+                solicitudesReference.child(solicitudId).setValue(caretaker)
+                        .addOnSuccessListener(unused -> {
+                            Toast.makeText(this, "Tu solicitud está pendiente de aprobación.", Toast.LENGTH_SHORT).show();
+                            finish();
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
         }
-
-        if (imageUri != null) {
-            // Subir la imagen a Firebase Storage
-            StorageReference fileReference = storageReference.child("usuarios/perfiles/" + System.currentTimeMillis() + ".jpg");
-            fileReference.putFile(imageUri)
-                    .addOnSuccessListener(taskSnapshot -> fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                        String photoUrl = uri.toString(); // URL pública de la foto
-                        createFirebaseUser(fullName, email, phone, birthDate, specialty, availableHours, password, photoUrl);
-                    }))
-                    .addOnFailureListener(e -> Toast.makeText(this, "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-        } else {
-            // Continuar sin foto de perfil
-            createFirebaseUser(fullName, email, phone, birthDate, specialty, availableHours, password, null);
-        }
-    }
-
-    private void createFirebaseUser(String fullName, String email, String phone, String birthDate, String specialty, String availableHours, String password, String photoUrl) {
-        auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
-
-                        // Hashear la contraseña antes de almacenarla
-                        String hashedPassword = hashPassword(password);
-
-                        // Crear y guardar el objeto del cuidador
-                        Caretaker caretaker = new Caretaker(fullName, email, phone, birthDate, specialty, availableHours, hashedPassword, photoUrl);
-                        databaseReference.child(userId).setValue(caretaker)
-                                .addOnSuccessListener(unused -> {
-                                    Toast.makeText(this, "Cuidador registrado con éxito", Toast.LENGTH_SHORT).show();
-
-                                    // Redirigir automáticamente al LoginPrincipal
-                                    Intent intent = new Intent(FormularioCuidador.this, LoginPrincipal.class);
-                                    startActivity(intent);
-                                    finish(); // Finalizar esta actividad
-                                })
-                                .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar en la base de datos: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-                    } else {
-                        Toast.makeText(this, "Error en el registro: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 
     private boolean validateFields(String fullName, String email, String phone, String birthDate, String specialty, String availableHours, String password, String confirmPassword) {
@@ -147,17 +86,12 @@ public class FormularioCuidador extends AppCompatActivity {
 
         return true;
     }
-
-    private String hashPassword(String password) {
-        // Generar un hash seguro con BCrypt
-        return BCrypt.hashpw(password, BCrypt.gensalt());
-    }
 }
 
 class Caretaker {
-    public String nombre, correo, telefono, fechaNacimiento, especialidad, horariosDisponibles, contraseña, fotoPerfil;
+    public String nombre, correo, telefono, fechaNacimiento, especialidad, horariosDisponibles, contraseña, estado;
 
-    public Caretaker(String nombre, String correo, String telefono, String fechaNacimiento, String especialidad, String horariosDisponibles, String contraseña, String fotoPerfil) {
+    public Caretaker(String nombre, String correo, String telefono, String fechaNacimiento, String especialidad, String horariosDisponibles, String contraseña, String estado) {
         this.nombre = nombre;
         this.correo = correo;
         this.telefono = telefono;
@@ -165,6 +99,6 @@ class Caretaker {
         this.especialidad = especialidad;
         this.horariosDisponibles = horariosDisponibles;
         this.contraseña = contraseña;
-        this.fotoPerfil = fotoPerfil;
+        this.estado = estado;
     }
 }

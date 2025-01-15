@@ -1,0 +1,315 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E1E1E1"
+    tools:context=".gestionadministradores">
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#8FC7F6"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Botón de regresar -->
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="42dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/ic_regresar"
+            android:contentDescription="@string/regresar"
+            tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
+
+        <!-- Botón de cambiar tema -->
+        <ImageButton
+            android:id="@+id/btn_theme_toggle"
+            android:layout_width="40dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="38dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_cambio_tema"
+            android:contentDescription="@string/cambiar_tema"
+            tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
+
+        <!-- Foto de perfil del administrador -->
+        <ImageView
+            android:id="@+id/btn_settings"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/foto_de_perfil"
+            android:scaleType="centerCrop"
+            android:background="@drawable/rounded_image_background"
+            tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
+
+    </LinearLayout>
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/panel_del_administrador"
+        android:textSize="27sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:layout_below="@id/header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        tools:ignore="VisualLintOverlap" />
+
+    <!-- Menú Inferior -->
+    <GridLayout
+        android:id="@+id/panel_admin"
+        android:layout_width="match_parent"
+        android:layout_height="403dp"
+        android:layout_below="@id/tv_title"
+        android:layout_marginTop="14dp"
+        android:columnCount="2"
+        android:padding="16dp"
+        android:rowCount="2">
+
+        <LinearLayout
+            android:id="@+id/card_cuidadores_activos"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/card_background_blue"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:contentDescription="cuidadores_activos_boton"
+                android:src="@drawable/ic_cuidadores_activos"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/cuidadores_activos"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="TextContrastCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/card_citas_pendientes"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/card_background_blue"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:contentDescription="citas_pendientes_boton"
+                android:src="@drawable/ic_citas_pendientes"
+                tools:ignore="HardcodedText,ImageContrastCheck" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/citas_pendientes"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="TextContrastCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/card_notificaciones_recientes"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/card_background_blue"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="101dp"
+                android:layout_height="50dp"
+                android:contentDescription="notificaciones_boton"
+                android:src="@drawable/ic_notificaciones_recientes"
+                tools:ignore="HardcodedText,ImageContrastCheck" />
+
+            <TextView
+                android:layout_width="123dp"
+                android:layout_height="36dp"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="@string/notificaciones_recientes"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="TextSizeCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/card_servicios_completados"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/card_background_blue"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:contentDescription="servicios_completados_boton"
+                android:src="@drawable/ic_servicios_completados"
+                tools:ignore="HardcodedText,ImageContrastCheck" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/servicios_completados"
+                android:textColor="#000000"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="TextContrastCheck" />
+        </LinearLayout>
+    </GridLayout>
+
+    <!-- Botones inferiores -->
+    <LinearLayout
+        android:id="@+id/bottom_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="121dp"
+        android:layout_below="@id/panel_admin"
+        android:layout_marginTop="39dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        tools:ignore="DisableBaselineAlignment">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/icon_map"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/mapa"
+                android:src="@drawable/ic_mapa"
+                tools:ignore="ImageContrastCheck" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Mapa"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/icon_caregivers"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/cuidadores"
+                android:src="@drawable/ic_cuidadores" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Cuidadores"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/icon_appointments"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/citas"
+                android:src="@drawable/ic_citas" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Citas"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="87dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/icon_history"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/historial"
+                android:src="@drawable/ic_historial"
+                tools:ignore="ImageContrastCheck" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Historial"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

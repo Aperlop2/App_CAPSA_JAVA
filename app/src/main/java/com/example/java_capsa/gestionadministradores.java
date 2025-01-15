@@ -15,7 +15,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class gestionadministradores extends AppCompatActivity {
 
@@ -37,16 +42,27 @@ public class gestionadministradores extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gestion_administradores);
 
-        // Configuración del clic en la tarjeta de "Cuidadores Activos"
+        // Configurar la foto de perfil en lugar del botón de ajustes
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("usuarios/administradores").child(userId);
+
+            userRef.get().addOnSuccessListener(snapshot -> {
+                if (snapshot.exists()) {
+                    String photoUrl = snapshot.child("fotoPerfil").getValue(String.class);
+                    ImageView btnSettings = findViewById(R.id.btn_settings); // Botón de ajustes reemplazado por foto
+                    if (photoUrl != null) {
+                        Glide.with(this).load(photoUrl).circleCrop().into(btnSettings);
+                    }
+                }
+            });
+        }
+
+        // Configuración del clic en las tarjetas
         findViewById(R.id.card_cuidadores_activos).setOnClickListener(v -> mostrarVentanaEmergente(this));
-
-        // Configuración del clic en la tarjeta de "Citas Pendientes"
         findViewById(R.id.card_citas_pendientes).setOnClickListener(v -> mostrarVentanaCitasPendientes(this));
-
-        // Configuración del clic en la tarjeta de "Notificaciones Recientes"
         findViewById(R.id.card_notificaciones_recientes).setOnClickListener(v -> mostrarVentanaNotificacionesRecientes(this));
-
-        // Configuración del clic en la tarjeta de "Servicios Completados"
         findViewById(R.id.card_servicios_completados).setOnClickListener(v -> mostrarVentanaServiciosCompletados(this));
 
         // Configuración del clic en el icono del mapa
@@ -59,7 +75,7 @@ public class gestionadministradores extends AppCompatActivity {
         // Configuración del clic en el icono de cuidadores
         ImageView iconCaregivers = findViewById(R.id.icon_caregivers);
         iconCaregivers.setOnClickListener(v -> {
-            Intent intent = new Intent(gestionadministradores.this, GestionDeCuidadores.class);
+            Intent intent = new Intent(gestionadministradores.this, GestionDeCuidadoresActivity.class);
             startActivity(intent);
         });
 
@@ -77,48 +93,13 @@ public class gestionadministradores extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Configuración del clic en el botón de notificaciones
-        ImageView btnNotifications = findViewById(R.id.btn_notifications);
-        btnNotifications.setOnClickListener(v -> {
-            Intent intent = new Intent(gestionadministradores.this, NotificacionesGenerales.class);
-            startActivity(intent);
-        });
-
-        // Configuración del clic en el botón de cambio de tema
-        ImageView btnThemeToggle = findViewById(R.id.btn_theme_toggle);
-        btnThemeToggle.setOnClickListener(v -> toggleTheme());
-
-        // Configuración del botón "Regresar"
+        // Configuración del clic en el botón "Regresar"
         ImageView btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(gestionadministradores.this, LoginPrincipal.class);
             startActivity(intent);
             finish(); // Finaliza la actividad actual para evitar volver con el botón de retroceso
         });
-    }
-
-    private void toggleTheme() {
-        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean isDarkTheme = preferences.getBoolean(KEY_THEME, false);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        if (isDarkTheme) {
-            editor.putBoolean(KEY_THEME, false);
-            setThemeForAllActivities(R.style.AppTheme_Light);
-        } else {
-            editor.putBoolean(KEY_THEME, true);
-            setThemeForAllActivities(R.style.AppTheme_Dark);
-        }
-        editor.apply();
-
-        // Reiniciar la actividad para aplicar el cambio de tema
-        recreate();
-    }
-
-    private void setThemeForAllActivities(int themeResId) {
-        AppCompatDelegate.setDefaultNightMode(
-                themeResId == R.style.AppTheme_Dark ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
-        );
     }
 
     @SuppressLint("SetTextI18n")

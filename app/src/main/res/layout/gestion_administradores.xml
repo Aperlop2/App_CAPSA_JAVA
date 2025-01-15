@@ -20,20 +20,9 @@
             android:id="@+id/btn_back"
             android:layout_width="42dp"
             android:layout_height="38dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginEnd="50dp"
             android:background="@drawable/ic_regresar"
             android:contentDescription="@string/regresar"
-            tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
-
-        <!-- Botón de notificaciones -->
-        <ImageButton
-            android:id="@+id/btn_notifications"
-            android:layout_width="40dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/ic_notificacion"
-            android:contentDescription="@string/notificaciones"
             tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
 
         <!-- Botón de cambiar tema -->
@@ -47,15 +36,18 @@
             android:contentDescription="@string/cambiar_tema"
             tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
 
-        <!-- Botón de ajustes -->
-        <ImageButton
+        <!-- Foto de perfil del administrador -->
+        <ImageView
             android:id="@+id/btn_settings"
             android:layout_width="40dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="35dp"
-            android:background="@drawable/ic_ajustes"
-            android:contentDescription="@string/configuracion"
+            android:layout_height="40dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/foto_de_perfil"
+            android:scaleType="centerCrop"
+            android:background="@drawable/rounded_image_background"
             tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
+
     </LinearLayout>
 
     <!-- Título -->

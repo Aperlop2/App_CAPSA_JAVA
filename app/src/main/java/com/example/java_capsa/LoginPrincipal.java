@@ -20,7 +20,6 @@ import org.mindrot.jbcrypt.BCrypt;
 public class LoginPrincipal extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private DatabaseReference adminRef, caretakerRef;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class LoginPrincipal extends AppCompatActivity {
         TextView tvSignUp = findViewById(R.id.tvSignUp); // Texto para redirigir al registro
         TextView tvForgotPassword = findViewById(R.id.tvForgotPassword); // Texto para redirigir a la recuperación de contraseña
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth.getInstance();
         // Referencias a Firebase
         adminRef = FirebaseDatabase.getInstance().getReference("usuarios/administradores");
         caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");

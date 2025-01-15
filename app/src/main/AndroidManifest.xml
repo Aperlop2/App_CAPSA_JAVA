@@ -6,12 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <!-- Declarar características opcionales de la cámara -->
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
     <uses-feature android:name="android.hardware.camera.front" android:required="false" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-
 
     <application
         android:name=".MyApp"
@@ -44,8 +43,8 @@
         </activity>
         <activity android:name=".gestionadministradores" />
         <activity android:name=".MapaTiempoReal" android:exported="true" />
-        <activity android:name=".GestionDeCuidadores" />
-        <activity android:name=".AgregarNuevoCuidador" />
+        <activity android:name=".GestionDeCuidadoresActivity" />
+        <activity android:name=".AgregarNuevoCuidadorActivity" />
         <activity android:name=".GestionDeCitas" />
         <activity android:name=".HistorialEvidencias" />
         <activity android:name=".AgregarCita" />
@@ -54,6 +53,7 @@
         <activity android:name=".FormularioAdministrador" />
         <activity android:name=".FormularioCuidador" />
         <activity android:name=".EditarCita" />
+
 
         <activity android:name=".RecuperarContrasena"/>
     </application>

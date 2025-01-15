@@ -8,38 +8,50 @@
     android:background="@color/gris">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="432dp"
+        android:layout_height="677dp"
         android:orientation="vertical"
         android:padding="20dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="VisualLintBounds">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/agregar_cita"
-            android:textSize="28sp"
-            android:textColor="@color/black"
+            android:layout_marginBottom="16dp"
             android:fontFamily="@font/roboto_bold"
             android:gravity="center"
-            android:layout_marginBottom="16dp" />
+            android:text="@string/agregar_cita"
+            android:textColor="@color/black"
+            android:textSize="28sp" />
 
+        <TextView
+            android:id="@+id/tvDatoDinamico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:id="@+id/iconoFecha"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/baseline_calendar_today_24"
                 android:layout_marginEnd="16dp"
+                android:src="@drawable/baseline_calendar_today_24"
                 app:tint="@color/black"
                 tools:ignore="ContentDescription" />
 
@@ -47,25 +59,25 @@
                 android:id="@+id/tvFecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/seleccione_fecha"
-                android:textSize="16sp"
                 android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/black" />
+                android:text="@string/seleccione_fecha"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:id="@+id/iconoHora"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/baseline_access_time_24"
                 android:layout_marginEnd="16dp"
+                android:src="@drawable/baseline_access_time_24"
                 app:tint="@color/black"
                 tools:ignore="ContentDescription" />
 
@@ -73,26 +85,11 @@
                 android:id="@+id/tvHora"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/seleccione_hora"
-                android:textSize="16sp"
                 android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/black" />
+                android:text="@string/seleccione_hora"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
         </LinearLayout>
-
-        <EditText
-            android:id="@+id/etCuidador"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="@color/white"
-            android:fontFamily="@font/roboto_medium"
-            android:hint="@string/cuidador"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            android:padding="8dp"
-            tools:ignore="Autofill,VisualLintTextFieldSize,TextContrastCheck" />
 
         <EditText
             android:id="@+id/etUbicacion"
@@ -101,19 +98,19 @@
             android:layout_marginBottom="16dp"
             android:background="@color/white"
             android:fontFamily="@font/roboto_medium"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
             android:hint="@string/ubicacion"
             android:inputType="textPostalAddress"
             android:minHeight="48dp"
             android:padding="8dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
             tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnGuardarCita"

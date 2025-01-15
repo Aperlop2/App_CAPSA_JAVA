@@ -2,19 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permisos necesarios para la aplicación -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <!-- Declarar características opcionales de la cámara -->
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
-
     <application
-        android:name=".MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,50 +10,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Java_CAPSA"
-        android:usesCleartextTraffic="true"
+        android:theme="@style/Theme.App_CAPSA_JAVA"
         tools:targetApi="35">
-
-        <!-- Llave de la API de Google Maps -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDWonA4tTFkquO3RpV7y2GRYI4_w0mHq9g" />
-
-        <!-- Actividades registradas -->
-        <activity android:name=".DashboardCuidadorActivity" />
-        <activity android:name=".ScanActivity" />
-        <activity android:name=".AppointmentsActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".LoginPrincipal" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".gestionadministradores" />
-        <activity android:name=".MapaTiempoReal" android:exported="true" />
-        <activity android:name=".GestionDeCuidadoresActivity" />
-        <activity android:name=".AgregarNuevoCuidadorActivity" />
-        <activity android:name=".GestionDeCitas" />
-        <activity android:name=".HistorialEvidencias" />
-        <activity android:name=".AgregarCita" />
-        <activity android:name=".NotificacionesGenerales" />
-        <activity android:name=".RegistroAdminYCuidador" />
-        <activity android:name=".FormularioAdministrador" />
-        <activity android:name=".FormularioCuidador" />
-        <activity android:name=".EditarCita" />
-        <activity android:name=".RecuperarContrasena" />
-
-        <!-- Actividad principal del segundo manifiesto -->
         <activity
             android:name="com.example.app_capsa_java.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

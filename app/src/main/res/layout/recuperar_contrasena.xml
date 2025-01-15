@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#E1E1E1"
+    tools:context=".RecuperarContrasena">
+
+    <TextView
+        android:id="@+id/tvRecuperarTitulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Recuperar contraseña"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/etEmailRecuperar"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/roboto_italic"
+        android:hint="Correo electrónico"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
+        android:inputType="textEmailAddress"
+        android:background="@drawable/rounded_edittext"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRecuperarTitulo"
+        tools:ignore="Autofill,HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
+
+    <Button
+        android:id="@+id/btnRecuperar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#4C9BB8"
+        android:fontFamily="@font/roboto_bolditalic"
+        android:text="Recuperar contraseña"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etEmailRecuperar"
+        tools:ignore="DuplicateSpeakableTextCheck,HardcodedText,VisualLintButtonSize" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E1E1E1"
+    tools:context=".AgregarNuevoCuidadorActivity">
+
+    <!-- Título de la pantalla -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Detalles del cuidador"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="HardcodedText" />
+
+    <!-- Contenedor de la información del cuidador -->
+
+    <!-- Contenedor de botones -->
+    <ScrollView
+        android:id="@+id/infoScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@id/buttonContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Campo: Nombre -->
+            <TextView
+                android:id="@+id/nombreTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_edittext"
+                android:padding="16dp"
+                android:text="Nombre:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <!-- Campo: Correo -->
+            <TextView
+                android:id="@+id/correoTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/rounded_edittext"
+                android:padding="16dp"
+                android:text="Correo:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <!-- Campo: Teléfono -->
+            <TextView
+                android:id="@+id/telefonoTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/rounded_edittext"
+                android:padding="16dp"
+                android:text="Teléfono:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <!-- Campo: Especialidad -->
+            <TextView
+                android:id="@+id/especialidadTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/rounded_edittext"
+                android:padding="16dp"
+                android:text="Especialidad:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <!-- Campo: Fecha de Nacimiento -->
+            <TextView
+                android:id="@+id/fechaNacimientoTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/rounded_edittext"
+                android:padding="16dp"
+                android:text="Fecha de Nacimiento:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+            <!-- Campo: Horarios Disponibles -->
+            <TextView
+                android:id="@+id/horariosDisponiblesTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/rounded_edittext"
+                android:padding="16dp"
+                android:text="Horarios Disponibles:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Botón Aceptar -->
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#4CAF50"
+            android:drawableLeft="@drawable/baseline_save_24"
+            android:text="Aceptar"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="ButtonStyle,HardcodedText,RtlHardcoded,TextContrastCheck,VisualLintButtonSize" />
+
+        <!-- Botón Rechazar -->
+        <Button
+            android:id="@+id/btnCancelar"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#F44336"
+            android:drawableLeft="@drawable/baseline_cancel_24"
+            android:text="Rechazar"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="ButtonStyle,HardcodedText,RtlHardcoded,VisualLintButtonSize" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "281439422182",
+    "project_id": "app-java-capsa",
+    "storage_bucket": "app-java-capsa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281439422182:android:897a13ded9143113a85d27",
+        "android_client_info": {
+          "package_name": "com.example.java_capsa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEHcT7TZzGxjGAic5S9pbnxsvblY5uOZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,10 +2,9 @@ package com.example.java_capsa;
 
 import android.app.Application;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MyApp extends Application {
+public class MiApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();

@@ -1,4 +1,4 @@
-package com.example.app_capsa_java;
+package com.example.java_capsa;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.R;
 
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class CuidadorAdapter extends RecyclerView.Adapter<CuidadorAdapter.Cuidad
 
         holder.btnEditar.setOnClickListener(v -> {
             // Acción para editar cuidador
-            Intent intent = new Intent(v.getContext(), EditarCuidador.class);
+            Intent intent = new Intent(v.getContext(), com.example.java_capsa.EditarCuidador.class);
             intent.putExtra("nombre", cuidador.getNombre());
             intent.putExtra("direccion", cuidador.getDireccion());
             intent.putExtra("telefono", cuidador.getTelefono());

@@ -1,4 +1,4 @@
-package com.example.app_capsa_java;
+package com.example.java_capsa;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.myapplication.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -180,15 +181,15 @@ public class MapaTiempoReal extends FragmentActivity implements OnMapReadyCallba
             TextView details = view.findViewById(R.id.details);
 
             if (Objects.equals(marker.getTitle(), "Tatiana Jiménez Ramón")) {
-                imageView.setImageResource(R.drawable.tatiana);
+                imageView.setImageResource(R.drawable.baseline_account_circle_24);
                 title.setText(marker.getTitle());
                 details.setText("Fecha: 03/01/25\nHora: 8:35\nEstado: Activo");
             } else if (Objects.equals(marker.getTitle(), "María López")) {
-                imageView.setImageResource(R.drawable.maria);
+                imageView.setImageResource(R.drawable.baseline_account_circle_24);
                 title.setText(marker.getTitle());
                 details.setText("Fecha: 02/01/25\nHora: 9:00\nEstado: Activo");
             } else if (Objects.equals(marker.getTitle(), "Carlos Pérez")) {
-                imageView.setImageResource(R.drawable.carlos);
+                imageView.setImageResource(R.drawable.baseline_account_circle_24);
                 title.setText(marker.getTitle());
                 details.setText("Fecha: 01/01/25\nHora: 7:30\nEstado: Inactivo");
             }

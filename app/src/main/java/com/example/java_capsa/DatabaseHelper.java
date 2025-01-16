@@ -1,4 +1,4 @@
-package com.example.app_capsa_java;
+package com.example.java_capsa;
 
 import android.content.ContentValues;
 import android.content.Context;

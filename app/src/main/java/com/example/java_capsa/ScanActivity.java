@@ -1,4 +1,4 @@
-package com.example.app_capsa_java;
+package com.example.java_capsa;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.example.myapplication.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.FirebaseApp;

@@ -1,8 +1,10 @@
-package com.example.app_capsa_java;
+package com.example.java_capsa;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.myapplication.R;
 
 public class NotificacionesGenerales extends AppCompatActivity {
 

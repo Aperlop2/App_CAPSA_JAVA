@@ -1,4 +1,4 @@
-package com.example.app_capsa_java;
+package com.example.java_capsa;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class RecuperarContrasena extends AppCompatActivity {

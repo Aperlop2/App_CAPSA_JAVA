@@ -1,4 +1,5 @@
-package com.example.app_capsa_java;
+package com.example.java_capsa;
+
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -82,7 +84,7 @@ public class gestionadministradores extends AppCompatActivity {
         // Configuración del clic en el icono de citas
         ImageView iconAppointments = findViewById(R.id.icon_appointments);
         iconAppointments.setOnClickListener(v -> {
-            Intent intent = new Intent(gestionadministradores.this, com.example.java_capsa.GestionDeCitas.class);
+            Intent intent = new Intent(gestionadministradores.this, GestionDeCitas.class);
             startActivity(intent);
         });
 

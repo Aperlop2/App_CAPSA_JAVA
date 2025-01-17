@@ -136,48 +136,7 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
-    private void enviarDatos() {
-        String ubicacion = locationTextView.getText().toString();
-
-        if (capturedPhoto == null || ubicacion.isEmpty() || ubicacion.equals("Esperando ubicación...") || descripcionEditText.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Por favor, complete todos los campos y asegúrese de que la ubicación esté disponible.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Obtener la descripción
-        String descripcion = descripcionEditText.getText().toString();
-        // Convertir la foto a base64
-        String fotoBase64 = bitmapToBase64(capturedPhoto);
-
-        // Verificar que el usuario está autenticado
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            String email = user.getEmail();
-            // Obtener el nombre del cuidador desde Firebase
-            caretakerRef.get().addOnSuccessListener(snapshot -> {
-                boolean encontrado = false;
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    String storedEmail = child.child("correo").getValue(String.class);
-                    if (storedEmail != null && storedEmail.equals(email)) {
-                        // Nombre del cuidador encontrado
-                        String nombreCuidador = child.child("nombre").getValue(String.class);
-                        if (nombreCuidador == null) {
-                            nombreCuidador = "Cuidador sin nombre asignado";
-                        }
-                        // Ahora que tenemos el nombre, enviamos los datos al servidor
-                        enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64);
-                        encontrado = true;
-                        break;
-                    }
-                }
-                if (!encontrado) {
-                    Toast.makeText(this, "No se encontró información para el cuidador con correo: " + email, Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(e -> Toast.makeText(this, "Error al conectar con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-        } else {
-            Toast.makeText(this, "Usuario no autenticado. Por favor, inicie sesión.", Toast.LENGTH_SHORT).show();
-        }
-    }
+    String fechaHora = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new java.util.Date());
 
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -217,7 +176,7 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
-    private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64) {
+    private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64, String fechaHora) {
         String url = "http://192.168.137.1/evidencias/guardar_evidencia.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -230,12 +189,14 @@ public class ScanActivity extends AppCompatActivity {
                 params.put("ubicacion", ubicacion);
                 params.put("descripcion", descripcion);
                 params.put("foto", fotoBase64);
+                params.put("fecha_hora", fechaHora); // Se envía la fecha y hora al servidor
                 return params;
             }
         };
 
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
+
 
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

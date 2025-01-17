@@ -84,6 +84,52 @@ public class ScanActivity extends AppCompatActivity {
         checkLocationPermission();
     }
 
+    private void enviarDatos() {
+        String ubicacion = locationTextView.getText().toString();
+
+        if (capturedPhoto == null || ubicacion.isEmpty() || ubicacion.equals("Esperando ubicación...") || descripcionEditText.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Por favor, complete todos los campos y asegúrese de que la ubicación esté disponible.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Obtener la descripción
+        String descripcion = descripcionEditText.getText().toString();
+        // Convertir la foto a base64
+        String fotoBase64 = bitmapToBase64(capturedPhoto);
+        // Obtener la fecha y hora actual en formato "YYYY-MM-DD HH:MM:SS"
+        String fechaHora = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new java.util.Date());
+
+        // Verificar que el usuario está autenticado
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            String email = user.getEmail();
+            // Obtener el nombre del cuidador desde Firebase
+            caretakerRef.get().addOnSuccessListener(snapshot -> {
+                boolean encontrado = false;
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    String storedEmail = child.child("correo").getValue(String.class);
+                    if (storedEmail != null && storedEmail.equals(email)) {
+                        // Nombre del cuidador encontrado
+                        String nombreCuidador = child.child("nombre").getValue(String.class);
+                        if (nombreCuidador == null) {
+                            nombreCuidador = "Cuidador sin nombre asignado";
+                        }
+                        // Ahora que tenemos el nombre, enviamos los datos al servidor
+                        enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64, fechaHora); // Se agregó fechaHora
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) {
+                    Toast.makeText(this, "No se encontró información para el cuidador con correo: " + email, Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(e -> Toast.makeText(this, "Error al conectar con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        } else {
+            Toast.makeText(this, "Usuario no autenticado. Por favor, inicie sesión.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     private void verificarAutenticacion() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {

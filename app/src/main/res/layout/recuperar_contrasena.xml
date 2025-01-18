@@ -35,6 +35,7 @@
         android:textColorHint="#000000"
         android:inputType="textEmailAddress"
         android:background="@drawable/rounded_edittext"
+        android:drawableLeft="@drawable/baseline_password_24"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

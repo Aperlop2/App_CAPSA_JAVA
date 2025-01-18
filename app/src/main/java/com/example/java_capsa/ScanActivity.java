@@ -209,6 +209,8 @@ public class ScanActivity extends AppCompatActivity {
                 response -> {
                     Log.d("RESPUESTA_SERVIDOR", "Respuesta: " + response);
                     Toast.makeText(this, "Datos enviados correctamente", Toast.LENGTH_SHORT).show();
+
+                    descripcionEditText.setText("");
                 },
                 error -> {
                     Log.e("ERROR_VOLLEY", "Error de red: " + error.getMessage());

@@ -1,24 +1,15 @@
 package com.example.java_capsa;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import com.example.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -27,21 +18,21 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+
+import android.net.Uri;
+
+
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 public class FormularioAdministrador extends AppCompatActivity {
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
-
     private EditText etFullName, etEmail, etPhoneNumber, etRole, etPassword, etConfirmPassword;
-    private ImageView ivProfilePicture;
     private DatabaseReference databaseReference;
-    private StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
-    private Bitmap capturedImage;
+    private StorageReference storageReference;
+    private Uri imageUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,53 +45,36 @@ public class FormularioAdministrador extends AppCompatActivity {
         etRole = findViewById(R.id.etRole);
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
-        ivProfilePicture = findViewById(R.id.ivProfilePicture);
         Button btnRegister = findViewById(R.id.btnRegister);
         Button btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
 
+
+        storageReference = FirebaseStorage.getInstance().getReference("usuarios/perfiles");
+
         databaseReference = FirebaseDatabase.getInstance().getReference("usuarios/administradores");
-        storageReference = FirebaseStorage.getInstance().getReference("usuarios/administradores");
         firebaseAuth = FirebaseAuth.getInstance();
 
         btnRegister.setOnClickListener(v -> registerAdministrator());
-        btnUploadPhoto.setOnClickListener(v -> checkCameraPermission());
+        btnUploadPhoto.setOnClickListener(v -> openGallery());
+
     }
 
-    private void checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
-        } else {
-            openCamera();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera();
-            } else {
-                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-        }
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, 1000); // Código de solicitud para distinguir acciones
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
-            capturedImage = (Bitmap) data.getExtras().get("data");
-            ivProfilePicture.setImageBitmap(capturedImage);
+        if (requestCode == 1000 && resultCode == RESULT_OK && data != null) {
+            imageUri = data.getData();
+            ImageView ivProfilePicture = findViewById(R.id.ivProfilePicture);
+            ivProfilePicture.setImageURI(imageUri); // Mostrar la imagen seleccionada
         }
     }
+
 
     private void registerAdministrator() {
         String fullName = etFullName.getText().toString().trim();
@@ -110,51 +84,52 @@ public class FormularioAdministrador extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-        if (validateFields(fullName, email, phone, role, password, confirmPassword)) {
-            firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            assert user != null;
-                            String userId = user.getUid();
-
-                            String hashedPassword = hashPassword(password);
-                            uploadProfilePicture(userId, fullName, email, phone, role, hashedPassword);
-                        } else {
-                            Toast.makeText(this, "Error al registrar el usuario: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+        if (!validateFields(fullName, email, phone, role, password, confirmPassword)) {
+            return;
         }
-    }
 
-    private void uploadProfilePicture(String userId, String fullName, String email, String phone, String role, String hashedPassword) {
-        if (capturedImage != null) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            capturedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] data = baos.toByteArray();
-
-            StorageReference imageRef = storageReference.child(userId + ".jpg");
-            UploadTask uploadTask = imageRef.putBytes(data);
-
-            uploadTask.addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                String photoUrl = uri.toString();
-                saveAdministratorData(userId, fullName, email, phone, role, hashedPassword, photoUrl);
-            })).addOnFailureListener(e -> Toast.makeText(this, "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        if (imageUri != null) {
+            // Subir la imagen a Firebase Storage
+            StorageReference fileReference = storageReference.child(System.currentTimeMillis() + ".jpg");
+            fileReference.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String photoUrl = uri.toString(); // URL pública de la foto
+                        createFirebaseUser(fullName, email, phone, role, password, photoUrl);
+                    }))
+                    .addOnFailureListener(e -> Toast.makeText(this, "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         } else {
-            saveAdministratorData(userId, fullName, email, phone, role, hashedPassword, null);
+            // Continuar sin foto de perfil
+            createFirebaseUser(fullName, email, phone, role, password, null);
         }
     }
 
-    private void saveAdministratorData(String userId, String fullName, String email, String phone, String role, String hashedPassword, String photoUrl) {
-        Administrator administrator = new Administrator(fullName, email, phone, role, hashedPassword, photoUrl);
-        databaseReference.child(userId).setValue(administrator)
-                .addOnSuccessListener(unused -> {
-                    Toast.makeText(this, "Administrador registrado con éxito", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(FormularioAdministrador.this, gestionadministradores.class);
-                    startActivity(intent);
-                    finish();
-                })
-                .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar en la base de datos: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    private void createFirebaseUser(String fullName, String email, String phone, String role, String password, String photoUrl) {
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        assert user != null;
+                        String userId = user.getUid();
+
+                        // Hashear la contraseña antes de almacenarla
+                        String hashedPassword = hashPassword(password);
+
+                        // Crear y guardar el objeto del administrador
+                        Administrator administrator = new Administrator(fullName, email, phone, role, hashedPassword, photoUrl);
+                        databaseReference.child(userId).setValue(administrator)
+                                .addOnSuccessListener(unused -> {
+                                    Toast.makeText(this, "Administrador registrado con éxito", Toast.LENGTH_SHORT).show();
+
+                                    // Redirigir automáticamente al LoginPrincipal
+                                    Intent intent = new Intent(FormularioAdministrador.this, LoginPrincipal.class);
+                                    startActivity(intent);
+                                    finish(); // Finalizar esta actividad
+                                })
+                                .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar en la base de datos: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    } else {
+                        Toast.makeText(this, "Error al registrar el usuario: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private boolean validateFields(String fullName, String email, String phone, String role, String password, String confirmPassword) {
@@ -178,6 +153,7 @@ public class FormularioAdministrador extends AppCompatActivity {
     }
 
     private String hashPassword(String password) {
+        // Generar un hash seguro con BCrypt
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 }

@@ -7,7 +7,6 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.R;
 
 public class EditarCuidador extends AppCompatActivity {
 

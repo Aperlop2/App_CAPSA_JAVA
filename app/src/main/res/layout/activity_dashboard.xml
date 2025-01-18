@@ -30,7 +30,7 @@
             android:id="@+id/notificationsIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/notifications"
+            android:src="@drawable/baseline_notifications_24"
             android:contentDescription="Notificaciones"
             android:layout_gravity="center_vertical" />
     </LinearLayout>
@@ -81,7 +81,7 @@
                 android:id="@+id/clientAvatar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/profile"
+                android:src="@drawable/baseline_account_circle_24"
                 android:contentDescription="Avatar del cliente"
                 android:layout_marginRight="8dp" />
 
@@ -115,7 +115,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/bottom_navigation_menu"
+        app:menu="@menu/buttom_navigation_menu"
         app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/selector_bottom_nav"
         app:itemTextColor="@color/selector_bottom_nav" />

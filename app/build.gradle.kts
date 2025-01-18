@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.example.java_capsa"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "com.example.java_capsa"
         minSdk = 26 // Ajustado para compatibilidad con Firebase y otras librerías
         targetSdk = 34
         versionCode = 1

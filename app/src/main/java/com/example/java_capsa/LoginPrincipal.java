@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -20,6 +20,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginPrincipal extends AppCompatActivity {
     private EditText etEmail, etPassword;
+    private FirebaseAuth mAuth;
     private DatabaseReference adminRef, caretakerRef;
 
     @Override
@@ -27,33 +28,24 @@ public class LoginPrincipal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_principal);
 
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        Button btnLogin = findViewById(R.id.btnLogin);
-        TextView tvSignUp = findViewById(R.id.tvSignUp); // Texto para redirigir al registro
-        TextView tvForgotPassword = findViewById(R.id.tvForgotPassword); // Texto para redirigir a la recuperación de contraseña
+        // Inicialización de Firebase Authentication
+        mAuth = FirebaseAuth.getInstance();
 
-        FirebaseAuth.getInstance();
-        // Referencias a Firebase
+        // Referencias a Firebase Database
         adminRef = FirebaseDatabase.getInstance().getReference("usuarios/administradores");
         caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
 
-        // Manejar clic en el botón "Iniciar Sesión"
+        // Inicialización de vistas
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
+        Button btnLogin = findViewById(R.id.btnLogin);
+        TextView tvSignUp = findViewById(R.id.tvSignUp);
+        TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
+
+        // Manejo de eventos
         btnLogin.setOnClickListener(v -> loginUser());
-
-        // Manejar clic en "No tienes cuenta, regístrate aquí"
-        tvSignUp.setOnClickListener(v -> {
-            // Redirigir a la actividad RegistroAdminYCuidador
-            Intent intent = new Intent(LoginPrincipal.this, RegistroAdminYCuidador.class);
-            startActivity(intent);
-        });
-
-        // Manejar clic en "Olvidaste tu contraseña"
-        tvForgotPassword.setOnClickListener(v -> {
-            // Redirigir a la actividad Recuperación de Contraseña
-            Intent intent = new Intent(LoginPrincipal.this, RecuperarContrasena.class);
-            startActivity(intent);
-        });
+        tvSignUp.setOnClickListener(v -> startActivity(new Intent(LoginPrincipal.this, RegistroAdminYCuidador.class)));
+        tvForgotPassword.setOnClickListener(v -> startActivity(new Intent(LoginPrincipal.this, RecuperarContrasena.class)));
     }
 
     private void loginUser() {
@@ -65,48 +57,49 @@ public class LoginPrincipal extends AppCompatActivity {
             return;
         }
 
+        // Autenticación con Firebase Authentication
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            verificarRolUsuario(user.getUid(), email);
+                        } else {
+                            Toast.makeText(this, "Error al obtener la sesión del usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
-        // Validar en Administradores
-        adminRef.get().addOnSuccessListener(snapshot -> {
-            if (snapshot.exists() && validateLogin(snapshot, email, password)) {
+    private void verificarRolUsuario(String userId, String email) {
+        // Primero, verificamos si es un Administrador
+        adminRef.child(userId).get().addOnSuccessListener(snapshot -> {
+            if (snapshot.exists()) {
+                // Inicio de sesión exitoso como Administrador
                 Toast.makeText(this, "Inicio de sesión exitoso (Administrador)", Toast.LENGTH_SHORT).show();
-                // Redirigir al Dashboard del Administrador
                 Intent intent = new Intent(LoginPrincipal.this, gestionadministradores.class);
-                intent.putExtra("email", email); // Pasar el correo a la siguiente actividad
+                intent.putExtra("email", email);
                 startActivity(intent);
                 finish();
             } else {
-                // Validar en Cuidadores
-                caretakerRef.get().addOnSuccessListener(caretakerSnapshot -> {
-                    if (caretakerSnapshot.exists() && validateLogin(caretakerSnapshot, email, password)) {
+                // Si no es Administrador, verificamos si es Cuidador
+                caretakerRef.child(userId).get().addOnSuccessListener(caretakerSnapshot -> {
+                    if (caretakerSnapshot.exists()) {
+                        // Inicio de sesión exitoso como Cuidador
                         Toast.makeText(this, "Inicio de sesión exitoso (Cuidador)", Toast.LENGTH_SHORT).show();
-                        // Redirigir al Dashboard del Cuidador
                         Intent intent = new Intent(LoginPrincipal.this, DashboardCuidadorActivity.class);
-                        intent.putExtra("email", email); // Pasar el correo a la siguiente actividad
+                        intent.putExtra("email", email);
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "No tienes permisos en la plataforma", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(e ->
                         Toast.makeText(this, "Error al conectarse con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         }).addOnFailureListener(e ->
                 Toast.makeText(this, "Error al conectarse con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-    }
-
-    private boolean validateLogin(DataSnapshot snapshot, String email, String password) {
-        for (DataSnapshot child : snapshot.getChildren()) {
-            String storedEmail = child.child("correo").getValue(String.class);
-            String storedPassword = child.child("contraseña").getValue(String.class);
-
-            if (storedEmail != null && storedPassword != null
-                    && storedEmail.equals(email)
-                    && BCrypt.checkpw(password, storedPassword)) {
-                return true;
-            }
-        }
-        return false;
-
     }
 }

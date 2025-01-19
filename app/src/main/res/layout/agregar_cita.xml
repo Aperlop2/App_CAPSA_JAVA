@@ -93,10 +93,10 @@
 
         <EditText
             android:id="@+id/etUbicacion"
-            android:layout_width="match_parent"
+            android:layout_width="351dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:background="@color/white"
+            android:background="@drawable/rounded_edittext"
             android:fontFamily="@font/roboto_medium"
             android:hint="@string/ubicacion"
             android:inputType="textPostalAddress"

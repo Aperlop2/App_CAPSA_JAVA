@@ -62,6 +62,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-storage")
+    implementation ("com.google.firebase:firebase-appcheck-debug:17.0.1")
+
 
     // Seguridad
     implementation("org.mindrot:jbcrypt:0.4")
@@ -73,4 +75,5 @@ dependencies {
 
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+
 }

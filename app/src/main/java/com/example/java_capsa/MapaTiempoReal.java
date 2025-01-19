@@ -1,197 +1,128 @@
 package com.example.java_capsa;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import java.util.ArrayList;
+import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.Objects;
-
-public class MapaTiempoReal extends FragmentActivity implements OnMapReadyCallback {
-
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
-    private GoogleMap mMap;
-    private Marker lastSelectedMarker;
+public class MapaTiempoReal extends AppCompatActivity {
+    private RecyclerView recyclerView;
+    private CuidadorAdapter adapter;
+    private List<Cuidador> listaCuidadores = new ArrayList<>();
+    private static final String URL = "http://192.168.100.15/obtener_evidencias.php"; // Ajusta la IP según tu servidor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mapa_tiempo_real);
 
-        // Configurar el botón para centrar el mapa
-        Button btnCentrarMapa = findViewById(R.id.btn_centrar_mapa);
-        btnCentrarMapa.setOnClickListener(v -> centrarMapa());
+        recyclerView = findViewById(R.id.recyclerViewCuidadores);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Configurar el botón para regresar
-        ImageButton btnBackMapa = findViewById(R.id.btn_back_mapa);
-        btnBackMapa.setOnClickListener(v -> {
-            Intent intent = new Intent(MapaTiempoReal.this, gestionadministradores.class);
-            startActivity(intent);
-            finish();
-        });
+        adapter = new CuidadorAdapter(this, listaCuidadores, this::eliminarEvidencia);
+        recyclerView.setAdapter(adapter);
 
-        // Verificar y solicitar permisos
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            solicitarPermisos();
-        } else {
-            inicializarMapa();
-        }
+        obtenerCuidadores();
     }
 
-    private void solicitarPermisos() {
-        ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-        }, LOCATION_PERMISSION_REQUEST_CODE);
+    private void obtenerCuidadores() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                URL,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.e("RESPUESTA_SERVIDOR", response.toString()); // Debug
+
+                            if (response.getString("status").equals("success")) {
+                                JSONArray dataArray = response.getJSONArray("data");
+                                listaCuidadores.clear();
+
+                                for (int i = 0; i < dataArray.length(); i++) {
+                                    JSONObject obj = dataArray.getJSONObject(i);
+
+                                    int id = obj.getInt("id"); // ID de la evidencia
+                                    String nombre = obj.getString("nombre_cuidador");
+                                    String ubicacion = obj.getString("ubicacion");
+                                    String descripcion = obj.has("descripcion") ? obj.getString("descripcion") : "Sin descripción";
+                                    String foto = obj.has("foto") ? obj.getString("foto") : "URL_DEFAULT";
+                                    String fechaHora = obj.getString("fecha_hora");
+
+                                    listaCuidadores.add(new Cuidador(id, nombre, ubicacion, descripcion, foto, fechaHora));
+                                }
+
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Log.e("Volley", "Error en respuesta: " + response.getString("message"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("Volley", "Error procesando JSON: " + e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", "Error en la solicitud: " + error.getMessage());
+                    }
+                }
+        );
+
+        queue.add(jsonObjectRequest);
     }
 
-    private void inicializarMapa() {
-        // Cargar dinámicamente el mapa en el FrameLayout
-        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.contenedor_mapa, mapFragment)
-                .commit();
+    private void eliminarEvidencia(int id, int position) {
+        String url = "http://192.168.100.15/obtener_evidencias.php?id=" + id; // ID en la URL
 
-        // Configurar el callback para el mapa
-        mapFragment.getMapAsync(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, null,
+                response -> {
+                    try {
+                        Log.e("DELETE_RESPONSE", response.toString()); // Mostrar respuesta del servidor en logs
+                        if (response.getString("status").equals("success")) {
+                            // Eliminar también de la base de datos local SQLite
+                            DatabaseHelper dbHelper = new DatabaseHelper(MapaTiempoReal.this);
+                            boolean eliminadoLocal = dbHelper.eliminarEvidencia(id);
+
+                            if (eliminadoLocal) {
+                                Log.e("SQLite", "Evidencia eliminada de la base de datos local.");
+                            } else {
+                                Log.e("SQLite", "No se encontró la evidencia en SQLite.");
+                            }
+
+                            listaCuidadores.remove(position);
+                            adapter.notifyItemRemoved(position);
+                            adapter.notifyItemRangeChanged(position, listaCuidadores.size());
+                        } else {
+                            Log.e("DELETE_ERROR", "Error en respuesta: " + response.getString("message"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Log.e("DELETE_ERROR", "Error al eliminar: " + error.getMessage())
+        );
+
+        requestQueue.add(request);
     }
 
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
 
-        // Configurar el tipo de mapa
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-        // Habilitar la ubicación del usuario si se otorgaron permisos
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-        } else {
-            Toast.makeText(this, "Permisos de ubicación no otorgados.", Toast.LENGTH_SHORT).show();
-        }
-
-        // Configurar adaptador de ventanas de información personalizada
-        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
-
-        // Configurar el listener de clics en los marcadores
-        mMap.setOnMarkerClickListener(marker -> {
-            lastSelectedMarker = marker;
-            marker.showInfoWindow();
-            return true;
-        });
-
-        // Añadir marcadores con datos personalizados
-        addMarkers();
-    }
-
-    private void addMarkers() {
-        // Marcador 1: Tatiana Jiménez Ramón
-        LatLng sanPablo = new LatLng(19.27315, -98.97342); // Coordenadas de San Pablo Atlatlahuca
-        mMap.addMarker(new MarkerOptions()
-                .position(sanPablo)
-                .title("Tatiana Jiménez Ramón")
-                .snippet("Última evidencia"));
-
-        // Marcador 2: Ejemplo 2
-        LatLng ejemplo2 = new LatLng(19.432608, -99.133209); // Ciudad de México
-        mMap.addMarker(new MarkerOptions()
-                .position(ejemplo2)
-                .title("María López")
-                .snippet("Última evidencia"));
-
-        // Marcador 3: Ejemplo 3
-        LatLng ejemplo3 = new LatLng(19.504255, -99.14679);
-        mMap.addMarker(new MarkerOptions()
-                .position(ejemplo3)
-                .title("Carlos Pérez")
-                .snippet("Última evidencia"));
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sanPablo, 10)); // Zoom ajustado
-        lastSelectedMarker = mMap.addMarker(new MarkerOptions().position(sanPablo));
-    }
-
-    private void centrarMapa() {
-        if (lastSelectedMarker != null) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastSelectedMarker.getPosition(), 10)); // Zoom ajustado
-        } else {
-            Toast.makeText(this, "No hay marcador seleccionado.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                inicializarMapa();
-            } else {
-                Toast.makeText(this, "Permisos de ubicación denegados.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    // Adaptador para ventanas de información personalizada
-    private class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
-
-        private final View mWindow;
-
-        @SuppressLint("InflateParams")
-        CustomInfoWindowAdapter() {
-            mWindow = LayoutInflater.from(MapaTiempoReal.this).inflate(R.layout.custom_info_window, null);
-        }
-
-        @Override
-        public View getInfoWindow(@NonNull Marker marker) {
-            render(marker, mWindow);
-            return mWindow;
-        }
-
-        @Override
-        public View getInfoContents(@NonNull Marker marker) {
-            return null;
-        }
-
-        private void render(Marker marker, View view) {
-            ImageView imageView = view.findViewById(R.id.image_view);
-            TextView title = view.findViewById(R.id.title);
-            TextView details = view.findViewById(R.id.details);
-
-            if (Objects.equals(marker.getTitle(), "Tatiana Jiménez Ramón")) {
-                imageView.setImageResource(R.drawable.baseline_account_circle_24);
-                title.setText(marker.getTitle());
-                details.setText("Fecha: 03/01/25\nHora: 8:35\nEstado: Activo");
-            } else if (Objects.equals(marker.getTitle(), "María López")) {
-                imageView.setImageResource(R.drawable.baseline_account_circle_24);
-                title.setText(marker.getTitle());
-                details.setText("Fecha: 02/01/25\nHora: 9:00\nEstado: Activo");
-            } else if (Objects.equals(marker.getTitle(), "Carlos Pérez")) {
-                imageView.setImageResource(R.drawable.baseline_account_circle_24);
-                title.setText(marker.getTitle());
-                details.setText("Fecha: 01/01/25\nHora: 7:30\nEstado: Inactivo");
-            }
-        }
-    }
 }

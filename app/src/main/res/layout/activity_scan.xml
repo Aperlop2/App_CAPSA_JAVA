@@ -4,7 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background">
+    android:background="@color/white"
+    tools:context=".ScanActivity">
+
+    <!-- Barra superior -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:background="@color/blue"
+        android:gravity="center"
+        android:padding="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Captura de Evidencia"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
     <!-- TextView para mostrar la ubicación -->
     <TextView
         android:id="@+id/locationTextView"
@@ -12,11 +38,11 @@
         android:layout_height="wrap_content"
         android:text="Esperando ubicación..."
         android:textSize="16sp"
+        android:textColor="@color/black"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- ImageView para mostrar la foto capturada -->
     <ImageView
@@ -24,25 +50,27 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginTop="16dp"
-        android:background="@color/gris"
+        android:background="@drawable/rounded_background"
         android:contentDescription="Foto capturada"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locationTextView"
-        tools:ignore="HardcodedText,ImageContrastCheck" />
+        app:layout_constraintTop_toBottomOf="@id/locationTextView" />
 
     <!-- Botón para tomar una foto -->
     <Button
         android:id="@+id/takePhotoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tomar foto"
+        android:text="📷 Tomar Foto"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/teal_700"
+        android:textColor="@color/white"
         android:layout_marginTop="16dp"
+        android:padding="10dp"
         app:layout_constraintTop_toBottomOf="@id/photoImageView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- EditText para escribir una descripción -->
     <EditText
@@ -50,25 +78,43 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@android:drawable/edit_text"
-        android:hint="Descripción"
-        android:padding="8dp"
+        android:background="@drawable/rounded_edittext"
+        android:hint="Escribe una descripción..."
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/takePhotoButton"
-        tools:ignore="Autofill,HardcodedText,TextContrastCheck,TextFields,VisualLintTextFieldSize" />
+        app:layout_constraintTop_toBottomOf="@id/takePhotoButton" />
 
     <!-- Botón para enviar los datos -->
     <Button
         android:id="@+id/enviarButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enviar"
+        android:text="🚀 Enviar"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@color/white"
         android:layout_marginTop="16dp"
+        android:padding="10dp"
         app:layout_constraintTop_toBottomOf="@id/descripcionEditText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Botón para ir al Dashboard -->
+    <Button
+        android:id="@+id/btnDashboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Ir al Dashboard"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/blue"
+        android:textColor="@color/white"
+        android:layout_marginTop="16dp"
+        android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@id/enviarButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

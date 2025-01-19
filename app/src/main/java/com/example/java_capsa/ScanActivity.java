@@ -67,6 +67,7 @@ public class ScanActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
 
+
         // Inicialización de vistas
         locationTextView = findViewById(R.id.locationTextView);
         descripcionEditText = findViewById(R.id.descripcionEditText);
@@ -82,6 +83,14 @@ public class ScanActivity extends AppCompatActivity {
         enviarButton.setOnClickListener(v -> enviarDatos());
 
         checkLocationPermission();
+
+
+        Button btnDashboard = findViewById(R.id.btnDashboard);
+        btnDashboard.setOnClickListener(v -> {
+            Intent intent = new Intent(ScanActivity.this, DashboardCuidadorActivity.class);
+            startActivity(intent);
+        });
+
     }
     private void enviarDatos() {
         String ubicacion = locationTextView.getText().toString();

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "evidencias_db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     public static final String TABLE_NAME = "evidencias";
     public static final String COLUMN_ID = "id";
@@ -53,4 +53,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return db.insert(TABLE_NAME, null, values);
     }
+
+    public boolean eliminarEvidencia(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int filasAfectadas = db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+        return filasAfectadas > 0;
+    }
+
 }

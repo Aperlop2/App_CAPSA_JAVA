@@ -21,7 +21,7 @@
             android:layout_width="42dp"
             android:layout_height="38dp"
             android:layout_marginEnd="50dp"
-            android:background="@drawable/ic_regresar"
+            android:background="@drawable/baseline_logout_24"
             android:contentDescription="@string/regresar"
             tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
 

@@ -76,6 +76,9 @@ public class DashboardCuidadorActivity extends AppCompatActivity implements OnMa
                 intent.putExtra("nombreCuidador", "Nombre Predeterminado"); // Cambiar por datos reales
                 startActivity(intent);
                 return true;
+            } else if (id == R.id.nav_appointments) {
+                startActivity(new Intent(this, AppointmentsActivity.class));
+                return true;
             } else {
                 return false;
             }

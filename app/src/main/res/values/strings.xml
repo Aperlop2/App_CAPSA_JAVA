@@ -1,6 +1,6 @@
 <resources>
     <!-- Claves del primer código -->
-    <string name="app_name">java_CAPSA</string>
+    <string name="app_name">CAPSA</string>
     <string name="google_maps_api_key">
         AIzaSyDWonA4tTFkquO3RpV7y2GRYI4_w0mHq9g
     </string>

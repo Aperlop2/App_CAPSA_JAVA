@@ -21,7 +21,7 @@ public class MapaTiempoReal extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CuidadorAdapter adapter;
     private List<Cuidador> listaCuidadores = new ArrayList<>();
-    private static final String URL = "http://192.168.100.15/obtener_evidencias.php"; // Ajusta la IP según tu servidor
+    private static final String URL = "http://192.168.100.5/obtener_evidencias.php"; // Ajusta la IP según tu servidor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class MapaTiempoReal extends AppCompatActivity {
     }
 
     private void eliminarEvidencia(int id, int position) {
-        String url = "http://192.168.100.15/obtener_evidencias.php?id=" + id; // ID en la URL
+        String url = "http://192.168.100.5/obtener_evidencias.php?id=" + id; // ID en la URL
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 

@@ -205,7 +205,7 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64, String fechaHora) {
-        String url = "http://192.168.100.15/guardar_evidencia.php";
+        String url = "http://192.168.100.5/guardar_evidencia.php";
 
         // 🔴 Agregar logs para verificar si los datos se están generando correctamente antes de enviarlos
         Log.d("DATOS_ENVIO", "Nombre Cuidador: " + nombreCuidador);

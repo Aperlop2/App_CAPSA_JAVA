@@ -61,10 +61,7 @@ public class gestionadministradores extends AppCompatActivity {
         }
 
         // Configuración del clic en las tarjetas
-        findViewById(R.id.card_cuidadores_activos).setOnClickListener(v -> mostrarVentanaEmergente(this));
         findViewById(R.id.card_citas_pendientes).setOnClickListener(v -> mostrarVentanaCitasPendientes(this));
-        findViewById(R.id.card_notificaciones_recientes).setOnClickListener(v -> mostrarVentanaNotificacionesRecientes(this));
-        findViewById(R.id.card_servicios_completados).setOnClickListener(v -> mostrarVentanaServiciosCompletados(this));
 
         // Configuración del clic en el icono del mapa
         ImageView iconMap = findViewById(R.id.icon_map);
@@ -88,11 +85,6 @@ public class gestionadministradores extends AppCompatActivity {
         });
 
         // Configuración del clic en el icono de historial
-        ImageView iconHistory = findViewById(R.id.icon_history);
-        iconHistory.setOnClickListener(v -> {
-            Intent intent = new Intent(gestionadministradores.this, HistorialEvidencias.class);
-            startActivity(intent);
-        });
 
         // Configuración del clic en el botón "Regresar"
         ImageView btnBack = findViewById(R.id.btn_back);

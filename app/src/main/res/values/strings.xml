@@ -14,7 +14,7 @@
     <string name="citas_pendientes">Citas pendientes</string>
     <string name="notificaciones_recientes">Notificaciones recientes</string>
     <string name="servicios_completados">Servicios completados</string>
-    <string name="mapa">Mapa</string>
+    <string name="evidencias_registradas">Evidencias registradas</string>
     <string name="cuidadores">Cuidadores</string>
     <string name="citas">Citas</string>
     <string name="historial">Historial</string>
@@ -113,7 +113,7 @@
     <string name="repetir_contraseña_cuidador">Repetir contraseña</string>
     <string name="registrar_cuidador">Registrar</string>
     <string name="contraseña">contraseña</string>
-    <string name="cuidado_experto_con_ubicacion_precisa_precisa">cuidado_experto_con_ubicacion_precisa_precisa</string>
+    <string name="cuidado_experto_con_ubicacion_precisa_precisa">Cuidado experto con ubicación precisa</string>
 
     <string name="recuperar_contrasena">Recuperar contraseña</string>
     <string name="recuperar_exito">Te hemos enviado un correo para recuperar tu contraseña</string>

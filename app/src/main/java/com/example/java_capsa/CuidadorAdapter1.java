@@ -15,9 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class CuidadorAdapter extends RecyclerView.Adapter<CuidadorAdapter.ViewHolder> {
+public class CuidadorAdapter1 extends RecyclerView.Adapter<CuidadorAdapter1.ViewHolder> {
     private Context context;
-    private List<Cuidador> cuidadoresList;
+    private List<Cuidador1> cuidadoresList;
     private OnItemDeleteListener onItemDeleteListener;
 
     // Interfaz para manejar la eliminación de elementos
@@ -26,7 +26,7 @@ public class CuidadorAdapter extends RecyclerView.Adapter<CuidadorAdapter.ViewHo
     }
 
     // Constructor con el listener
-    public CuidadorAdapter(Context context, List<Cuidador> cuidadoresList, OnItemDeleteListener listener) {
+    public CuidadorAdapter1(Context context, List<Cuidador1> cuidadoresList, OnItemDeleteListener listener) {
         this.context = context;
         this.cuidadoresList = cuidadoresList;
         this.onItemDeleteListener = listener;
@@ -41,7 +41,7 @@ public class CuidadorAdapter extends RecyclerView.Adapter<CuidadorAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Cuidador cuidador = cuidadoresList.get(position);
+        Cuidador1 cuidador = cuidadoresList.get(position);
 
         if (cuidador != null) {
             Log.e("CuidadorAdapter", "Nombre recibido: " + cuidador.getNombre());

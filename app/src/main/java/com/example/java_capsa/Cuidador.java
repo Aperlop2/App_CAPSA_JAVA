@@ -1,43 +1,37 @@
 package com.example.java_capsa;
 
 public class Cuidador {
-    private int id;
-    private String nombre;
-    private String ubicacion;
-    private String descripcion;
-    private String foto;
-    private String fechaHora;
+    private final String nombre;
+    private final String direccion;
+    private final String telefono;
+    private final String horario;
+    private final String imageUri;
 
-    public Cuidador(int id, String nombre, String ubicacion, String descripcion, String foto, String fechaHora) {
-        this.id = id;
+    public Cuidador(String nombre, String direccion, String telefono, String horario, String imageUri) {
         this.nombre = nombre;
-        this.ubicacion = ubicacion;
-        this.descripcion = descripcion;
-        this.foto = foto;
-        this.fechaHora = fechaHora;
-    }
-
-    public int getId() {
-        return id;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.horario = horario;
+        this.imageUri = imageUri;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public String getUbicacion() {
-        return ubicacion;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getTelefono() {
+        return telefono;
     }
 
-    public String getFoto() {
-        return foto;
+    public String getHorario() {
+        return horario;
     }
 
-    public String getFechaHora() {
-        return fechaHora;
+    public String getImageUri() {
+        return imageUri;
     }
 }

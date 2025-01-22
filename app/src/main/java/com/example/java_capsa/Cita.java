@@ -1,39 +1,41 @@
 package com.example.java_capsa;
 
 public class Cita {
-    private String detalle;
-    private String cuidador;
+    private String id;
+    private String fecha;
+    private String hora;
     private String ubicacion;
+    private String estado;
 
-    public Cita(String detalle, String cuidador, String ubicacion) {
-        this.detalle = detalle;
-        this.cuidador = cuidador;
+    public Cita(String id, String fecha, String hora, String ubicacion, String estado) {
+        this.id = id;
+        this.fecha = fecha;
+        this.hora = hora;
         this.ubicacion = ubicacion;
+        this.estado = (estado != null) ? estado : "Pendiente"; // Si no tiene estado, lo marcamos como "Pendiente"
     }
 
-    // Getters
-    public String getDetalle() {
-        return detalle;
+    public String getId() {
+        return id;
     }
 
-    public String getCuidador() {
-        return cuidador;
+    public String getFecha() {
+        return fecha;
+    }
+
+    public String getHora() {
+        return hora;
     }
 
     public String getUbicacion() {
         return ubicacion;
     }
 
-    // Setters (si necesitas modificar los atributos)
-    public void setDetalle(String detalle) {
-        this.detalle = detalle;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setCuidador(String cuidador) {
-        this.cuidador = cuidador;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

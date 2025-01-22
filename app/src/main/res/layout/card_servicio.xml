@@ -3,32 +3,24 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:elevation="2dp"
-    android:background="#D0F0FD"
+    android:background="#7C33A8"
     android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#A8E6CF"
+        android:background="#A366C8"
         android:padding="12dp">
-
-        <TextView
-            android:id="@+id/tv_servicio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/servicio"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tv_fecha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="@string/fecha"
-            android:textColor="#000000"
+            android:text="@string/fecha_cuidador"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
             android:textSize="16sp" />
 
         <TextView
@@ -36,17 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="@string/hora"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_cuidador"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="@string/cuidador"
-            android:textColor="#000000"
+            android:text="@string/hora_cuidador"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
             android:textSize="16sp" />
 
         <TextView
@@ -54,7 +38,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ubicacion"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
             android:textSize="16sp" />
+
+
     </LinearLayout>
 </RelativeLayout>

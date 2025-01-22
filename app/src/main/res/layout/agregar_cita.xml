@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gris">
+    android:background="#E7D6DB">
 
     <LinearLayout
         android:layout_width="432dp"
@@ -17,7 +17,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
         tools:ignore="VisualLintBounds">
 
         <TextView
@@ -38,7 +37,8 @@
             android:fontFamily="@font/roboto_medium"
             android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -105,6 +105,7 @@
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize" />
+
 
         <LinearLayout
             android:layout_width="match_parent"

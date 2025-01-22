@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +11,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue"
+        android:background="@color/azul"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="16dp">
@@ -21,7 +22,7 @@
             android:layout_width="42dp"
             android:layout_height="38dp"
             android:layout_marginEnd="50dp"
-            android:background="@drawable/baseline_logout_24"
+            android:background="@drawable/ic_regresar"
             android:contentDescription="@string/regresar"
             tools:ignore="ImageContrastCheck,TouchTargetSizeCheck" />
 
@@ -45,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/panel_del_administrador"
-        android:textSize="27sp"
+        android:textSize="29sp"
         android:textStyle="bold"
         android:textColor="#000000"
         android:layout_below="@id/header"
@@ -64,37 +65,16 @@
         android:padding="16dp"
         android:rowCount="2">
 
-        <LinearLayout
-            android:id="@+id/card_citas_pendientes"
-            android:layout_width="264dp"
-            android:layout_height="130dp"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_row="0"
-            android:layout_rowWeight="1"
             android:layout_column="0"
-            android:layout_columnWeight="1"
-            android:layout_margin="6dp"
-            android:background="@drawable/card_background_blue"
-            android:gravity="center"
-            android:orientation="vertical"
-            tools:ignore="UselessParent">
+            app:srcCompat="@drawable/administradores"
+            android:scaleType="fitCenter"
+            tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:contentDescription="citas_pendientes_boton"
-                android:src="@drawable/ic_citas_pendientes"
-                tools:ignore="HardcodedText,ImageContrastCheck" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="@string/citas_pendientes"
-                android:textColor="#000000"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:ignore="TextContrastCheck" />
-        </LinearLayout>
     </GridLayout>
 
     <!-- Botones inferiores -->
@@ -103,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="181dp"
         android:layout_below="@id/panel_admin"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="72dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="16dp"
@@ -120,9 +100,9 @@
 
             <ImageView
                 android:id="@+id/icon_map"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:contentDescription="@string/evidencias_registradas"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="@string/mapa"
                 android:src="@drawable/ic_mapa"
                 tools:ignore="ImageContrastCheck" />
 
@@ -130,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Evidencias registradas"
+                android:text="Mapa"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
@@ -147,8 +127,8 @@
 
             <ImageView
                 android:id="@+id/icon_caregivers"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
                 android:contentDescription="@string/cuidadores"
                 android:src="@drawable/ic_cuidadores" />
 
@@ -159,7 +139,7 @@
                 android:text="Cuidadores"
                 android:textAlignment="center"
                 android:textColor="#000000"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
@@ -174,8 +154,8 @@
 
             <ImageView
                 android:id="@+id/icon_appointments"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:contentDescription="@string/citas"
                 android:src="@drawable/ic_citas" />
 
@@ -189,6 +169,34 @@
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/card_citas_pendientes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:contentDescription="@string/citas_pendientes"
+                android:src="@drawable/ic_citas_pendientes"
+                tools:ignore="ImageContrastCheck" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Citas\npendientes"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

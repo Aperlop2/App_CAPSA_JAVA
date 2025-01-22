@@ -1,28 +1,32 @@
 package com.example.java_capsa;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 public class CitaAdapter extends RecyclerView.Adapter<CitaAdapter.CitaViewHolder> {
 
-    private final List<Cita> citasList;
-    private final Context context;
-    private final OnCitaClickListener listener;
+    private List<Cita> citasList;
+    private Context context;
+    private DatabaseReference citasRef;
 
-    public CitaAdapter(List<Cita> citasList, Context context, OnCitaClickListener listener) {
+    public CitaAdapter(List<Cita> citasList, Context context) {
         this.citasList = citasList;
         this.context = context;
-        this.listener = listener;
+        this.citasRef = FirebaseDatabase.getInstance().getReference("citas");
     }
 
     @NonNull
@@ -35,15 +39,40 @@ public class CitaAdapter extends RecyclerView.Adapter<CitaAdapter.CitaViewHolder
     @Override
     public void onBindViewHolder(@NonNull CitaViewHolder holder, int position) {
         Cita cita = citasList.get(position);
-        holder.tvCita.setText(cita.getDetalle());
-        holder.tvCuidador.setText(cita.getCuidador());
-        holder.tvUbicacion.setText(cita.getUbicacion());
 
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onCitaClick(cita.getCuidador());
-            }
-        });
+        holder.tvFecha.setText("📅 Fecha: " + cita.getFecha());
+        holder.tvHora.setText("⏰ Hora: " + cita.getHora());
+        holder.tvUbicacion.setText("📍 Ubicación: " + cita.getUbicacion());
+
+        if ("Completada".equals(cita.getEstado())) {
+            holder.btnCompletada.setEnabled(false);
+            holder.btnCompletada.setText("Completada");
+        } else {
+            holder.btnCompletada.setOnClickListener(v -> mostrarDialogoConfirmacion(holder, cita, position));
+        }
+    }
+
+    private void mostrarDialogoConfirmacion(CitaViewHolder holder, Cita cita, int position) {
+        new AlertDialog.Builder(context)
+                .setTitle("Confirmación")
+                .setMessage("¿Marcar esta cita como completada y eliminarla?")
+                .setPositiveButton("Sí", (dialog, which) -> marcarCitaComoCompletada(holder, cita, position))
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void marcarCitaComoCompletada(CitaViewHolder holder, Cita cita, int position) {
+        // Eliminar la cita de Firebase
+        citasRef.child(cita.getId()).removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    // Eliminar la cita de la lista y actualizar la vista
+                    citasList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, citasList.size());
+
+                    Toast.makeText(context, "Cita eliminada y marcada como completada", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Toast.makeText(context, "Error al eliminar la cita", Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -51,20 +80,16 @@ public class CitaAdapter extends RecyclerView.Adapter<CitaAdapter.CitaViewHolder
         return citasList.size();
     }
 
-    static class CitaViewHolder extends RecyclerView.ViewHolder {
+    public static class CitaViewHolder extends RecyclerView.ViewHolder {
+        TextView tvFecha, tvHora, tvUbicacion;
+        Button btnCompletada;
 
-        TextView tvCita, tvCuidador, tvUbicacion;
-
-        @SuppressLint("CutPasteId")
         public CitaViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvCita = itemView.findViewById(R.id.tv_cuidador);
-            tvCuidador = itemView.findViewById(R.id.tv_cuidador);
-            tvUbicacion = itemView.findViewById(R.id.tv_ubicacion);
+            tvFecha = itemView.findViewById(R.id.tvFecha);
+            tvHora = itemView.findViewById(R.id.tvHora);
+            tvUbicacion = itemView.findViewById(R.id.tvUbicacion);
+            btnCompletada = itemView.findViewById(R.id.btnCompletada);
         }
-    }
-
-    public interface OnCitaClickListener {
-        void onCitaClick(String cuidador);
     }
 }

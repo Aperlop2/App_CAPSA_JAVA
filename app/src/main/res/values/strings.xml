@@ -129,4 +129,11 @@
     <string name="datos_del_cuidador">Datos del cuidador</string>
     <string name="guardar">Guardar</string>
     <string name="cancelar">Cancelar</string>
+
+    <string name="correo_cuidador">Correo cuidador</string>
+    <string name="fecha_cuidador">Fecha</string>
+    <string name="hora_cuidador">Hora</string>
+    <string name="ubicacion_cuidador">Ubicacion</string>
+    <string name="estado">Estado</string>
+    <string name="mapa">Mapa</string>
 </resources>

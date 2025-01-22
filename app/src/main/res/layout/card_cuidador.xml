@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:elevation="2dp"
-    android:background="#D0F0FD"
+    android:background="#7C33A8"
     android:padding="16dp">
 
 
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#A8E6CF"
+        android:background="#A366C8"
         android:padding="12dp"
         tools:ignore="UselessParent">
 
@@ -22,7 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nombre_nombre"
-            android:textColor="#000"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginBottom="8dp" />
 
@@ -32,7 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="@string/estado_estado"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
             android:textSize="16sp" />
 
         <TextView
@@ -41,7 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="@string/ubicacion_ubicacion"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
             android:textSize="16sp" />
 
         <TextView
@@ -49,9 +52,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Especialidad: [Especialidad]"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
             android:textSize="16sp"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText,TextContrastCheck" />
     </LinearLayout>
 
 </RelativeLayout>

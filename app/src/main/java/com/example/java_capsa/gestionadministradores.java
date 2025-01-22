@@ -1,45 +1,34 @@
 package com.example.java_capsa;
 
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class gestionadministradores extends AppCompatActivity {
-
-    private static final String PREFS_NAME = "theme_prefs";
-    private static final String KEY_THEME = "dark_theme";
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Cargar el tema desde las preferencias
-        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean isDarkTheme = preferences.getBoolean(KEY_THEME, false);
-        if (isDarkTheme) {
-            setTheme(R.style.AppTheme_Dark);
-        } else {
-            setTheme(R.style.AppTheme_Light);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gestion_administradores);
 
@@ -52,7 +41,7 @@ public class gestionadministradores extends AppCompatActivity {
             userRef.get().addOnSuccessListener(snapshot -> {
                 if (snapshot.exists()) {
                     String photoUrl = snapshot.child("fotoPerfil").getValue(String.class);
-                    ImageView btnSettings = findViewById(R.id.btn_settings); // Botón de ajustes reemplazado por foto
+                    ImageView btnSettings = findViewById(R.id.btn_settings);
                     if (photoUrl != null) {
                         Glide.with(this).load(photoUrl).circleCrop().into(btnSettings);
                     }
@@ -60,35 +49,15 @@ public class gestionadministradores extends AppCompatActivity {
             });
         }
 
-        // Configuración del clic en las tarjetas
+        // Configuración del clic en las tarjetas del panel de administración
         findViewById(R.id.card_citas_pendientes).setOnClickListener(v -> mostrarVentanaCitasPendientes(this));
-
-        // Configuración del clic en el icono del mapa
-        ImageView iconMap = findViewById(R.id.icon_map);
-        iconMap.setOnClickListener(v -> {
-            Intent intent = new Intent(gestionadministradores.this, MapaTiempoReal.class);
-            startActivity(intent);
-        });
-
-        // Configuración del clic en el icono de cuidadores
-        ImageView iconCaregivers = findViewById(R.id.icon_caregivers);
-        iconCaregivers.setOnClickListener(v -> {
-            Intent intent = new Intent(gestionadministradores.this, GestionDeCuidadoresActivity.class);
-            startActivity(intent);
-        });
-
-        // Configuración del clic en el icono de citas
-        ImageView iconAppointments = findViewById(R.id.icon_appointments);
-        iconAppointments.setOnClickListener(v -> {
-            Intent intent = new Intent(gestionadministradores.this, GestionDeCitas.class);
-            startActivity(intent);
-        });
-
-        // Configuración del clic en el icono de historial
+        // Redirecciones a otras actividades desde los iconos inferiores
+        findViewById(R.id.icon_map).setOnClickListener(v -> startActivity(new Intent(this, MapaTiempoReal.class)));
+        findViewById(R.id.icon_caregivers).setOnClickListener(v -> startActivity(new Intent(this, GestionDeCuidadoresActivity.class)));
+        findViewById(R.id.icon_appointments).setOnClickListener(v -> startActivity(new Intent(this, GestionDeCitas.class)));
 
         // Configuración del clic en el botón "Regresar"
-        ImageView btnBack = findViewById(R.id.btn_back);
-        btnBack.setOnClickListener(v -> {
+        findViewById(R.id.btn_back).setOnClickListener(v -> {
             Intent intent = new Intent(gestionadministradores.this, LoginPrincipal.class);
             startActivity(intent);
             finish(); // Finaliza la actividad actual para evitar volver con el botón de retroceso
@@ -96,154 +65,111 @@ public class gestionadministradores extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void mostrarVentanaEmergente(Context context) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View popupView = inflater.inflate(R.layout.cuidadores_activos, null);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(popupView);
-        AlertDialog dialog = builder.create();
-
-        TextView tvTotalCuidadores = popupView.findViewById(R.id.tv_total_cuidadores);
-        ScrollView scrollCuidadores = popupView.findViewById(R.id.scroll_cuidadores);
-        Button btnClose = popupView.findViewById(R.id.btn_close);
-
-        String totalCuidadores = String.format(getString(R.string.numero_cuidadores_placeholder), 0);
-        tvTotalCuidadores.setText(totalCuidadores);
-
-        LinearLayout layoutCuidadores = new LinearLayout(context);
-        layoutCuidadores.setOrientation(LinearLayout.VERTICAL);
-        scrollCuidadores.addView(layoutCuidadores);
-
-        View cardView = inflater.inflate(R.layout.card_cuidador, layoutCuidadores, false);
-        TextView tvName = cardView.findViewById(R.id.tv_name);
-        TextView tvStatus = cardView.findViewById(R.id.tv_status);
-        TextView tvLocation = cardView.findViewById(R.id.tv_location);
-        TextView tvEspecialidad = cardView.findViewById(R.id.tv_especialidad);
-
-        tvName.setText("Nombre:");
-        tvStatus.setText("Estado:");
-        tvLocation.setText("Ubicación:");
-        tvEspecialidad.setText("Especialidad:");
-
-        layoutCuidadores.addView(cardView);
-
-        btnClose.setOnClickListener(v -> dialog.dismiss());
-        dialog.show();
-    }
-
-    @SuppressLint("SetTextI18n")
     private void mostrarVentanaCitasPendientes(Context context) {
+        if (context == null) {
+            return;
+        }
+
+        // Inflar el diseño de la ventana emergente
         LayoutInflater inflater = LayoutInflater.from(context);
         View popupView = inflater.inflate(R.layout.citas_pendientes, null);
 
+
+        if (popupView == null) {
+            return;
+        }
+
+        // Crear el AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(popupView);
         AlertDialog dialog = builder.create();
 
+        // Referencias a los elementos de la ventana emergente
         TextView tvTotalCitas = popupView.findViewById(R.id.tv_total_citas);
-        ScrollView scrollCitas = popupView.findViewById(R.id.scroll_citas);
+        LinearLayout layoutCitas = popupView.findViewById(R.id.layout_citas);
         Button btnClose = popupView.findViewById(R.id.btn_close);
 
-        String totalCitas = String.format(getString(R.string.total_citas_placeholder), 0);
-        tvTotalCitas.setText(totalCitas);
+        if (tvTotalCitas == null || layoutCitas == null || btnClose == null) {
+            return;
+        }
 
-        LinearLayout layoutCitas = new LinearLayout(context);
-        layoutCitas.setOrientation(LinearLayout.VERTICAL);
-        scrollCitas.addView(layoutCitas);
+        // Referencia a la base de datos Firebase
+        DatabaseReference citasRef = FirebaseDatabase.getInstance().getReference("citas");
 
-        View cardView = inflater.inflate(R.layout.card_cita, layoutCitas, false);
-        TextView tvCita = cardView.findViewById(R.id.tv_cita);
-        TextView tvFecha = cardView.findViewById(R.id.tv_fecha);
-        TextView tvCuidador = cardView.findViewById(R.id.tv_cuidador);
-        TextView tvUbicacion = cardView.findViewById(R.id.tv_ubicacion);
+        citasRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                layoutCitas.removeAllViews(); // Limpiar la lista antes de agregar nuevas citas
 
-        tvCita.setText("Cita:");
-        tvFecha.setText("Fecha:");
-        tvCuidador.setText("Cuidador:");
-        tvUbicacion.setText("Ubicación:");
+                int totalCitas = 0;
+                LayoutInflater inflater = LayoutInflater.from(context);
 
-        layoutCitas.addView(cardView);
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String fecha = snapshot.child("fecha").getValue(String.class);
+                    String hora = snapshot.child("hora").getValue(String.class);
+                    String ubicacion = snapshot.child("ubicacion").getValue(String.class);
 
+                    if (fecha != null && hora != null && ubicacion != null) {
+                        // Inflar el diseño de la tarjeta card_cita.xml
+                        View cardView = inflater.inflate(R.layout.card_cita, layoutCitas, false);
+
+                        // Obtener referencias de los TextView en card_cita.xml
+                        TextView tvFecha = cardView.findViewById(R.id.tvFecha);
+                        TextView tvHora = cardView.findViewById(R.id.tvHora);
+                        TextView tvUbicacion = cardView.findViewById(R.id.tvUbicacion);
+
+                        // Asignar valores obtenidos de Firebase
+                        tvFecha.setText("Fecha: " + fecha);
+                        tvHora.setText("Hora: " + hora);
+                        tvUbicacion.setText("Ubicación: " + ubicacion);
+
+                        // Agregar la tarjeta al layout dinámico
+                        layoutCitas.addView(cardView);
+                        totalCitas++;
+                    }
+                }
+
+                // Actualizar el número total de citas pendientes
+                tvTotalCitas.setText("Total de citas pendientes: " + totalCitas);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                tvTotalCitas.setText("Error al cargar las citas.");
+            }
+        });
+
+        // Configurar el botón de cierre
         btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        // Mostrar la ventana emergente
         dialog.show();
     }
 
-    @SuppressLint("SetTextI18n")
+    // Métodos de ventanas emergentes para otras tarjetas
+    private void mostrarVentanaEmergente(Context context) {
+        mostrarDialogoBasico(context, R.layout.cuidadores_activos);
+    }
+
     private void mostrarVentanaNotificacionesRecientes(Context context) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View popupView = inflater.inflate(R.layout.notificaciones_recientes, null);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(popupView);
-        AlertDialog dialog = builder.create();
-
-        TextView tvTotalNotificaciones = popupView.findViewById(R.id.tv_total_notificaciones);
-        ScrollView scrollNotificaciones = popupView.findViewById(R.id.scroll_notificaciones);
-        Button btnClose = popupView.findViewById(R.id.btn_close);
-
-        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String totalNotificaciones = String.format(getString(R.string.total_de_notificaciones_recientes_0), 0);
-        tvTotalNotificaciones.setText(totalNotificaciones);
-
-        LinearLayout layoutNotificaciones = new LinearLayout(context);
-        layoutNotificaciones.setOrientation(LinearLayout.VERTICAL);
-        scrollNotificaciones.addView(layoutNotificaciones);
-
-        View cardView = inflater.inflate(R.layout.card_notificacion, layoutNotificaciones, false);
-        TextView tvFecha = cardView.findViewById(R.id.tv_fecha);
-        TextView tvTipo = cardView.findViewById(R.id.tv_tipo_notificacion);
-        TextView tvNombre = cardView.findViewById(R.id.tv_nombre);
-        TextView tvDireccion = cardView.findViewById(R.id.tv_direccion);
-        TextView tvHorario = cardView.findViewById(R.id.tv_horario);
-
-        tvFecha.setText("Fecha:");
-        tvTipo.setText("Tipo de notificación:");
-        tvNombre.setText("Nombre:");
-        tvDireccion.setText("Dirección:");
-        tvHorario.setText("Horario:");
-
-        layoutNotificaciones.addView(cardView);
-
-        btnClose.setOnClickListener(v -> dialog.dismiss());
-        dialog.show();
+        mostrarDialogoBasico(context, R.layout.notificaciones_recientes);
     }
 
-    @SuppressLint("SetTextI18n")
     private void mostrarVentanaServiciosCompletados(Context context) {
+        mostrarDialogoBasico(context, R.layout.servicios_completados);
+    }
+
+    private void mostrarDialogoBasico(Context context, int layout) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View popupView = inflater.inflate(R.layout.servicios_completados, null);
+        View popupView = inflater.inflate(layout, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(popupView);
         AlertDialog dialog = builder.create();
 
-        TextView tvTotalServicios = popupView.findViewById(R.id.tv_total_servicios);
-        ScrollView scrollServicios = popupView.findViewById(R.id.scroll_servicios);
         Button btnClose = popupView.findViewById(R.id.btn_close);
-
-        String totalServicios = String.format(getString(R.string.total_servicios_placeholder), 0);
-        tvTotalServicios.setText(totalServicios);
-
-        LinearLayout layoutServicios = new LinearLayout(context);
-        layoutServicios.setOrientation(LinearLayout.VERTICAL);
-        scrollServicios.addView(layoutServicios);
-
-        View cardView = inflater.inflate(R.layout.card_servicio, layoutServicios, false);
-        TextView tvServicio = cardView.findViewById(R.id.tv_servicio);
-        TextView tvFecha = cardView.findViewById(R.id.tv_fecha);
-        TextView tvHora = cardView.findViewById(R.id.tv_hora);
-        TextView tvCuidador = cardView.findViewById(R.id.tv_cuidador);
-        TextView tvUbicacion = cardView.findViewById(R.id.tv_ubicacion);
-
-        tvServicio.setText("Servicio:");
-        tvFecha.setText("Fecha:");
-        tvHora.setText("Hora:");
-        tvCuidador.setText("Cuidador:");
-        tvUbicacion.setText("Ubicación:");
-
-        layoutServicios.addView(cardView);
-
         btnClose.setOnClickListener(v -> dialog.dismiss());
+
         dialog.show();
     }
 }

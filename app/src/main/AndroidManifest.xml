@@ -35,7 +35,6 @@ xmlns:tools="http://schemas.android.com/tools">
         <activity android:name=".DashboardCuidadorActivity" />
         <activity android:name=".ScanActivity" />
         <activity android:name=".AppointmentsActivity" />
-        <activity android:name=".ProfileActivity" />
         <activity android:name=".LoginPrincipal" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -67,7 +67,6 @@ public class ScanActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         caretakerRef = FirebaseDatabase.getInstance().getReference("usuarios/cuidadores");
 
-
         // Inicialización de vistas
         locationTextView = findViewById(R.id.locationTextView);
         descripcionEditText = findViewById(R.id.descripcionEditText);
@@ -84,24 +83,30 @@ public class ScanActivity extends AppCompatActivity {
 
         checkLocationPermission();
 
-
         Button btnDashboard = findViewById(R.id.btnDashboard);
         btnDashboard.setOnClickListener(v -> {
             Intent intent = new Intent(ScanActivity.this, DashboardCuidadorActivity.class);
             startActivity(intent);
         });
-
     }
+
     private void enviarDatos() {
         String ubicacion = locationTextView.getText().toString();
 
+        // Verificar que todos los campos estén completos
         if (capturedPhoto == null || ubicacion.isEmpty() || ubicacion.equals("Esperando ubicación...") || descripcionEditText.getText().toString().isEmpty()) {
             Toast.makeText(this, "Por favor, complete todos los campos.", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Convertir la foto a Base64
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        capturedPhoto.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String fotoBase64 = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
         String descripcion = descripcionEditText.getText().toString();
-        String fotoBase64 = bitmapToBase64(capturedPhoto);
+        String fechaHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
@@ -115,9 +120,7 @@ public class ScanActivity extends AppCompatActivity {
                             nombreCuidador = "Cuidador sin nombre asignado";
                         }
 
-                        // Generar la fecha y hora en el formato correcto
-                        String fechaHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-
+                        // Ahora que tienes el nombre del cuidador, puedes enviar los datos
                         enviarDatosAlServidor(nombreCuidador, ubicacion, descripcion, fotoBase64, fechaHora);
                         break;
                     }
@@ -127,6 +130,7 @@ public class ScanActivity extends AppCompatActivity {
             Toast.makeText(this, "Usuario no autenticado. Inicie sesión.", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void verificarAutenticacion() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -181,7 +185,6 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
-
     @SuppressLint("MissingPermission")
     private void getLocation() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -205,7 +208,7 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     private void enviarDatosAlServidor(String nombreCuidador, String ubicacion, String descripcion, String fotoBase64, String fechaHora) {
-        String url = "http://192.168.100.5/guardar_evidencia.php";
+        String url = "http://192.168.100.17/guardar_evidencia.php";
 
         // 🔴 Agregar logs para verificar si los datos se están generando correctamente antes de enviarlos
         Log.d("DATOS_ENVIO", "Nombre Cuidador: " + nombreCuidador);
@@ -238,13 +241,6 @@ public class ScanActivity extends AppCompatActivity {
         };
 
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
-    }
-
-
-    private String bitmapToBase64(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
     }
 
     @Override

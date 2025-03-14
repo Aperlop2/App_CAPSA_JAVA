@@ -57,49 +57,36 @@ public class LoginPrincipal extends AppCompatActivity {
             return;
         }
 
-        // Autenticación con Firebase Authentication
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-                            verificarRolUsuario(user.getUid(), email);
-                        } else {
-                            Toast.makeText(this, "Error al obtener la sesión del usuario", Toast.LENGTH_SHORT).show();
+                            String userId = user.getUid();  // Obtener el UID del usuario
+
+                            // Esperar a que Firebase termine la autenticación antes de leer
+                            caretakerRef.child(userId).get().addOnCompleteListener(dbTask -> {
+                                if (dbTask.isSuccessful() && dbTask.getResult().exists()) {
+                                    // Usuario encontrado en cuidadores
+                                    Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(LoginPrincipal.this, DashboardCuidadorActivity.class));
+                                } else {
+                                    adminRef.child(userId).get().addOnCompleteListener(adminTask -> {
+                                        if (adminTask.isSuccessful() && adminTask.getResult().exists()) {
+                                            // Usuario encontrado en administradores
+                                            Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(LoginPrincipal.this, gestionadministradores.class));
+                                        } else {
+                                            Toast.makeText(this, "No se encontraron datos del usuario", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            });
                         }
                     } else {
-                        Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void verificarRolUsuario(String userId, String email) {
-        // Primero, verificamos si es un Administrador
-        adminRef.child(userId).get().addOnSuccessListener(snapshot -> {
-            if (snapshot.exists()) {
-                // Inicio de sesión exitoso como Administrador
-                Toast.makeText(this, "Inicio de sesión exitoso (Administrador)", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginPrincipal.this, gestionadministradores.class);
-                intent.putExtra("email", email);
-                startActivity(intent);
-                finish();
-            } else {
-                // Si no es Administrador, verificamos si es Cuidador
-                caretakerRef.child(userId).get().addOnSuccessListener(caretakerSnapshot -> {
-                    if (caretakerSnapshot.exists()) {
-                        // Inicio de sesión exitoso como Cuidador
-                        Toast.makeText(this, "Inicio de sesión exitoso (Cuidador)", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(LoginPrincipal.this, DashboardCuidadorActivity.class);
-                        intent.putExtra("email", email);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Toast.makeText(this, "No tienes permisos en la plataforma", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(e ->
-                        Toast.makeText(this, "Error al conectarse con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-            }
-        }).addOnFailureListener(e ->
-                Toast.makeText(this, "Error al conectarse con Firebase: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-    }
 }

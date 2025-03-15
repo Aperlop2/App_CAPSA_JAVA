@@ -89,7 +89,7 @@ public class MapaTiempoReal extends AppCompatActivity {
     }
 
     private void eliminarEvidencia(int id, int position) {
-        String url = "http://192.168.100.5/obtener_evidencias.php?id=" + id; // ID en la URL
+        String url = "http://192.168.100.17/obtener_evidencias.php?id=" + id; // ID en la URL
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 

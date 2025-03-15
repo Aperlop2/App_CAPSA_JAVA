@@ -95,7 +95,6 @@
                 android:textColor="#FFFFFF"
                 tools:ignore="ButtonStyle,RtlHardcoded,TextContrastCheck" />
         </LinearLayout>
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

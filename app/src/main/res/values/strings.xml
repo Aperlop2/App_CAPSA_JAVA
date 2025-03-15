@@ -69,7 +69,7 @@
     <string name="gestion_de_cuidadores">Gestión de cuidadores</string>
     <string name="agregar">Agregar</string>
     <string name="nombre_cuidador">Nombre del Cuidador</string>
-    <string name="direccionItem">Dirección</string>
+    <string name="direccionItem">correo</string>
     <string name="telefonoItem">Teléfono</string>
     <string name="horarioItem">Horario</string>
     <string name="editar">Editar</string>

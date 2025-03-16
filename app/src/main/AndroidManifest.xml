@@ -53,6 +53,8 @@ xmlns:tools="http://schemas.android.com/tools">
         <activity android:name=".FormularioAdministrador" />
         <activity android:name=".FormularioCuidador" />
         <activity android:name=".EditarCita" />
+        <activity android:name=".ListaCuidadoresActivity" />
+
 
 
         <activity android:name=".RecuperarContrasena"/>

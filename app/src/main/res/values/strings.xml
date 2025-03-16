@@ -71,8 +71,8 @@
     <string name="nombre_cuidador">Nombre del Cuidador</string>
     <string name="direccionItem">correo</string>
     <string name="telefonoItem">Teléfono</string>
-    <string name="horarioItem">Horario</string>
-    <string name="editar">Editar</string>
+    <string name="horarioItem">Especialidad</string>
+    <string name="editar">Guardar</string>
     <string name="eliminar">Eliminar</string>
     <string name="editar_cuidador">Editar cuidador</string>
     <string name="gestion_de_citas">Gestión de citas</string>

@@ -1,101 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    tools:context=".CuidadorAdapter">
 
     <LinearLayout
-        android:id="@+id/contenedor_cuidador"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#FFFFFF"
-        android:padding="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:padding="16dp">
 
+        <!-- Imagen del cuidador -->
         <ImageView
             android:id="@+id/imagen_cuidador"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/avatar"
-            tools:ignore="ContentDescription" />
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/cuidador_imagen"
+            android:src="@drawable/ic_cuidadores"/>
 
+        <!-- Nombre del cuidador -->
         <TextView
             android:id="@+id/nombre_cuidador"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/nombre_cuidador"
-            android:fontFamily="@font/roboto_bold"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
+            android:text="@string/nombre_del_cuidador"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:layout_marginTop="8dp"/>
 
+        <!-- Ubicación del cuidador -->
         <TextView
-            android:id="@+id/direccion_cuidador"
-            android:layout_width="match_parent"
+            android:id="@+id/ubicacion_cuidador"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/direccionItem"
-            android:fontFamily="@font/roboto_bold"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp" />
+            android:text="Ubicación"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_marginTop="4dp"
+            tools:ignore="HardcodedText" />
 
+        <!-- Descripción del cuidador -->
         <TextView
-            android:id="@+id/telefono_cuidador"
-            android:layout_width="match_parent"
+            android:id="@+id/descripcion_cuidador"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/telefonoItem"
-            android:fontFamily="@font/roboto_bold"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp" />
+            android:text="@string/descripcion_breve"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:layout_marginTop="4dp"/>
 
+        <!-- Fecha y hora -->
         <TextView
-            android:id="@+id/horario_cuidador"
-            android:layout_width="match_parent"
+            android:id="@+id/fecha_hora"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/horarioItem"
-            android:fontFamily="@font/roboto_bold"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginBottom="16dp" />
+            android:text="@string/fecha_y_hora"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:layout_marginTop="4dp"/>
 
+        <!-- Botones de acción -->
         <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal">
+            android:gravity="end"
+            android:layout_marginTop="8dp">
 
+            <!-- Botón Editar -->
             <Button
-                android:id="@+id/btnEditar1"
+                android:id="@+id/btnEditar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Editar"
                 android:layout_marginEnd="8dp"
-                android:backgroundTint="#4CAF50"
-                android:drawableLeft="@drawable/baseline_edit_24"
-                android:text="@string/editar"
-                android:textColor="#FFFFFF"
-                tools:ignore="ButtonStyle,RtlHardcoded,TextContrastCheck" />
+                tools:ignore="ButtonStyle,HardcodedText" />
 
+            <!-- Botón Eliminar -->
             <Button
-                android:id="@+id/btnEliminar1"
+                android:id="@+id/btnEliminar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#F44336"
-                android:drawableLeft="@drawable/baseline_delete_24"
-                android:text="@string/eliminar"
-                android:textColor="#FFFFFF"
-                tools:ignore="ButtonStyle,RtlHardcoded,TextContrastCheck" />
+                android:text="Eliminar"
+                tools:ignore="ButtonStyle,HardcodedText" />
         </LinearLayout>
 
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

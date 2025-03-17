@@ -5,15 +5,15 @@ public class Cuidador {
     private String nombre;
     private String ubicacion;
     private String descripcion;
-    private String foto;
+    private String fotoUrl;
     private String fechaHora;
 
-    public Cuidador(int id, String nombre, String ubicacion, String descripcion, String foto, String fechaHora) {
+    public Cuidador(int id, String nombre, String ubicacion, String descripcion, String fotoUrl, String fechaHora) {
         this.id = id;
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.descripcion = descripcion;
-        this.foto = foto;
+        this.fotoUrl = fotoUrl;
         this.fechaHora = fechaHora;
     }
 
@@ -33,8 +33,8 @@ public class Cuidador {
         return descripcion;
     }
 
-    public String getFoto() {
-        return foto;
+    public String getFotoUrl() {
+        return fotoUrl;
     }
 
     public String getFechaHora() {

@@ -5,6 +5,7 @@
     android:background="#E0F7FA"
     android:padding="16dp">
 
+    <!-- Ícono de citas pendientes -->
     <ImageView
         android:id="@+id/img_title"
         android:layout_width="75dp"
@@ -14,6 +15,7 @@
         android:src="@drawable/ic_citas_pendientes"
         tools:ignore="ImageContrastCheck" />
 
+    <!-- Título de la ventana -->
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
@@ -26,6 +28,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp" />
 
+    <!-- Texto que muestra la cantidad de citas pendientes -->
     <TextView
         android:id="@+id/tv_total_citas"
         android:layout_width="wrap_content"
@@ -36,17 +39,26 @@
         android:textColor="#000000"
         android:textSize="16sp" />
 
+    <!-- ScrollView para mostrar las citas dinámicamente -->
     <ScrollView
         android:id="@+id/scroll_citas"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_above="@id/btn_close"
-        android:layout_below="@id/tv_total_citas"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         tools:ignore="SpeakableTextPresentCheck">
+
+        <!-- Contenedor donde se agregarán dinámicamente las citas -->
+        <LinearLayout
+            android:id="@+id/layout_citas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
     </ScrollView>
 
+    <!-- Botón para cerrar la ventana emergente -->
     <Button
         android:id="@+id/btn_close"
         android:layout_width="match_parent"
@@ -62,5 +74,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:padding="12dp"
-        tools:ignore="VisualLintButtonSize" />
+        tools:ignore="RtlHardcoded,VisualLintButtonSize" />
+
 </RelativeLayout>
+

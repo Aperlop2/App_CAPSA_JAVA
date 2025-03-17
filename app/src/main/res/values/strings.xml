@@ -52,6 +52,7 @@
     <string name="ubicacion">Ubicación:</string>
     <string name="cerrar_ventana">Cerrar</string>
     <string name="mapa_tiempo_real">Mapa en tiempo real</string>
+    <string name="mapa">Mapa en tiempo real</string>
     <string name="centrar_mapa">Centrar mapa</string>
     <string name="notificaciones_titulo">Notificaciones en general</string>
     <string name="icono_notificaciones_desc">Icono de notificaciones</string>
@@ -129,4 +130,13 @@
     <string name="datos_del_cuidador">Datos del cuidador</string>
     <string name="guardar">Guardar</string>
     <string name="cancelar">Cancelar</string>
+
+    <string name="cuidador_imagen">Imagen del Cuidador</string>
+    <string name="nombre_del_cuidador">Nombre del Cuidador</string>
+    <string name="descripcion_breve">Descripción breve</string>
+    <string name="fecha_y_hora">Fecha y hora</string>
+    <string name="titulo_citas_completadas">Citas completadas</string>
+
+    <string name="ic_citas_completadas">Citas completadas</string>
+    <string name="total_citas">Total de citas</string>
 </resources>

@@ -27,13 +27,13 @@ public class AgregarCita extends AppCompatActivity {
     private TextView tvFecha, tvHora, tvDatoDinamico;
     private EditText etUbicacion;
     private DatabaseReference firebaseReference;
+    private String correoCuidador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agregar_cita);
 
-        // Inicializar vistas
         tvFecha = findViewById(R.id.tvFecha);
         tvHora = findViewById(R.id.tvHora);
         tvDatoDinamico = findViewById(R.id.tvDatoDinamico);
@@ -45,17 +45,19 @@ public class AgregarCita extends AppCompatActivity {
 
         firebaseReference = FirebaseDatabase.getInstance().getReference("citas");
 
-        // Obtener el cuidador enviado desde la actividad anterior
-        String cuidadorSeleccionado = getIntent().getStringExtra("cuidador");
+        // Obtener el correo del cuidador desde la actividad anterior
+        correoCuidador = getIntent().getStringExtra("correo_cuidador");
 
-        // Mostrar el cuidador en el TextView dinámico
-        if (cuidadorSeleccionado != null && !cuidadorSeleccionado.isEmpty()) {
-            tvDatoDinamico.setText("Cita con: " + cuidadorSeleccionado);
+        if (correoCuidador == null || correoCuidador.isEmpty()) {
+            Toast.makeText(this, "Error: No se pudo identificar el correo del cuidador", Toast.LENGTH_SHORT).show();
+            tvDatoDinamico.setText("Correo no identificado");
+            finish();
+            return;
         } else {
-            tvDatoDinamico.setText("Cita sin cuidador seleccionado");
+            // Mostrar el correo del cuidador en el TextView
+            tvDatoDinamico.setText(correoCuidador);
         }
 
-        // Selector de fecha
         iconoFecha.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
@@ -63,44 +65,36 @@ public class AgregarCita extends AppCompatActivity {
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
             new DatePickerDialog(this, (view, year1, month1, dayOfMonth) -> {
-                String fechaSeleccionada = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
+                String fechaSeleccionada = year1 + "-" + (month1 + 1) + "-" + dayOfMonth;
                 tvFecha.setText(fechaSeleccionada);
             }, year, month, day).show();
         });
 
-        // Selector de hora
         iconoHora.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
 
             new TimePickerDialog(this, (view, hourOfDay, minute1) -> {
-                String horaSeleccionada = hourOfDay + ":" + (minute1 < 10 ? "0" + minute1 : minute1);
+                String horaSeleccionada = hourOfDay + ":" + (minute1 < 10 ? "0" + minute1 : minute1) + ":00";
                 tvHora.setText(horaSeleccionada);
             }, hour, minute, true).show();
         });
 
-        // Guardar cita
         btnGuardarCita.setOnClickListener(v -> {
             try {
-                // Obtener los datos ingresados
                 String fecha = tvFecha.getText().toString();
                 String hora = tvHora.getText().toString();
                 String ubicacion = etUbicacion.getText().toString();
 
-                // Validar que los campos no estén vacíos
-                if (fecha.isEmpty() || hora.isEmpty() || ubicacion.isEmpty()) {
+                if (fecha.isEmpty() || hora.isEmpty() || ubicacion.isEmpty() || correoCuidador == null) {
                     Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Almacenar en Firebase
-                guardarCitaEnFirebase(cuidadorSeleccionado, fecha, hora, ubicacion);
+                guardarCitaEnFirebase(fecha, hora, ubicacion, correoCuidador);
+                guardarCitaEnMySQL(fecha, hora, ubicacion, correoCuidador);
 
-                // Almacenar en MySQL
-                guardarCitaEnMySQL(cuidadorSeleccionado, fecha, hora, ubicacion);
-
-                // Finalizar actividad
                 Toast.makeText(this, "Cita guardada con éxito", Toast.LENGTH_SHORT).show();
                 finish();
             } catch (Exception e) {
@@ -109,37 +103,36 @@ public class AgregarCita extends AppCompatActivity {
             }
         });
 
-        // Cancelar acción
         btnCancelarCita.setOnClickListener(v -> finish());
     }
 
-    private void guardarCitaEnFirebase(String cuidador, String fecha, String hora, String ubicacion) {
+    private void guardarCitaEnFirebase(String fecha, String hora, String ubicacion, String correoCuidador) {
         String idCita = firebaseReference.push().getKey();
         if (idCita != null) {
             Map<String, Object> cita = new HashMap<>();
-            cita.put("cuidador", cuidador);
             cita.put("fecha", fecha);
             cita.put("hora", hora);
             cita.put("ubicacion", ubicacion);
+            cita.put("correo_cuidador", correoCuidador);
             firebaseReference.child(idCita).setValue(cita)
                     .addOnSuccessListener(aVoid -> Log.d(TAG, "Cita guardada en Firebase"))
                     .addOnFailureListener(e -> Log.e(TAG, "Error al guardar en Firebase: ", e));
         }
     }
 
-    private void guardarCitaEnMySQL(String cuidador, String fecha, String hora, String ubicacion) {
+    private void guardarCitaEnMySQL(String fecha, String hora, String ubicacion, String correoCuidador) {
         String url = "http://192.168.137.1/evidencias/guardar_cita.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                response -> Log.d(TAG, "Cita guardada en MySQL: " + response),
-                error -> Log.e(TAG, "Error al guardar en MySQL: " + error.getMessage())) {
+                response -> Log.d(TAG, "Cita guardada en SQLite: " + response),
+                error -> Log.e(TAG, "Error al guardar en SQLite: " + error.getMessage())) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("cuidador", cuidador);
                 params.put("fecha", fecha);
                 params.put("hora", hora);
                 params.put("ubicacion", ubicacion);
+                params.put("correo_cuidador", correoCuidador);
                 return params;
             }
         };

@@ -51,7 +51,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.1") // GPS y geolocalización
 
     // Fragmentos
-    implementation("androidx.fragment:fragment:1.8.5") // Mantén una versión estable
+    implementation("androidx.fragment:fragment-ktx:1.6.2") // Versión estable recomendada para Kotlin
 
     // Volley (HTTP Requests)
     implementation("com.android.volley:volley:1.2.1")
@@ -62,18 +62,19 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-storage")
-    implementation ("com.google.firebase:firebase-appcheck-debug:17.0.1")
+    implementation("com.google.firebase:firebase-appcheck-debug")
 
 
     // Seguridad
     implementation("org.mindrot:jbcrypt:0.4")
 
+    // Glide (Carga de imágenes)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+
     // Pruebas
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
-
+    
 }

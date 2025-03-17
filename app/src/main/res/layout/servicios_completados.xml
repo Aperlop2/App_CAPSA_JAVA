@@ -18,7 +18,7 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/titulo_servicios_completados"
+        android:text="@string/titulo_citas_completadas"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="#000000"
@@ -31,7 +31,7 @@
         android:id="@+id/tv_total_servicios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total_servicios_placeholder"
+        android:text="@string/total_citas_placeholder"
         android:textSize="16sp"
         android:textColor="#000000"
         android:layout_below="@id/tv_title"
@@ -57,9 +57,9 @@
         android:layout_marginBottom="16dp"
         android:backgroundTint="#4A90E2"
         android:text="@string/cerrar_ventana"
-        android:drawableLeft="@drawable/baseline_close_24"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"
         tools:ignore="VisualLintButtonSize" />
 </RelativeLayout>
+

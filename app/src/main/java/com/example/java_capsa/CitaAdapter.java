@@ -1,28 +1,22 @@
 package com.example.java_capsa;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-
 import java.util.List;
 
 public class CitaAdapter extends RecyclerView.Adapter<CitaAdapter.CitaViewHolder> {
 
-    private final List<Cita> citasList;
-    private final Context context;
-    private final OnCitaClickListener listener;
+    private List<Cita> citasList;
+    private Context context;
 
-    public CitaAdapter(List<Cita> citasList, Context context, OnCitaClickListener listener) {
+    public CitaAdapter(List<Cita> citasList, Context context) {
         this.citasList = citasList;
         this.context = context;
-        this.listener = listener;
     }
 
     @NonNull
@@ -35,15 +29,12 @@ public class CitaAdapter extends RecyclerView.Adapter<CitaAdapter.CitaViewHolder
     @Override
     public void onBindViewHolder(@NonNull CitaViewHolder holder, int position) {
         Cita cita = citasList.get(position);
-        holder.tvCita.setText(cita.getDetalle());
-        holder.tvCuidador.setText(cita.getCuidador());
-        holder.tvUbicacion.setText(cita.getUbicacion());
 
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onCitaClick(cita.getCuidador());
-            }
-        });
+        if (cita != null) {
+            holder.tvFecha.setText("📅 Fecha: " + (cita.getFecha() != null ? cita.getFecha() : "No disponible"));
+            holder.tvHora.setText("⏰ Hora: " + (cita.getHora() != null ? cita.getHora() : "No disponible"));
+            holder.tvUbicacion.setText("📍 Ubicación: " + (cita.getUbicacion() != null ? cita.getUbicacion() : "No disponible"));
+        }
     }
 
     @Override
@@ -52,19 +43,13 @@ public class CitaAdapter extends RecyclerView.Adapter<CitaAdapter.CitaViewHolder
     }
 
     static class CitaViewHolder extends RecyclerView.ViewHolder {
+        TextView tvFecha, tvHora, tvUbicacion;
 
-        TextView tvCita, tvCuidador, tvUbicacion;
-
-        @SuppressLint("CutPasteId")
         public CitaViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvCita = itemView.findViewById(R.id.tv_cuidador);
-            tvCuidador = itemView.findViewById(R.id.tv_cuidador);
-            tvUbicacion = itemView.findViewById(R.id.tv_ubicacion);
+            tvFecha = itemView.findViewById(R.id.tvFecha);
+            tvHora = itemView.findViewById(R.id.tvHora);
+            tvUbicacion = itemView.findViewById(R.id.tvUbicacion);
         }
-    }
-
-    public interface OnCitaClickListener {
-        void onCitaClick(String cuidador);
     }
 }

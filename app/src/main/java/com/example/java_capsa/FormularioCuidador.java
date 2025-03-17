@@ -29,7 +29,7 @@ public class FormularioCuidador extends AppCompatActivity {
     private ImageView ivProfilePicture;
     private DatabaseReference solicitudesReference;
     private Bitmap capturedImage; // Bitmap para guardar la imagen capturada
-
+    // Código para identificar la solicitud de captura de imagen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

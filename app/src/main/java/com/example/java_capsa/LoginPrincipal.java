@@ -47,6 +47,7 @@ public class LoginPrincipal extends AppCompatActivity {
             startActivity(intent);
         });
 
+
         // Manejar clic en "Olvidaste tu contraseña"
         tvForgotPassword.setOnClickListener(v -> {
             // Redirigir a la actividad Recuperación de Contraseña

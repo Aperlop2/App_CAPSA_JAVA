@@ -170,7 +170,7 @@ CREATE TABLE evidencias (
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/[TU_USUARIO]/App_CAPSA_JAVA.git
+git clone https://github.com/Aperlop2/App_CAPSA_JAVA.git
 cd App_CAPSA_JAVA
 
 # 2. Colocar la configuración de Firebase (ver sección siguiente)

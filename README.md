@@ -280,6 +280,6 @@ Abre un Pull Request describiendo el problema resuelto y cómo probarlo.
 
 Distribuido bajo licencia **MIT** (ver `LICENSE`). Proyecto académico de código abierto.
 
-**Autor:** [TU_NOMBRE] — [@TU_USUARIO](https://github.com/[TU_USUARIO]) · [tu@email.com] · [LINKEDIN/TU_PERFIL]
+**Autor:** ANA CRISTINA PÉREZ LÓPEZ — Aperlop2 (https://github.com/Aperlop2) · anacristinaperez.dev01@gmail.com · LINKEDIN/(https://www.linkedin.com/in/ana-cristina-perez-lopez/)
 
 > Si este proyecto te resulta útil, considéralo una ⭐ — ayuda a visibilizar el trabajo.
